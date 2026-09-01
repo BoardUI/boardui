@@ -1,8 +1,8 @@
 <a href="https://www.boardui.com"><img src=".github/readme-banner.png" alt="BoardUI, a React design system for agentic interfaces" width="100%"></a>
 
-# BoardUI chat starter
+# Start your agentic app with BoardUI
 
-A working AI chat app on your own model key. Next.js App Router, React, Tailwind CSS v4, and the interface built from [BoardUI](https://www.boardui.com) components that live in this repo as source, so everything is yours to edit.
+A working AI chat app on your own model key, deployed in a click. Next.js App Router, React, Tailwind CSS v4, and an interface built from [BoardUI](https://www.boardui.com) components that live in this repo as source, so everything is yours to edit.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fmertcanesmergul%2Fboardui-starter&env=AI_API_KEY&envDescription=Your+model+provider+key%3A+OpenAI%2C+Anthropic%2C+Google%2C+OpenRouter%2C+or+Vercel+AI+Gateway.+The+provider+is+read+from+the+key+itself.&envLink=https%3A%2F%2Fwww.boardui.com%2Fcomponents%2Fchat-starter&project-name=boardui-chat-starter&repository-name=boardui-chat-starter)
 
