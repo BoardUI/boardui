@@ -54,4 +54,4 @@ Requests bill to whoever owns the key. Put a rate limit in front of `/api/chat` 
 
 ## License
 
-[BoardUI License](LICENSE). In short: build and sell products with it, keep your copy in your own repository, public or private. Do not redistribute the components as a kit, template or library. Full text at [boardui.com/license](https://www.boardui.com/license).
+[MIT](LICENSE). Use it, change it, ship it, share it. BoardUI Pro components and templates are sold separately under the [BoardUI License](https://www.boardui.com/license).
