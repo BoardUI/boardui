@@ -40,15 +40,39 @@ cp .env.example .env.local   # then put your key in AI_API_KEY
 npm run dev
 ```
 
-## Add more BoardUI
+## Add the rest of BoardUI
 
-Every component here was installed with the BoardUI CLI, and the rest of the library installs the same way:
+The starter ships only what the chat needs. Every other free component installs the same way, as source into this repo, and BoardUI Pro adds the full-page templates and richer components on the same path.
+
+### With an agent
+
+BoardUI has an MCP server, so Claude Code, Cursor and any MCP client can browse the catalog and install for you. Add it once:
 
 ```bash
-npx boardui add data-table
+claude mcp add boardui -- npx -y boardui@latest mcp
 ```
 
-Or let an agent do it: `npx boardui mcp` exposes the whole registry to Claude Code, Cursor and friends. [BoardUI Pro](https://www.boardui.com) adds the full-page templates and richer components, installed into this same project as source.
+Cursor and most other clients take the same server in their MCP config:
+
+```json
+{
+  "mcpServers": {
+    "boardui": { "command": "npx", "args": ["-y", "boardui@latest", "mcp"] }
+  }
+}
+```
+
+Then ask in plain words. "Install every free BoardUI component" installs the whole free catalog in one go. "Add a data table and stat cards to the dashboard" installs just those and wires them in. The rules in `AGENTS.md` keep whatever it builds on BoardUI's tokens and type scale. Setup for VS Code, Codex and the rest is at [boardui.com/mcp](https://www.boardui.com/mcp).
+
+### With the CLI
+
+```bash
+npx boardui@latest list              # every component, one line each
+npx boardui@latest add data-table    # one component and what it depends on
+npx boardui@latest add --all         # the whole free catalog
+```
+
+Pro components and templates need a licence key: `npx boardui@latest login <key>`, then `add` as usual. See [BoardUI Pro](https://www.boardui.com).
 
 ## Before going public
 
