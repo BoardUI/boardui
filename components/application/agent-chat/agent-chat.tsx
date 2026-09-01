@@ -58,7 +58,15 @@ type Probe = {
   model: string | null;
 };
 
-export function AgentChat({ className }: { className?: string }) {
+export function AgentChat({
+  className,
+  contained = false,
+}: {
+  className?: string;
+  /** Docs preview mode: fill the preview frame's height instead of the
+   *  viewport, and keep the phone nav drawer inside the frame. */
+  contained?: boolean;
+}) {
   const [probe, setProbe] = useState<Probe>({ status: "checking", provider: null, label: null, model: null });
   const [input, setInput] = useState("");
   const [navOpen, setNavOpen] = useState(false);
@@ -328,7 +336,8 @@ export function AgentChat({ className }: { className?: string }) {
   return (
     <div
       className={cx(
-        "relative flex h-dvh w-full gap-4 overflow-hidden bg-background-full p-3",
+        "relative flex w-full gap-4 overflow-hidden bg-background-full p-3",
+        contained ? "h-[var(--template-preview-height)]" : "h-dvh",
         className,
       )}
     >
@@ -337,7 +346,7 @@ export function AgentChat({ className }: { className?: string }) {
       {/* Below lg the sidebar rides in as an overlay drawer. The Pro template
           pushes the workspace across instead; this is the plain version. */}
       {navOpen && (
-        <div className="fixed inset-0 z-50 flex lg:hidden">
+        <div className={cx(contained ? "absolute" : "fixed", "inset-0 z-50 flex lg:hidden")}>
           <button
             type="button"
             aria-label="Close navigation"
