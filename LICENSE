@@ -1,0 +1,48 @@
+BoardUI License
+
+Copyright (c) 2026 BoardUI. All rights reserved.
+
+This repository is the BoardUI chat starter. It contains BoardUI source:
+components, styles, tokens, utilities and the chat runtime. That source is
+licensed to you under the BoardUI License, whose full text lives at
+
+    https://www.boardui.com/license
+
+The page is the licence and controls if anything here reads differently. This
+file summarises it and adds one permission specific to this starter.
+
+WHAT YOU CAN DO
+
+- Build unlimited end products with it: websites, applications, internal
+  tools, personal and commercial, including products you sell.
+- Modify anything. Rewrite it, restyle it, delete half of it.
+- Keep your copy of this starter, including your changes, in your own
+  repository, public or private, as the codebase of a product you are
+  building. This is the permission the Deploy button relies on.
+- Hand an end product over to a client, with the BoardUI code inside it.
+
+WHAT YOU CANNOT DO
+
+- Redistribute the BoardUI source, or a recognisable derivative of it, as
+  source code: sell it, give it away, sublicense it, or offer it onward as a
+  template, starter kit, boilerplate, theme, block collection or course. Your
+  public repository is fine as your product; it is not fine as a kit for
+  other people.
+- Use it to build anything that competes with BoardUI: a component library,
+  UI kit, design system, template marketplace, theme or Figma kit offered to
+  other people, paid or free.
+- Build a tool that lets other people browse, preview, generate, export or
+  customise the BoardUI source.
+- Remove or obscure licence notices in the files that carry them.
+
+The line is simple. Shipping products built with BoardUI is the point.
+Shipping BoardUI itself, or a substitute for it, is not.
+
+THIRD-PARTY SOFTWARE
+
+Open-source work in this repository keeps its own licence, unaffected by this
+file: React Aria Components (Apache 2.0), the Vercel AI SDK (Apache 2.0),
+Motion (MIT), Tailwind CSS (MIT), Remix Icon (Apache 2.0), and the Inter and
+JetBrains Mono typefaces (SIL Open Font License 1.1).
+
+Warranty, liability and termination are set out on the licence page.

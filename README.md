@@ -6,6 +6,8 @@ A working AI chat app on your own model key. Next.js App Router, React, Tailwind
 
 Click the button, paste one API key when Vercel asks for it, and the first deploy already answers.
 
+This repository is generated from BoardUI's source and takes no pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md).
+
 ## What you get
 
 - A streaming chat screen: app sidebar, composer, thinking indicator, message actions, and a chat history rail kept in the visitor's own browser. No database.
@@ -49,3 +51,7 @@ Or let an agent do it: `npx boardui mcp` exposes the whole registry to Claude Co
 ## Before going public
 
 Requests bill to whoever owns the key. Put a rate limit in front of `/api/chat` before pointing the internet at a deployment with a live key.
+
+## License
+
+[BoardUI License](LICENSE). In short: build and sell products with it, keep your copy in your own repository, public or private. Do not redistribute the components as a kit, template or library. Full text at [boardui.com/license](https://www.boardui.com/license).
