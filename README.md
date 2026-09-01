@@ -1,3 +1,5 @@
+<a href="https://www.boardui.com"><img src=".github/readme-banner.png" alt="BoardUI, a React design system for agentic interfaces" width="100%"></a>
+
 # BoardUI chat starter
 
 A working AI chat app on your own model key. Next.js App Router, React, Tailwind CSS v4, and the interface built from [BoardUI](https://www.boardui.com) components that live in this repo as source, so everything is yours to edit.
