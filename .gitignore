@@ -1,0 +1,11 @@
+node_modules
+.next
+out
+dist
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Keys stay out of git. .env.example documents what goes in .env.local.
+.env*
+!.env.example
