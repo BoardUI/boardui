@@ -1,20 +1,18 @@
 "use client";
 
-import { useId, useState } from "react";
-import { Area, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useState } from "react";
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Chip } from "@/components/base/badges/chip";
 import { useCountUp } from "@/hooks/use-count-up";
 import { cx } from "@/utils/cx";
 
 /**
- * Revenue Chart Card: a year of monthly revenue drawn against the year before.
- *
- * The current year is the filled area and solid line, last year the dashed
- * line behind it, so the gap between them is the story. Hovering a month
- * swaps the headline for that month's figure and shows what it was a year
- * earlier. The frame, the count-up headline and the delta chip follow the
- * stat cards and the other chart cards, so it sits in any dashboard row.
+ * Orders Chart Card: a year of monthly orders as bars, this year beside last
+ * year for every month, so the comparison is read bar to bar rather than
+ * against a line. The header is the same as the revenue chart's: a count-up
+ * total with a delta chip, the year-earlier figure under it, and a legend.
+ * Hovering a month swaps the headline for that month.
  */
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -33,34 +31,32 @@ const MONTHS_FULL = [
   "December",
 ];
 
-export type RevenuePoint = {
+export type OrdersPoint = {
   /** Short month label on the axis. */
   label: string;
-  /** Revenue this year, in the card's currency. */
+  /** Orders this year. */
   current: number;
-  /** Revenue for the same month a year earlier. */
+  /** Orders in the same month a year earlier. */
   previous: number;
 };
 
-/** Twelve months that add up to the stat cards' total revenue. */
-export const REVENUE_DATA: RevenuePoint[] = [
-  { label: "Jan", current: 9840, previous: 8210 },
-  { label: "Feb", current: 10120, previous: 8460 },
-  { label: "Mar", current: 11380, previous: 9950 },
-  { label: "Apr", current: 10960, previous: 10240 },
-  { label: "May", current: 12210, previous: 10880 },
-  { label: "Jun", current: 12740, previous: 11020 },
-  { label: "Jul", current: 13980, previous: 11760 },
-  { label: "Aug", current: 13120, previous: 12030 },
-  { label: "Sep", current: 14210, previous: 12190 },
-  { label: "Oct", current: 14690, previous: 12480 },
-  { label: "Nov", current: 14360, previous: 12160 },
-  { label: "Dec", current: 14703.92, previous: 11924 },
+/** Twelve months that add up to the stat cards' total orders. */
+export const ORDERS_DATA: OrdersPoint[] = [
+  { label: "Jan", current: 1680, previous: 1510 },
+  { label: "Feb", current: 1740, previous: 1480 },
+  { label: "Mar", current: 1920, previous: 1650 },
+  { label: "Apr", current: 1850, previous: 1620 },
+  { label: "May", current: 2040, previous: 1710 },
+  { label: "Jun", current: 2110, previous: 1760 },
+  { label: "Jul", current: 2290, previous: 1840 },
+  { label: "Aug", current: 2180, previous: 1890 },
+  { label: "Sep", current: 2320, previous: 1930 },
+  { label: "Oct", current: 2410, previous: 1970 },
+  { label: "Nov", current: 2280, previous: 1810 },
+  { label: "Dec", current: 2342, previous: 1798 },
 ];
 
-const formatK = (value: number) => (value >= 1000 ? `$${Math.round(value / 1000)}k` : `$${value}`);
-const formatMoney = (value: number) =>
-  value.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+const formatK = (value: number) => (value >= 1000 ? `${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k` : `${value}`);
 
 function describeDelta(current: number, previous: number) {
   if (previous === 0) return { label: "New", color: "neutral" as const };
@@ -73,30 +69,18 @@ function describeDelta(current: number, previous: number) {
   };
 }
 
-/** The active month's marker on the current-year line. */
-function ActiveDot({ cx: x, cy: y }: { cx?: number; cy?: number }) {
-  if (x === undefined || y === undefined) return null;
-  return (
-    <g>
-      <circle cx={x} cy={y} r={7} fill="var(--color-chart-2-active)" opacity={0.25} />
-      <circle cx={x} cy={y} r={4} fill="var(--color-chart-2-active)" stroke="var(--color-background-secondary-default)" strokeWidth={2} />
-    </g>
-  );
-}
-
-export function RevenueChartCard({
-  data = REVENUE_DATA,
-  title = "Revenue",
+export function OrdersChartCard({
+  data = ORDERS_DATA,
+  title = "Orders",
   className,
 }: {
   /** Twelve points, one per month; defaults to the demo year. */
-  data?: RevenuePoint[];
+  data?: OrdersPoint[];
   /** Headline label when no month is hovered. */
   title?: string;
   className?: string;
 } = {}) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const gradientId = useId();
 
   const totalCurrent = data.reduce((sum, point) => sum + point.current, 0);
   const totalPrevious = data.reduce((sum, point) => sum + point.previous, 0);
@@ -108,7 +92,7 @@ export function RevenueChartCard({
   const delta = describeDelta(headlineValue, comparison);
   const monthIndex = point ? MONTHS.indexOf(point.label) : -1;
   const label = point ? (monthIndex >= 0 ? MONTHS_FULL[monthIndex] : point.label) : title;
-  const display = useCountUp(Math.round(headlineValue));
+  const display = useCountUp(headlineValue);
 
   const yMax = Math.max(...data.map((d) => Math.max(d.current, d.previous)));
 
@@ -128,14 +112,14 @@ export function RevenueChartCard({
               key={activeIndex ?? "total"}
               className="animate-number-fade text-title-1-medium whitespace-nowrap text-text-primary tabular-nums"
             >
-              ${formatMoney(display)}
+              {display.toLocaleString("en-US")}
             </p>
             <Chip variant="bold" color={delta.color}>
               {delta.label}
             </Chip>
           </div>
           <p className="text-body-2-medium text-text-tertiary tabular-nums">
-            ${formatMoney(comparison)} {point ? "a year earlier" : "last year"}
+            {comparison.toLocaleString("en-US")} {point ? "a year earlier" : "last year"}
           </p>
         </div>
         <dl className="flex shrink-0 items-center gap-4 text-body-2-medium text-text-secondary">
@@ -153,23 +137,19 @@ export function RevenueChartCard({
       {/* Chart */}
       <div className="min-h-0 w-full flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
+          <BarChart
             data={data}
             margin={{ top: 4, right: 6, bottom: 0, left: 0 }}
+            barCategoryGap="28%"
+            barGap={3}
             onMouseMove={(state) => {
               const index = Number(state?.activeTooltipIndex);
               if (state?.isTooltipActive && Number.isFinite(index)) setActiveIndex(index);
             }}
             onMouseLeave={() => setActiveIndex(null)}
           >
-            <defs>
-              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="var(--color-chart-2)" stopOpacity={0.35} />
-                <stop offset="100%" stopColor="var(--color-chart-2)" stopOpacity={0} />
-              </linearGradient>
-            </defs>
             <YAxis
-              width={44}
+              width={40}
               domain={[0, yMax * 1.1]}
               tickCount={4}
               tickFormatter={formatK}
@@ -185,40 +165,22 @@ export function RevenueChartCard({
               interval="preserveStartEnd"
               tick={{ fontSize: 13, fill: "var(--color-text-tertiary)" }}
             />
-            <Tooltip
-              content={() => null}
-              cursor={{ stroke: "var(--color-chart-cursor)", strokeWidth: 1, strokeDasharray: "4 4" }}
-            />
-            <Line
-              type="monotone"
+            <Tooltip content={() => null} cursor={{ fill: "var(--color-chart-track)", opacity: 0.5 }} />
+            <Bar
               dataKey="previous"
-              stroke="var(--color-chart-neutral)"
-              strokeWidth={2}
-              strokeDasharray="5 5"
-              dot={false}
-              activeDot={false}
+              fill="var(--color-chart-neutral)"
+              radius={[4, 4, 0, 0]}
               isAnimationActive
               animationDuration={450}
             />
-            <Area
-              type="monotone"
+            <Bar
               dataKey="current"
-              stroke="none"
-              fill={`url(#${gradientId})`}
+              fill="var(--color-chart-2-active)"
+              radius={[4, 4, 0, 0]}
               isAnimationActive
               animationDuration={450}
             />
-            <Line
-              type="monotone"
-              dataKey="current"
-              stroke="var(--color-chart-2-active)"
-              strokeWidth={2.5}
-              dot={false}
-              activeDot={<ActiveDot />}
-              isAnimationActive
-              animationDuration={450}
-            />
-          </ComposedChart>
+          </BarChart>
         </ResponsiveContainer>
       </div>
     </section>
