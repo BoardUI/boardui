@@ -1,6 +1,11 @@
 "use client";
 
-import { RiDownloadCloud2Line, RiGitPullRequestLine, RiShieldCheckLine } from "@remixicon/react";
+import {
+  RiDownloadCloud2Line,
+  RiGitPullRequestLine,
+  RiInbox2Line,
+  RiShieldCheckLine,
+} from "@remixicon/react";
 
 import { AppShell } from "@/components/application/app-shell/app-shell";
 import {
@@ -70,7 +75,7 @@ const NOTIFICATIONS: NotificationCenterItem[] = [
 
 export default function InboxPage() {
   return (
-    <AppShell title="Inbox">
+    <AppShell title="Inbox" icon={RiInbox2Line}>
       <NotificationCenter notifications={NOTIFICATIONS} />
     </AppShell>
   );

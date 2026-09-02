@@ -1,6 +1,13 @@
 "use client";
 
-import { RiChatAiLine, RiCloseLine, RiDashboardLine, RiInbox2Line, RiMenuLine } from "@remixicon/react";
+import {
+  RiChatAiLine,
+  RiCloseLine,
+  RiDashboardLine,
+  RiInbox2Line,
+  RiMenuLine,
+} from "@remixicon/react";
+import type { ComponentType } from "react";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 
@@ -8,6 +15,8 @@ import {
   DashboardSidebar,
   type DashboardNavItem,
 } from "@/components/application/dashboard/dashboard-sidebar";
+import { Avatar } from "@/components/base/avatar/avatar";
+import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
 import { IconButton } from "@/components/base/buttons/icon-button";
 import { cx } from "@/utils/cx";
 
@@ -49,12 +58,27 @@ export function useStarterSelected(): string {
   return "chat";
 }
 
+type IconComponent = ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" | "false" }>;
+
+/**
+ * The page standard every BoardUI template follows, free or Pro: content sits
+ * directly on the page background inside a 1300px column, so cards and tables
+ * carry their own surfaces; above it a breadcrumb trail (team, member, page)
+ * and the page heading. Pages pass what differs and get the rest.
+ */
 export function AppShell({
   title,
+  heading = title,
+  icon: Icon = RiDashboardLine,
   children,
   className,
 }: {
+  /** The page's name, shown as the current breadcrumb item. */
   title: string;
+  /** The heading over the content. Defaults to the title. */
+  heading?: string;
+  /** Icon on the current breadcrumb item. */
+  icon?: IconComponent;
   children: ReactNode;
   className?: string;
 }) {
@@ -92,18 +116,37 @@ export function AppShell({
         </div>
       )}
 
-      <main className="relative flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-3xl bg-background-secondary-default">
-        <header className="flex h-12 shrink-0 items-center gap-2 px-4 pt-[7px]">
-          <IconButton
-            icon={navOpen ? RiCloseLine : RiMenuLine}
-            size="small"
-            aria-label="Open navigation"
-            onClick={() => setNavOpen((open) => !open)}
-            className="lg:hidden"
-          />
-          <h1 className="text-headline-medium text-text-primary">{title}</h1>
-        </header>
-        <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">{children}</div>
+      <main className="relative flex min-h-0 min-w-0 flex-1 justify-center overflow-x-hidden overflow-y-auto bg-background-full sm:pt-3">
+        <div className="flex w-full max-w-[1300px] flex-col gap-2.5">
+          <header className="flex w-full flex-col gap-2">
+            <Breadcrumb>
+              <BreadcrumbItem href="#">
+                <Avatar size="xs" color="blue" initials="B" />
+                Board team
+              </BreadcrumbItem>
+              <BreadcrumbItem href="#">
+                <Avatar size="xs" color="neutral" initials="M" />
+                Mertcan
+              </BreadcrumbItem>
+              <BreadcrumbItem current icon={Icon}>
+                {title}
+              </BreadcrumbItem>
+            </Breadcrumb>
+            <div className="flex min-w-0 items-center gap-1.5">
+              <IconButton
+                icon={navOpen ? RiCloseLine : RiMenuLine}
+                size="small"
+                aria-label="Open navigation"
+                onClick={() => setNavOpen((open) => !open)}
+                className="lg:hidden"
+              />
+              <h1 className="px-1 text-title-2-medium whitespace-nowrap text-text-primary">
+                {heading}
+              </h1>
+            </div>
+          </header>
+          <div className="flex w-full flex-col gap-4 pb-4">{children}</div>
+        </div>
       </main>
     </div>
   );
