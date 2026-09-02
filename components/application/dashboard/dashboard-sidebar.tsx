@@ -12,16 +12,15 @@ import {
   RiAsterisk,
   RiBankLine,
   RiCalendarLine,
+  RiChatAiLine,
   RiCloseLine,
   RiCustomerServiceLine,
-  RiFolder6Line,
   RiHomeLine,
-  RiInbox2Line,
+  RiImageAiLine,
   RiMegaphoneLine,
   RiSearchLine,
   RiSettings4Line,
   RiSideBarFill,
-  RiTeamLine,
   RiUserSmileLine,
 } from "@remixicon/react";
 import { SettingsModal } from "@/components/application/settings/settings-modal";
@@ -153,11 +152,10 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
   { key: "marketing", label: "Marketing", icon: RiMegaphoneLine, href: "/templates/marketing" },
   { key: "calendar", label: "Calendar", icon: RiCalendarLine, href: "/templates/calendar" },
   { key: "finance", label: "Finance", icon: RiBankLine, href: "/templates/finance" },
-  { key: "projects", label: "Projects", icon: RiFolder6Line },
   { key: "medical", label: "Medical Report", icon: RiAsterisk, href: "/templates/medical-profile" },
-  { key: "hr", label: "HR Team", icon: RiTeamLine, href: "/templates/hr" },
+  { key: "ai-chat", label: "AI Chat", icon: RiChatAiLine, href: "/templates/ai-chat" },
+  { key: "ai-image", label: "AI Image Generation", icon: RiImageAiLine, href: "/templates/ai-image-generation" },
   { key: "profile", label: "Profile", icon: RiUserSmileLine, href: "/templates/ai-profile" },
-  { key: "inbox", label: "Inbox", icon: RiInbox2Line, badge: 91 },
 ];
 
 /**
