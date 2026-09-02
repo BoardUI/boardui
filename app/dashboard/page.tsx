@@ -1,17 +1,15 @@
 "use client";
 
-import { RiHomeLine, RiKey2Line, RiShieldCheckLine, RiSparklingLine } from "@remixicon/react";
-import { useRouter } from "next/navigation";
+import { RiHomeLine, RiShieldCheckLine, RiSparklingLine } from "@remixicon/react";
 
-import { AppShell, useStarterBase } from "@/components/application/app-shell/app-shell";
+import { AppShell } from "@/components/application/app-shell/app-shell";
+import { RevenueChartCard } from "@/components/application/dashboard/revenue-chart-card";
 import { StatCards } from "@/components/application/dashboard/stat-cards";
 import { DataTableExample } from "@/components/application/data-table/data-table";
 import {
   NotificationCenter,
   type NotificationCenterItem,
 } from "@/components/application/notification-center/notification-center";
-import { Announcement } from "@/components/base/announcement/announcement";
-import { FileUpload } from "@/components/base/file-upload/file-upload";
 
 /** A slice of the inbox: what the workspace did lately, as a dashboard feed. */
 const RECENT_ACTIVITY: NotificationCenterItem[] = [
@@ -49,30 +47,18 @@ const RECENT_ACTIVITY: NotificationCenterItem[] = [
 
 /**
  * The starter's dashboard page: stat cards, a row with the activity feed and
- * a documents dropzone, then the customers table. All free components.
+ * the revenue chart, then the customers table. All free components.
  */
 export default function DashboardPage() {
-  const router = useRouter();
-  const base = useStarterBase();
-
   return (
     <AppShell title="Dashboard" heading="Welcome Mertcan" icon={RiHomeLine}>
       <StatCards variant="footer" />
 
-      <div className="flex w-full flex-col items-stretch gap-4 xl:flex-row xl:items-start">
+      <div className="flex w-full flex-col items-stretch gap-4 xl:flex-row">
         <div className="w-full xl:w-[440px] xl:shrink-0">
           <NotificationCenter title="Recent activity" notifications={RECENT_ACTIVITY} />
         </div>
-        <div className="flex min-w-0 flex-1 flex-col gap-4">
-          <FileUpload className="w-full" />
-          <Announcement
-            icon={RiKey2Line}
-            title="The chat runs on your key"
-            description="Set CHAT_MODEL to switch models, or AI_PROVIDER to name one. The key stays server-side; nothing reaches the browser."
-            actionLabel="Open the chat"
-            onAction={() => router.push(base || "/")}
-          />
-        </div>
+        <RevenueChartCard className="h-auto min-h-[329px] xl:h-auto" />
       </div>
 
       <DataTableExample />

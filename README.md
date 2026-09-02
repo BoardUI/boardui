@@ -25,7 +25,7 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 
 ## What's in this repository
 
-- All 60 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
+- All 61 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
 - The app: a chat at `/`, a dashboard, an inbox and a sign-in screen, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
 - `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
@@ -106,6 +106,7 @@ Composed screens and panels: sidebars, chat, tables, settings, cards.
 | [Important Alerts Card](https://www.boardui.com/components/medical-profile) | Scrollable alert feed with tinted icon circles and date pills. | `npx boardui@latest add important-alerts-card` |
 | [Notification Center](https://www.boardui.com/components/notification-center) | Tabbed activity inbox with grouped notifications, unread state, avatars, status icons, and inline actions. | `npx boardui@latest add notification-center` |
 | [Patient Info Card](https://www.boardui.com/components/medical-profile) | Profile card with avatar and label/value detail rows. | `npx boardui@latest add patient-info-card` |
+| [Revenue Chart Card](https://www.boardui.com/components/revenue-chart-card) | Free chart card: a year of monthly revenue as an area against the year before, with a count-up headline, delta chip and hover readout per month. | `npx boardui@latest add revenue-chart-card` |
 | [Settings Modal](https://www.boardui.com/components/settings-modal) | Controlled multi-page settings dialog with General, Profile, Tools, and Storage views. | `npx boardui@latest add settings-modal` |
 | [Sidebar](https://www.boardui.com/components/sidebar) | The floating dashboard sidebar with team menu, nav, announcement, and user menu. | `npx boardui@latest add sidebar` |
 | [Stat Cards](https://www.boardui.com/components/stat-cards) | KPI stat card row with delta chips. | `npx boardui@latest add stat-cards` |
