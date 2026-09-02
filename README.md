@@ -2,6 +2,12 @@
 
 # BoardUI
 
+[![npm](https://img.shields.io/npm/v/boardui?label=npm)](https://www.npmjs.com/package/boardui)
+[![license](https://img.shields.io/github/license/BoardUI/boardui)](LICENSE)
+[![free components](https://img.shields.io/badge/free_components-59-blue)](#components)
+[![X](https://img.shields.io/badge/X-boardui-black?logo=x)](https://x.com/boardui)
+[![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/azcHkw8T6F)
+
 BoardUI is a React design system for agentic interfaces. It gives a product team the parts an AI product needs and the parts every dashboard needs, in one visual language, as source files that live in your project rather than behind a package. This repository is the free tier, all of it, and its homepage is a working AI chat app on your own model key.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FBoardUI%2Fboardui&env=AI_API_KEY&envDescription=Your+model+provider+key%3A+OpenAI%2C+Anthropic%2C+Google%2C+OpenRouter%2C+or+Vercel+AI+Gateway.+The+provider+is+read+from+the+key+itself.&envLink=https%3A%2F%2Fwww.boardui.com%2Fcomponents%2Fchat-starter&project-name=boardui-chat-starter&repository-name=boardui-chat-starter)
