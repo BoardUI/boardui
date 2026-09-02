@@ -3,6 +3,7 @@
 import { RiArrowRightUpLine } from "@remixicon/react";
 
 import { COMPONENT_SECTIONS, type Entry } from "@/components/application/docs/components-index";
+import { PREVIEW_IMAGE_SLUGS } from "@/components/application/docs/preview-images";
 import { cx } from "@/utils/cx";
 
 const SITE = "https://www.boardui.com";
@@ -10,8 +11,10 @@ const SITE = "https://www.boardui.com";
 /**
  * The boardui.com components index, as the starter shows it: the same
  * sections, names and descriptions, every card opening its docs page on the
- * site in a new tab. Deliberately no live previews: the site's preview system
- * renders Pro components, and nothing of Pro may enter this repository.
+ * site in a new tab. The previews are images captured from the site's own
+ * index (scripts/capture-previews.mjs) and served by boardui.com: the site's
+ * live preview system renders Pro components, and nothing of Pro may enter
+ * this repository, so the pictures travel instead of the code.
  */
 export function ComponentsCatalog() {
   const shipped = COMPONENT_SECTIONS.flatMap((s) => s.entries).filter((e) => e.status === "shipped");
@@ -30,14 +33,70 @@ export function ComponentsCatalog() {
             <span className="text-body-medium text-text-tertiary">{section.entries.length}</span>
             <span className="hidden text-body-regular text-text-tertiary sm:inline">{section.blurb}</span>
           </div>
+          <div
+            className={cx(
+              "grid w-full grid-cols-1 gap-x-5 gap-y-3 sm:gap-5",
+              section.wide ? "xl:grid-cols-[repeat(2,472px)]" : "sm:grid-cols-2 xl:grid-cols-[repeat(3,304px)]",
+            )}
+          >
+            {section.entries.filter(hasImage).map((entry) => (
+              <PreviewCard key={entry.name} entry={entry} />
+            ))}
+          </div>
           <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-            {section.entries.map((entry) => (
+            {section.entries.filter((entry) => !hasImage(entry)).map((entry) => (
               <CatalogCard key={entry.name} entry={entry} />
             ))}
           </div>
         </section>
       ))}
     </div>
+  );
+}
+
+const slugOf = (entry: Entry) => entry.href.replace("/components/", "");
+const hasImage = (entry: Entry) => entry.status === "shipped" && PREVIEW_IMAGE_SLUGS.has(slugOf(entry));
+
+/** The index's showcase card, with the captured preview where the live one would be. */
+function PreviewCard({ entry }: { entry: Entry }) {
+  const slug = slugOf(entry);
+  return (
+    <a
+      href={`${SITE}${entry.href}`}
+      target="_blank"
+      rel="noreferrer"
+      className={cx(
+        "group/card relative flex flex-col overflow-hidden rounded-[28px] border border-border-button-default bg-background-primary-default",
+        "transition-[box-shadow] duration-150 ease hover:shadow-xs",
+        "outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring focus-visible:ring-offset-2",
+      )}
+    >
+      <div className="relative h-[197px] w-full overflow-hidden">
+        {/* Plain img on purpose: these are small, fixed-size WebPs served by
+            boardui.com, and next/image would make every clone configure a
+            remote pattern for a picture. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${SITE}/previews/${slug}.webp`} alt="" loading="lazy" className="size-full object-cover object-top dark:hidden" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={`${SITE}/previews/${slug}-dark.webp`} alt="" loading="lazy" className="hidden size-full object-cover object-top dark:block" />
+      </div>
+      <div className="flex flex-col gap-1 px-5 pt-3 pb-5">
+        <div className="flex items-center gap-2 pr-6">
+          <span className="text-body-medium text-text-primary">{entry.name}</span>
+          {entry.isNew && <Tag tone="new">New</Tag>}
+          {entry.tier === "pro" && <Tag>Pro</Tag>}
+        </div>
+        <span className="line-clamp-2 text-body-regular text-text-secondary">{entry.description}</span>
+      </div>
+      <RiArrowRightUpLine
+        aria-hidden
+        className={cx(
+          "absolute right-5 bottom-5 size-4 text-foreground-icon-secondary",
+          "-translate-x-1 opacity-0 transition-[opacity,translate] duration-150 ease",
+          "group-hover/card:translate-x-0 group-hover/card:opacity-100",
+        )}
+      />
+    </a>
   );
 }
 
