@@ -19,6 +19,7 @@ import {
   type DashboardNavItem,
 } from "@/components/application/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/application/app-shell/notification-bell";
+import { ProOfferCard } from "@/components/application/app-shell/pro-offer-card";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
 import { Button } from "@/components/base/buttons/button";
@@ -172,6 +173,7 @@ export function AppShell({
           <div className="flex w-full flex-col gap-4 pb-4">{children}</div>
         </div>
       </main>
+      <ProOfferCard />
     </div>
   );
 }
