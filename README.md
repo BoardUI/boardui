@@ -59,7 +59,7 @@ npm run dev
 
 Every component in this repository also installs on its own, as source, into any Next.js project.
 
-### With an agent
+### Install with an agent
 
 BoardUI has an MCP server, so Claude Code, Cursor and any MCP client can browse the catalog and install for you. Add it once:
 
@@ -79,7 +79,7 @@ Cursor and most other clients take the same server in their MCP config:
 
 Then ask in plain words. "Install every free BoardUI component" installs the whole free catalog in one go. "Add a data table and stat cards to the dashboard" installs just those and wires them in. The rules in `AGENTS.md` keep whatever it builds on BoardUI's tokens and type scale. Setup for VS Code, Codex and the rest is at [boardui.com/mcp](https://www.boardui.com/mcp).
 
-### With the CLI
+### Install with the CLI
 
 ```bash
 npx boardui@latest list              # every component, one line each
