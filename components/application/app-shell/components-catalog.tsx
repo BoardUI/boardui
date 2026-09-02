@@ -20,7 +20,9 @@ export function ComponentsCatalog() {
   const shipped = COMPONENT_SECTIONS.flatMap((s) => s.entries).filter((e) => e.status === "shipped");
   const free = shipped.filter((e) => e.tier === "free").length;
   return (
-    <div className="flex w-full flex-col gap-10">
+    // 964px is the widest grid (two 472px template cards and a gap), so the
+    // headings and every grid share one centred column.
+    <div className="mx-auto flex w-full max-w-[964px] flex-col gap-10">
       <p className="max-w-2xl text-body-regular text-text-secondary">
         Every component, block, chart and template in BoardUI, {shipped.length} in all. The{" "}
         {free} free ones are already in this project as source; each card opens its docs on

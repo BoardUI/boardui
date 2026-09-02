@@ -95,7 +95,7 @@ export function AppShell({
   heading?: string;
   /** Icon on the current breadcrumb item. */
   icon?: IconComponent;
-  /** Header actions on the right; the Pro dashboard's set by default. */
+  /** Header actions on the right; the Pro dashboard's set by default, `null` for none. */
   actions?: ReactNode;
   children: ReactNode;
   className?: string;
@@ -164,7 +164,7 @@ export function AppShell({
                 </h1>
               </div>
               <div className="flex flex-wrap items-center justify-end gap-2.5">
-                {actions ?? (
+                {actions !== undefined ? actions : (
                   <>
                     <NotificationBell />
                     <Button variant="secondary" size="medium" leadingIcon={RiFilter3Fill}>

@@ -7,7 +7,7 @@ import { AppShell, ComponentsCatalog } from "@/components/application/app-shell/
 /** The starter's catalogue page: boardui.com/components, linking out. */
 export default function ComponentsPage() {
   return (
-    <AppShell title="Components and Blocks" icon={RiLayoutGridLine}>
+    <AppShell title="Components and Blocks" icon={RiLayoutGridLine} actions={null}>
       <ComponentsCatalog />
     </AppShell>
   );
