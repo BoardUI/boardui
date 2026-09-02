@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentType } from "react";
+import { useState, type ComponentType } from "react";
 import {
   RiArrowDownCircleFill,
   RiArrowUpCircleFill,
@@ -72,7 +72,7 @@ const DEFAULT_FOOTER_STATS: Stat[] = [
     delta: "16%",
     deltaColor: "lime",
     tone: "blue",
-    hint: "Gross revenue across all channels, before refunds.",
+    hint: "Gross revenue across every channel this month, before refunds. The change is against the same days last month.",
   },
   {
     icon: RiShoppingBasket2Fill,
@@ -81,7 +81,7 @@ const DEFAULT_FOOTER_STATS: Stat[] = [
     delta: "20%",
     deltaColor: "lime",
     tone: "orange",
-    hint: "Completed checkouts, including repeat purchases.",
+    hint: "Checkouts completed this month, repeat purchases included. The change is against the same days last month.",
   },
   {
     icon: RiGroupFill,
@@ -90,7 +90,7 @@ const DEFAULT_FOOTER_STATS: Stat[] = [
     delta: "8.1%",
     deltaColor: "lime",
     tone: "purple",
-    hint: "First-time buyers in the period.",
+    hint: "People who bought for the first time this month. The change is against the same days last month.",
   },
   {
     icon: RiRefund2Fill,
@@ -99,7 +99,7 @@ const DEFAULT_FOOTER_STATS: Stat[] = [
     delta: "2.4%",
     deltaColor: "rose",
     tone: "pink",
-    hint: "Value of orders refunded in the period.",
+    hint: "Value of orders refunded this month. Down is good here, so the change reads in red when refunds rise.",
   },
 ];
 
@@ -113,17 +113,33 @@ const TILE_TONES: Record<StatTone, string> = {
   emerald: "from-emerald-500 to-emerald-600",
 };
 
-const DELTA_STYLES: Record<Stat["deltaColor"], { icon: IconComponent; className: string }> = {
-  lime: { icon: RiArrowUpCircleFill, className: "text-status-lime-text" },
-  rose: { icon: RiArrowDownCircleFill, className: "text-status-rose-text" },
-  neutral: { icon: RiIndeterminateCircleFill, className: "text-text-tertiary" },
+const DELTA_STYLES: Record<
+  Stat["deltaColor"],
+  { icon: IconComponent; className: string; pill: string }
+> = {
+  lime: {
+    icon: RiArrowUpCircleFill,
+    className: "text-status-lime-text",
+    pill: "bg-status-lime-background",
+  },
+  rose: {
+    icon: RiArrowDownCircleFill,
+    className: "text-status-rose-text",
+    pill: "bg-status-rose-background",
+  },
+  neutral: {
+    icon: RiIndeterminateCircleFill,
+    className: "text-text-secondary",
+    pill: "bg-background-secondary-default",
+  },
 };
 
-/** White pill with a direction glyph — the footer band's delta readout. */
+/** Tinted pill with a direction glyph — the footer band's delta readout, in
+ *  the same lime and rose the chart cards use for their trend chips. */
 function DeltaPill({ delta, deltaColor }: Pick<Stat, "delta" | "deltaColor">) {
-  const { icon: Icon, className } = DELTA_STYLES[deltaColor];
+  const { icon: Icon, className, pill } = DELTA_STYLES[deltaColor];
   return (
-    <span className="flex shrink-0 items-center gap-1 rounded-full border border-border-button-default bg-background-primary-default py-0.5 pr-2 pl-1 shadow-xs">
+    <span className={cx("flex shrink-0 items-center gap-1 rounded-full py-0.5 pr-2 pl-1", pill)}>
       <Icon className={cx("size-4 shrink-0", className)} aria-hidden />
       <span className={cx("text-body-medium whitespace-nowrap tabular-nums", className)}>
         {delta}
@@ -132,14 +148,18 @@ function DeltaPill({ delta, deltaColor }: Pick<Stat, "delta" | "deltaColor">) {
   );
 }
 
-/** Bare info glyph with a tooltip — the footer header's trailing control. */
+/** Bare info glyph with a tooltip — the footer header's trailing control.
+ *  Opens on hover and focus as tooltips do, and on click as well, since a
+ *  glyph this small reads as a button and gets tapped. */
 function StatHint({ label, hint }: { label: string; hint: string }) {
+  const [open, setOpen] = useState(false);
   return (
-    <TooltipTrigger delay={200}>
+    <TooltipTrigger delay={200} isOpen={open} onOpenChange={setOpen}>
       <Focusable>
         <button
           type="button"
           aria-label={`About ${label}`}
+          onClick={() => setOpen((isOpen) => !isOpen)}
           className="flex shrink-0 cursor-pointer items-center justify-center rounded-full text-foreground-icon-secondary outline-none transition-colors duration-150 ease hover:text-foreground-icon-primary focus-visible:ring-2 focus-visible:ring-border-focus-ring"
         >
           <RiInformationFill className="size-5" aria-hidden />
@@ -172,8 +192,8 @@ function PlainStatCard({ stat }: { stat: Stat }) {
 function FooterStatCard({ stat }: { stat: Stat }) {
   return (
     <section className="flex min-w-0 flex-col rounded-2xl bg-background-secondary-default p-2">
-      {/* Icon tile + optional info glyph */}
-      <div className="flex w-full items-center justify-between gap-2.5 p-2">
+      {/* Icon tile + optional info glyph, both hanging from the same top inset */}
+      <div className="flex w-full items-start justify-between gap-2.5 p-2">
         <span
           className={cx(
             "flex size-10 shrink-0 items-center justify-center rounded-2lg bg-linear-to-b",
