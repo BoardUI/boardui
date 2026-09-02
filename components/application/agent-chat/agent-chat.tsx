@@ -17,6 +17,7 @@ import { AgentMessage } from "@/components/application/agent-chat/agent-chat-mes
 import { AgentComposer } from "@/components/application/agent-chat/agent-composer";
 import { AgentThinking } from "@/components/application/agent-thinking/agent-thinking";
 import { starterNav, useStarterBase } from "@/components/application/app-shell/app-shell";
+import { ProOfferCard } from "@/components/application/app-shell/pro-offer-card";
 import { DashboardSidebar } from "@/components/application/dashboard/dashboard-sidebar";
 import { IconButton } from "@/components/base/buttons/icon-button";
 import { cx } from "@/utils/cx";
@@ -521,6 +522,8 @@ export function AgentChat({
           />
         )}
       </div>
+      {/* Fixed to the viewport, so not inside the docs preview frame. */}
+      {!contained && <ProOfferCard />}
     </div>
   );
 }
