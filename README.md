@@ -4,7 +4,6 @@
 
 [![npm](https://img.shields.io/npm/v/boardui?label=npm)](https://www.npmjs.com/package/boardui)
 [![license](https://img.shields.io/github/license/BoardUI/boardui)](LICENSE)
-[![free components](https://img.shields.io/badge/free_components-59-blue)](#components)
 [![X](https://img.shields.io/badge/X-boardui-black?logo=x)](https://x.com/boardui)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/azcHkw8T6F)
 
