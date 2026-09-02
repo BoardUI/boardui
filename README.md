@@ -2,7 +2,7 @@
 
 # BoardUI
 
-Start your agentic app with BoardUI. This repository is the free tier of the [BoardUI](https://www.boardui.com) design system, every component as source, and its homepage is a working AI chat app on your own model key. Next.js App Router, React, Tailwind CSS v4. Deploy it in a click, or install any component into a project you already have.
+BoardUI is a React design system for agentic interfaces. It gives a product team the parts an AI product needs and the parts every dashboard needs, in one visual language, as source files that live in your project rather than behind a package. This repository is the free tier, all of it, and its homepage is a working AI chat app on your own model key.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FBoardUI%2Fboardui&env=AI_API_KEY&envDescription=Your+model+provider+key%3A+OpenAI%2C+Anthropic%2C+Google%2C+OpenRouter%2C+or+Vercel+AI+Gateway.+The+provider+is+read+from+the+key+itself.&envLink=https%3A%2F%2Fwww.boardui.com%2Fcomponents%2Fchat-starter&project-name=boardui-chat-starter&repository-name=boardui-chat-starter)
 
@@ -10,7 +10,16 @@ Click the button, paste one API key when Vercel asks for it, and the first deplo
 
 This repository is generated from BoardUI's source and takes no pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## What you get
+## Why BoardUI?
+
+- **Built for agent products.** A chat screen, a thinking indicator, an agent log, a composer and an app sidebar, next to the data table, stat cards, forms and settings the rest of the product needs. One system for the agent and the dashboard around it.
+- **Source, not a dependency.** `npx boardui add` copies the files into your project. Change anything, delete half of it, and never fight a theme API or wait on a maintainer.
+- **One visual language.** Designed in Figma first, then translated into 400+ design tokens: semantic text, background, border and foreground colours, a type scale, radii and shadows. Light and dark mode come from the same classes.
+- **Accessible by default.** Interactive components are built on React Aria Components for keyboard, focus and screen-reader behaviour, styled with Tailwind CSS v4 and no CSS-in-JS runtime.
+- **Agent-native.** An MCP server, an agent skill, always-on rules in `AGENTS.md` and `.cursor/rules`, and `llms.txt`, so Claude Code, Cursor and Codex build with the system rather than around it.
+- **Deployable.** The homepage here is a working chat on your own key, and the button above clones it into your account.
+
+## What's in this repository
 
 - Every free BoardUI item, 59 in all, as source under `components/`, `styles/` and `utils/`: the base components, the application blocks, the tokens and the type scale. The catalogue is below.
 - A streaming chat screen as the homepage: app sidebar, composer, thinking indicator, message actions, and a chat history rail kept in the visitor's own browser. No database.
