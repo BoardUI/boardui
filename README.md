@@ -31,6 +31,8 @@ One variable. The provider is read from the key itself:
 | `gsk_...` | Groq | llama-3.3-70b-versatile |
 | `xai-...` | xAI | grok-4-fast-non-reasoning |
 
+Create the key with a spending limit where the provider offers one: OpenRouter can cap the credits a key may spend, OpenAI has usage limits per project. The key never reaches the browser, but the chat itself is open to anyone who has your URL, so the cap is what bounds the cost.
+
 Set `CHAT_MODEL` to use a different model. For Mistral or DeepSeek, whose keys have no recognisable shape, add `AI_PROVIDER=mistral` or `AI_PROVIDER=deepseek`. For any OpenAI-compatible server (Ollama, LM Studio, vLLM, LiteLLM, Together) set `AI_BASE_URL` and `CHAT_MODEL`. Every provider's usual variable (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, ...) works too. See `.env.example`.
 
 ## Run it locally
@@ -210,7 +212,7 @@ Everything in this repository is free and complete. Pro adds the full-page templ
 
 ## Before going public
 
-Requests bill to whoever owns the key. Put a rate limit in front of `/api/chat` before pointing the internet at a deployment with a live key.
+Requests bill to whoever owns the key, and anyone who has your URL can send them. Three ways to bound that, simplest first: create the key with a spending limit, turn on Vercel's deployment protection for a personal deployment, and put a rate limit in front of `/api/chat` before pointing the internet at it.
 
 ## License
 
