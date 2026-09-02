@@ -25,8 +25,8 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 
 ## What's in this repository
 
-- All 59 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
-- The chat app: sidebar, composer, thinking indicator, history kept in the visitor's browser. No database.
+- All 60 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
+- The app: a chat at `/`, a dashboard, an inbox and a sign-in screen, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
 - `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
 ## Bring your own key
@@ -99,6 +99,7 @@ Composed screens and panels: sidebars, chat, tables, settings, cards.
 | [Agent Chat](https://www.boardui.com/components/chat-starter) | A working chat app: app sidebar, streaming replies, thinking indicator, a composer pill with stop control, a chat-history rail with local thread switching, and a setup notice when no provider key is set. | `npx boardui@latest add agent-chat` |
 | [Agent Log](components/application/agent-log/agent-log.tsx) | Shared streaming-log machinery: the reveal ticker, the blur-in with its soft clipping edge, and the curved tree guide that draws itself. Behind Task List and Web Search. | `npx boardui@latest add agent-log` |
 | [Agent Thinking](https://www.boardui.com/components/agent-thinking) | Agent thinking indicator for chat composers — dot wave, dot spin, stars, and infinity variants with a shimmering label and elapsed timer. | `npx boardui@latest add agent-thinking` |
+| [App Shell](components/application/app-shell/app-shell.tsx) | Page frame for the chat starter: the sidebar, a phone drawer, and a titled content card, carrying the starter's own navigation so the sidebar only links to pages the app has. | `npx boardui@latest add app-shell` |
 | [Auth Card](https://www.boardui.com/components/auth-card) | Sign-in and sign-up cards with social providers stacked with labels or inline as icons, plus email fields and a CTA. | `npx boardui@latest add auth-card` |
 | [Composer Loader](https://www.boardui.com/components/composer-loader) | Loading state that wraps a chat composer — an iridescent light band orbiting the rim with a soft inward bloom, fading in while the agent works. | `npx boardui@latest add composer-loader` |
 | [Data Table](https://www.boardui.com/components/data-table) | TanStack-powered data table with sorting, selection, and pagination. | `npx boardui@latest add data-table` |

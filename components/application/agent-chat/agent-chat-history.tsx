@@ -1,5 +1,8 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+
+import { useStarterBase } from "@/components/application/app-shell/app-shell";
 import {
   RiAddLine,
   RiDownloadLine,
@@ -175,6 +178,12 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
   const [usageOpen, setUsageOpen] = useState(false);
   const [storedBytes, setStoredBytes] = useState(0);
   const close = () => setIsOpen(false);
+  const router = useRouter();
+  const base = useStarterBase();
+  const logOut = () => {
+    close();
+    router.push(`${base}/login`);
+  };
 
   const chatPercent = Math.min(100, Math.round((threads.length / THREAD_CAPACITY) * 100));
   const storagePercent = Math.min(100, Math.round((storedBytes / STORAGE_BUDGET_BYTES) * 100));
@@ -268,7 +277,7 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
         <DropdownDivider />
 
         <DropdownGroup>
-          <DropdownItem onSelect={close} className="px-2 py-1.5">
+          <DropdownItem onSelect={logOut} className="px-2 py-1.5">
             <RiLogoutBoxRLine className="size-[18px] shrink-0 text-foreground-icon-secondary" aria-hidden />
             <span className="truncate text-body-medium whitespace-nowrap text-text-primary">
               Log out

@@ -135,16 +135,74 @@ function NavItem({
   );
 }
 
-export type DashboardNavKey =
-  | "home"
-  | "marketing"
-  | "calendar"
-  | "finance"
-  | "projects"
-  | "inbox"
-  | "medical"
-  | "hr"
-  | "profile";
+/** A primary navigation row. Rows without an `href` are decoration only. */
+export interface DashboardNavItem {
+  key: string;
+  label: string;
+  icon: IconComponent;
+  href?: string;
+  badge?: string | number;
+}
+
+/** Kept as a name for callers that typed their `selected` prop; any key works. */
+export type DashboardNavKey = string;
+
+/** The Pro dashboard's navigation, the default set. */
+export const DASHBOARD_NAV: DashboardNavItem[] = [
+  { key: "home", label: "Home", icon: RiHomeLine, href: "/templates/dashboard", badge: 152 },
+  { key: "marketing", label: "Marketing", icon: RiMegaphoneLine, href: "/templates/marketing" },
+  { key: "calendar", label: "Calendar", icon: RiCalendarLine, href: "/templates/calendar" },
+  { key: "finance", label: "Finance", icon: RiBankLine, href: "/templates/finance" },
+  { key: "projects", label: "Projects", icon: RiFolder6Line },
+  { key: "medical", label: "Medical Report", icon: RiAsterisk, href: "/templates/medical-profile" },
+  { key: "hr", label: "HR Team", icon: RiTeamLine, href: "/templates/hr" },
+  { key: "profile", label: "Profile", icon: RiUserSmileLine, href: "/templates/ai-profile" },
+  { key: "inbox", label: "Inbox", icon: RiInbox2Line, badge: 91 },
+];
+
+/**
+ * The primary rows. A component of its own so the closures over `collapsed`
+ * and the search query live here: built inline in the sidebar, the compiler
+ * could not tell they leave `mobile` untouched and dropped the sidebar's
+ * manual memoization.
+ */
+function NavRows({
+  items,
+  query,
+  selected,
+  collapsed,
+  secondaryMatch,
+}: {
+  items: DashboardNavItem[];
+  query: string;
+  selected: string;
+  collapsed: boolean;
+  /** Whether Support or Settings matches, so "No results" only shows when nothing does. */
+  secondaryMatch: boolean;
+}) {
+  const shown = items.filter((item) => item.label.toLocaleLowerCase().includes(query));
+  if (shown.length === 0 && !secondaryMatch && !collapsed) {
+    return <p className="px-2 py-3 text-body-regular text-text-tertiary">No results</p>;
+  }
+  return shown.map((item) => {
+      const isSelected = selected === item.key;
+      return (
+        <NavItem
+          key={item.key}
+          icon={item.icon}
+          label={item.label}
+          href={item.href}
+          isSelected={isSelected}
+          collapsed={collapsed}
+          badge={
+            item.badge !== undefined ? (
+              <Badge color={isSelected ? "primary" : "neutral"}>{item.badge}</Badge>
+            ) : undefined
+          }
+        />
+      );
+    });
+}
 
 export function DashboardSidebar({
   mobile = false,
@@ -152,6 +210,7 @@ export function DashboardSidebar({
   fluid = false,
   showThemeToggle = true,
   selected = "home",
+  items = DASHBOARD_NAV,
   flat = false,
   className,
 }: {
@@ -168,6 +227,8 @@ export function DashboardSidebar({
   showThemeToggle?: boolean;
   /** Which nav item shows the selected (filled blue) state. */
   selected?: DashboardNavKey;
+  /** Primary navigation rows. The Pro dashboard's set unless a screen brings its own. */
+  items?: DashboardNavItem[];
   /** Removes the floating panel treatment for a sidebar revealed beneath mobile content. */
   flat?: boolean;
   className?: string;
@@ -183,19 +244,8 @@ export function DashboardSidebar({
   const collapsed = mobile ? false : collapsedState;
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const matches = (label: string) => label.toLocaleLowerCase().includes(normalizedQuery);
-  const primaryLabels = [
-    "Home",
-    "Marketing",
-    "Calendar",
-    "Finance",
-    "Projects",
-    "Medical Report",
-    "HR Team",
-    "Profile",
-    "Inbox",
-  ];
   const secondaryLabels = ["Support", "Settings"];
-  const hasAnyMatch = [...primaryLabels, ...secondaryLabels].some(matches);
+  const secondaryMatch = secondaryLabels.some(matches);
 
   const activateSearch = useCallback(() => {
     if (!mobile) setCollapsed(false);
@@ -449,90 +499,13 @@ export function DashboardSidebar({
               here pushes every item 2px right and the rail's own clip shaves
               that much off its selected fill and hover state. */}
           <nav className={cx("flex w-full flex-col gap-1", !collapsed && "px-0.5")}>
-            {matches("Home") && (
-              <NavItem
-                icon={RiHomeLine}
-                label="Home"
-                href="/templates/dashboard"
-                isSelected={selected === "home"}
-                collapsed={collapsed}
-                badge={<Badge color={selected === "home" ? "primary" : "neutral"}>152</Badge>}
-              />
-            )}
-            {matches("Marketing") && (
-              <NavItem
-                icon={RiMegaphoneLine}
-                label="Marketing"
-                href="/templates/marketing"
-                isSelected={selected === "marketing"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Calendar") && (
-              <NavItem
-                icon={RiCalendarLine}
-                label="Calendar"
-                href="/templates/calendar"
-                isSelected={selected === "calendar"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Finance") && (
-              <NavItem
-                icon={RiBankLine}
-                label="Finance"
-                href="/templates/finance"
-                isSelected={selected === "finance"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Projects") && (
-              <NavItem
-                icon={RiFolder6Line}
-                label="Projects"
-                isSelected={selected === "projects"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Medical Report") && (
-              <NavItem
-                icon={RiAsterisk}
-                label="Medical Report"
-                href="/templates/medical-profile"
-                isSelected={selected === "medical"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("HR Team") && (
-              <NavItem
-                icon={RiTeamLine}
-                label="HR Team"
-                href="/templates/hr"
-                isSelected={selected === "hr"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Profile") && (
-              <NavItem
-                icon={RiUserSmileLine}
-                label="Profile"
-                href="/templates/ai-profile"
-                isSelected={selected === "profile"}
-                collapsed={collapsed}
-              />
-            )}
-            {matches("Inbox") && (
-              <NavItem
-                icon={RiInbox2Line}
-                label="Inbox"
-                isSelected={selected === "inbox"}
-                collapsed={collapsed}
-                badge={<Badge color={selected === "inbox" ? "primary" : "neutral"}>91</Badge>}
-              />
-            )}
-            {!hasAnyMatch && !collapsed && (
-              <p className="px-2 py-3 text-body-regular text-text-tertiary">No results</p>
-            )}
+            <NavRows
+              items={items}
+              query={normalizedQuery}
+              selected={selected}
+              collapsed={collapsed}
+              secondaryMatch={secondaryMatch}
+            />
           </nav>
         </div>
       </div>

@@ -13,6 +13,7 @@ import {
 import { AgentMessage } from "@/components/application/agent-chat/agent-chat-message";
 import { AgentComposer } from "@/components/application/agent-chat/agent-composer";
 import { AgentThinking } from "@/components/application/agent-thinking/agent-thinking";
+import { starterNav, useStarterBase } from "@/components/application/app-shell/app-shell";
 import { DashboardSidebar } from "@/components/application/dashboard/dashboard-sidebar";
 import { IconButton } from "@/components/base/buttons/icon-button";
 import { cx } from "@/utils/cx";
@@ -70,6 +71,8 @@ export function AgentChat({
   const [probe, setProbe] = useState<Probe>({ status: "checking", provider: null, label: null, model: null });
   const [input, setInput] = useState("");
   const [navOpen, setNavOpen] = useState(false);
+  // The sidebar links only to pages the starter has; see app-shell.
+  const navItems = starterNav(useStarterBase());
   const [threads, setThreads] = useState<StoredThread[]>([]);
   // Empty until the mount effect assigns one: an id generated during render
   // would differ between server and client and break hydration.
@@ -341,7 +344,7 @@ export function AgentChat({
         className,
       )}
     >
-      <DashboardSidebar selected="home" className="hidden lg:flex" />
+      <DashboardSidebar items={navItems} selected="chat" className="hidden lg:flex" />
 
       {/* Below lg the sidebar rides in as an overlay drawer. The Pro template
           pushes the workspace across instead; this is the plain version. */}
@@ -354,7 +357,13 @@ export function AgentChat({
             className="absolute inset-0 cursor-pointer bg-black/40"
           />
           <div className="relative flex h-full p-3">
-            <DashboardSidebar mobile onClose={() => setNavOpen(false)} className="flex" />
+            <DashboardSidebar
+              mobile
+              items={navItems}
+              selected="chat"
+              onClose={() => setNavOpen(false)}
+              className="flex"
+            />
           </div>
         </div>
       )}
