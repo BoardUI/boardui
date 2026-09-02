@@ -844,3 +844,25 @@ input[type="search"]::-webkit-search-cancel-button {
     transform: scaleY(0.7);
   }
 }
+
+/* Shimmer sweep on a primary call to action (the Pro prompt card). */
+@keyframes bui-badge-shimmer {
+  0% {
+    transform: translateX(0) skewX(-12deg);
+  }
+  40%,
+  100% {
+    transform: translateX(350%) skewX(-12deg);
+  }
+}
+
+.bui-badge-shimmer {
+  animation: bui-badge-shimmer 2.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bui-badge-shimmer {
+      animation: none;
+      opacity: 0;
+    }
+}
