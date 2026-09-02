@@ -12,8 +12,8 @@ const DISMISSED_KEY = "boardui:pro-offer-dismissed";
 const PRICING_URL = "https://www.boardui.com/#pricing";
 
 /**
- * The one mention of Pro inside the starter: a small card in the corner, gone
- * for good once closed. Counts are the catalogue as of September 2026; update
+ * The one mention of Pro inside the starter: a small card bottom-left, where
+ * the Pro templates keep theirs, gone for good once closed. Counts are the catalogue as of September 2026; update
  * them when Pro grows.
  */
 export function ProOfferCard({ className }: { className?: string }) {
@@ -43,7 +43,7 @@ export function ProOfferCard({ className }: { className?: string }) {
     <aside
       aria-label="BoardUI Pro"
       className={cx(
-        "fixed inset-x-3 bottom-3 z-40 flex w-auto flex-col gap-3 rounded-2xl border border-border-button-default bg-background-primary-default p-4 shadow-card sm:inset-x-auto sm:right-3 sm:w-[280px]",
+        "fixed inset-x-3 bottom-3 z-40 flex w-auto flex-col gap-3 rounded-2xl border border-border-button-default bg-background-primary-default p-4 shadow-card sm:inset-x-auto sm:left-3 sm:w-[280px]",
         className,
       )}
     >
