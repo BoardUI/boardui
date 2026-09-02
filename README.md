@@ -43,7 +43,7 @@ npm run dev
 
 ## Install into an existing project
 
-Every component in this repository also installs on its own, as source, into any Next.js project. BoardUI Pro adds the full-page templates and richer components on the same path.
+Every component in this repository also installs on its own, as source, into any Next.js project.
 
 ### With an agent
 
@@ -73,7 +73,6 @@ npx boardui@latest add data-table    # one component and what it depends on
 npx boardui@latest add --all         # everything in this repository
 ```
 
-Pro components and templates need a licence key: `npx boardui@latest login <key>`, then `add` as usual. See [BoardUI Pro](https://www.boardui.com).
 
 ## Components
 
@@ -156,6 +155,10 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 | [Typography tokens](https://www.boardui.com/components/typography) | The full Figma type scale as composite text-{family}-{weight} Tailwind utilities. | `npx boardui@latest add typography` |
 | [useCountUp hook](hooks/use-count-up.ts) | Animated rolling number hook used by chart headline figures. | `npx boardui@latest add use-count-up` |
 | [useDismissOnOutsidePress hook](utils/use-dismiss-on-outside-press.ts) | Closes React Aria popovers on outside press without swallowing the outside click. | `npx boardui@latest add use-dismiss-on-outside-press` |
+
+## BoardUI Pro
+
+Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 24 components and 8 templates, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
 
 ## Before going public
 
