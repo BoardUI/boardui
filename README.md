@@ -172,7 +172,7 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 
 ## BoardUI Pro
 
-Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 8 templates and 24 components, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
+Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 8 templates and 23 components, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
 
 <details>
 <summary>The 8 templates</summary>
@@ -191,13 +191,12 @@ Everything in this repository is free and complete. Pro adds the full-page templ
 </details>
 
 <details>
-<summary>The 24 components</summary>
+<summary>The 23 components</summary>
 
 | Name | What it is |
 | --- | --- |
 | [Activity Rings Card](https://www.boardui.com/components/activity-rings-card) | Apple Watch-style concentric goal rings with stat tiles. |
 | [Agent Limits Card](https://www.boardui.com/components/agent-limits-card) | Context window usage bar with an expandable token breakdown, collapsible groups, and plan usage limits with reset times. |
-| Agent Orb | WebGL voice-agent orb: five pattern generators on a four-stop color ramp, an optional refracting glass shell with chromatic dispersion, and an outer glow, all reacting to a live speaking level. |
 | [Agent Progress](https://www.boardui.com/components/agent-progress) | Collapsible multi-step AI task progress with animated active, pending, and completed states. |
 | [Area Chart Card](https://www.boardui.com/components/area-chart-card) | Multi-series area chart with stacked, overlapping and 100% variants, gradient fills, period dropdown and stat tiles. |
 | [Bar List Card](https://www.boardui.com/components/bar-list-card) | Analytics breakdown list: ranked rows with share bars behind the labels, tabbed lists, metric caption, and a show-more pill. |
