@@ -26,7 +26,7 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 ## What's in this repository
 
 - All 62 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
-- The app: a chat at `/`, a dashboard with the two free charts, an inbox, and sign-in and sign-up screens, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
+- The app: a chat at `/`, a dashboard with the two free charts, and sign-in and sign-up screens, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
 - `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
 ## Bring your own key

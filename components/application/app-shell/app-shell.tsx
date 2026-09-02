@@ -6,7 +6,6 @@ import {
   RiCloseLine,
   RiDashboardLine,
   RiFilter3Fill,
-  RiInbox2Line,
   RiLoginBoxLine,
   RiMenuLine,
   RiUserAddLine,
@@ -20,7 +19,6 @@ import {
   type DashboardNavItem,
 } from "@/components/application/dashboard/dashboard-sidebar";
 import { NotificationBell } from "@/components/application/app-shell/notification-bell";
-import { STARTER_UNREAD_COUNT } from "@/components/application/app-shell/starter-notifications";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
 import { Button } from "@/components/base/buttons/button";
@@ -51,7 +49,6 @@ export function starterNav(base: string): DashboardNavItem[] {
   return [
     { key: "chat", label: "Chat", icon: RiChatAiLine, href: base || "/" },
     { key: "dashboard", label: "Dashboard", icon: RiDashboardLine, href: `${base}/dashboard` },
-    { key: "inbox", label: "Inbox", icon: RiInbox2Line, href: `${base}/inbox`, badge: STARTER_UNREAD_COUNT },
     // Auth screens, as examples: full-page, so nothing is selected while on them.
     { key: "login", label: "Sign in", icon: RiLoginBoxLine, href: `${base}/login` },
     { key: "signup", label: "Sign up", icon: RiUserAddLine, href: `${base}/signup` },
@@ -64,7 +61,6 @@ export function useStarterSelected(): string {
   const base = useStarterBase();
   const rest = pathname.slice(base.length);
   if (rest.startsWith("/dashboard")) return "dashboard";
-  if (rest.startsWith("/inbox")) return "inbox";
   return "chat";
 }
 
