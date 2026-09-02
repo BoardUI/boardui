@@ -1,9 +1,11 @@
 "use client";
 
 import {
+  RiAddFill,
   RiChatAiLine,
   RiCloseLine,
   RiDashboardLine,
+  RiFilter3Fill,
   RiInbox2Line,
   RiLoginBoxLine,
   RiMenuLine,
@@ -17,8 +19,11 @@ import {
   DashboardSidebar,
   type DashboardNavItem,
 } from "@/components/application/dashboard/dashboard-sidebar";
+import { NotificationBell } from "@/components/application/app-shell/notification-bell";
+import { STARTER_UNREAD_COUNT } from "@/components/application/app-shell/starter-notifications";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Breadcrumb, BreadcrumbItem } from "@/components/base/breadcrumb/breadcrumb";
+import { Button } from "@/components/base/buttons/button";
 import { IconButton } from "@/components/base/buttons/icon-button";
 import { cx } from "@/utils/cx";
 
@@ -46,7 +51,7 @@ export function starterNav(base: string): DashboardNavItem[] {
   return [
     { key: "chat", label: "Chat", icon: RiChatAiLine, href: base || "/" },
     { key: "dashboard", label: "Dashboard", icon: RiDashboardLine, href: `${base}/dashboard` },
-    { key: "inbox", label: "Inbox", icon: RiInbox2Line, href: `${base}/inbox`, badge: 3 },
+    { key: "inbox", label: "Inbox", icon: RiInbox2Line, href: `${base}/inbox`, badge: STARTER_UNREAD_COUNT },
     // Auth screens, as examples: full-page, so nothing is selected while on them.
     { key: "login", label: "Sign in", icon: RiLoginBoxLine, href: `${base}/login` },
     { key: "signup", label: "Sign up", icon: RiUserAddLine, href: `${base}/signup` },
@@ -75,6 +80,7 @@ export function AppShell({
   title,
   heading = title,
   icon: Icon = RiDashboardLine,
+  actions,
   children,
   className,
 }: {
@@ -84,6 +90,8 @@ export function AppShell({
   heading?: string;
   /** Icon on the current breadcrumb item. */
   icon?: IconComponent;
+  /** Header actions on the right; the Pro dashboard's set by default. */
+  actions?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
@@ -137,17 +145,32 @@ export function AppShell({
                 {title}
               </BreadcrumbItem>
             </Breadcrumb>
-            <div className="flex min-w-0 items-center gap-1.5">
-              <IconButton
-                icon={navOpen ? RiCloseLine : RiMenuLine}
-                size="small"
-                aria-label="Open navigation"
-                onClick={() => setNavOpen((open) => !open)}
-                className="lg:hidden"
-              />
-              <h1 className="px-1 text-title-2-medium whitespace-nowrap text-text-primary">
-                {heading}
-              </h1>
+            <div className="flex w-full flex-wrap items-end justify-between gap-2">
+              <div className="flex min-w-0 items-center gap-1.5">
+                <IconButton
+                  icon={navOpen ? RiCloseLine : RiMenuLine}
+                  size="medium"
+                  aria-label="Open navigation"
+                  onClick={() => setNavOpen((open) => !open)}
+                  className="lg:hidden"
+                />
+                <h1 className="px-1 text-title-2-medium whitespace-nowrap text-text-primary">
+                  {heading}
+                </h1>
+              </div>
+              <div className="flex flex-wrap items-center justify-end gap-2.5">
+                {actions ?? (
+                  <>
+                    <NotificationBell />
+                    <Button variant="secondary" size="medium" leadingIcon={RiFilter3Fill}>
+                      Filters
+                    </Button>
+                    <Button variant="primary" size="medium" leadingIcon={RiAddFill}>
+                      Create ticket
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
           </header>
           <div className="flex w-full flex-col gap-4 pb-4">{children}</div>
