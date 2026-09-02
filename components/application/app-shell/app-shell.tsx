@@ -6,6 +6,7 @@ import {
   RiCloseLine,
   RiDashboardLine,
   RiFilter3Fill,
+  RiLayoutGridLine,
   RiLoginBoxLine,
   RiMenuLine,
   RiUserAddLine,
@@ -38,6 +39,11 @@ import { cx } from "@/utils/cx";
  */
 export const STARTER_SITE_PREFIX = "/templates/chat-starter";
 
+// Re-exported so the catalogue ships with the shell; the starter's pages are
+// copied into the public repo by path and can only import what a registry
+// item carries.
+export { ComponentsCatalog } from "@/components/application/app-shell/components-catalog";
+
 /** "" in a deployed starter, the site prefix on boardui.com. */
 export function useStarterBase(): string {
   const pathname = usePathname() ?? "";
@@ -50,6 +56,7 @@ export function starterNav(base: string): DashboardNavItem[] {
   return [
     { key: "chat", label: "Chat", icon: RiChatAiLine, href: base || "/" },
     { key: "dashboard", label: "Dashboard", icon: RiDashboardLine, href: `${base}/dashboard` },
+    { key: "components", label: "Components and Blocks", icon: RiLayoutGridLine, href: `${base}/components` },
     // Auth screens, as examples: full-page, so nothing is selected while on them.
     { key: "login", label: "Sign in", icon: RiLoginBoxLine, href: `${base}/login` },
     { key: "signup", label: "Sign up", icon: RiUserAddLine, href: `${base}/signup` },
@@ -62,6 +69,7 @@ export function useStarterSelected(): string {
   const base = useStarterBase();
   const rest = pathname.slice(base.length);
   if (rest.startsWith("/dashboard")) return "dashboard";
+  if (rest.startsWith("/components")) return "components";
   return "chat";
 }
 
