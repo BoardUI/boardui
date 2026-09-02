@@ -5,7 +5,9 @@ import {
   RiCloseLine,
   RiDashboardLine,
   RiInbox2Line,
+  RiLoginBoxLine,
   RiMenuLine,
+  RiUserAddLine,
 } from "@remixicon/react";
 import type { ComponentType } from "react";
 import { usePathname } from "next/navigation";
@@ -45,6 +47,9 @@ export function starterNav(base: string): DashboardNavItem[] {
     { key: "chat", label: "Chat", icon: RiChatAiLine, href: base || "/" },
     { key: "dashboard", label: "Dashboard", icon: RiDashboardLine, href: `${base}/dashboard` },
     { key: "inbox", label: "Inbox", icon: RiInbox2Line, href: `${base}/inbox`, badge: 3 },
+    // Auth screens, as examples: full-page, so nothing is selected while on them.
+    { key: "login", label: "Sign in", icon: RiLoginBoxLine, href: `${base}/login` },
+    { key: "signup", label: "Sign up", icon: RiUserAddLine, href: `${base}/signup` },
   ];
 }
 
