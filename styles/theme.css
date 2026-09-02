@@ -359,6 +359,8 @@
   --color-chart-7-active: var(--color-emerald-500);
   --color-chart-8:        var(--color-yellow-400);
   --color-chart-8-active: var(--color-yellow-500);
+  --color-chart-9:        var(--color-indigo-400);
+  --color-chart-9-active: var(--color-indigo-500);
   --color-chart-agents-bar:        var(--color-purple-300);
   --color-chart-agents-bar-active: var(--color-purple-400);
 
@@ -735,6 +737,8 @@
   --color-chart-7-active: var(--color-chart-7-active);
   --color-chart-8:        var(--color-chart-8);
   --color-chart-8-active: var(--color-chart-8-active);
+  --color-chart-9:        var(--color-chart-9);
+  --color-chart-9-active: var(--color-chart-9-active);
   --color-chart-agents-bar:        var(--color-chart-agents-bar);
   --color-chart-agents-bar-active: var(--color-chart-agents-bar-active);
 }

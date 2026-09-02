@@ -124,7 +124,7 @@ export function OrdersChartCard({
         </div>
         <dl className="flex shrink-0 items-center gap-4 text-body-2-medium text-text-secondary">
           <div className="flex items-center gap-1.5">
-            <span className="size-2 rounded-full bg-chart-2-active" aria-hidden />
+            <span className="size-2 rounded-full bg-chart-9-active" aria-hidden />
             <dt>This year</dt>
           </div>
           <div className="flex items-center gap-1.5">
@@ -175,7 +175,7 @@ export function OrdersChartCard({
             />
             <Bar
               dataKey="current"
-              fill="var(--color-chart-2-active)"
+              fill="var(--color-chart-9-active)"
               radius={[4, 4, 0, 0]}
               isAnimationActive
               animationDuration={450}
