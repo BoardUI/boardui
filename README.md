@@ -158,7 +158,55 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 
 ## BoardUI Pro
 
-Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 24 components and 8 templates, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
+Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 8 templates and 24 components, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
+
+<details>
+<summary>The 8 templates</summary>
+
+| Name | What it is |
+| --- | --- |
+| [AI Chat Template](https://www.boardui.com/components/ai-chat) | Full AI chat app: sidebar, resizable code panel, composer with model/effort controls. |
+| [AI Image Generation Template](https://www.boardui.com/components/ai-image-generation) | Prompt thread with a live generation frame and feedback actions, plus a gallery panel of past generations. |
+| [AI Profile Template](https://www.boardui.com/components/ai-profile) | AI contributions profile: cover card with activity heatmap, 30-day agents bar chart, and tokens trend chart. |
+| [Finance Dashboard Template](https://www.boardui.com/components/finance-dashboard) | Balance KPIs, a cash-flow sankey, spending rings, portfolio bubbles, a daily spending heatmap, and a transactions data table. |
+| [Home Dashboard Template](https://www.boardui.com/components/home-dashboard) | KPI stat cards, revenue trend, earnings chart, contributions heatmap, and a customers table in a responsive app shell. |
+| [HR Management Template](https://www.boardui.com/components/hr-management) | Headcount KPIs, recent hires, hiring pipeline, engagement radar, hires vs. attrition, team breakdowns, and an employees data table. |
+| [Marketing Dashboard Template](https://www.boardui.com/components/marketing-dashboard) | Campaign KPIs, acquisition funnel, spend by channel, traffic sources, ad spend vs. ROAS, visitors by channel, and a campaigns data table. |
+| [Medical Report Template](https://www.boardui.com/components/medical-profile) | Patient overview with steps, sleep score, activity rings, and most-active-days charts. |
+
+</details>
+
+<details>
+<summary>The 24 components</summary>
+
+| Name | What it is |
+| --- | --- |
+| [Activity Rings Card](https://www.boardui.com/components/activity-rings-card) | Apple Watch-style concentric goal rings with stat tiles. |
+| [Agent Limits Card](https://www.boardui.com/components/agent-limits-card) | Context window usage bar with an expandable token breakdown, collapsible groups, and plan usage limits with reset times. |
+| Agent Orb | WebGL voice-agent orb: five pattern generators on a four-stop color ramp, an optional refracting glass shell with chromatic dispersion, and an outer glow, all reacting to a live speaking level. |
+| [Agent Progress](https://www.boardui.com/components/agent-progress) | Collapsible multi-step AI task progress with animated active, pending, and completed states. |
+| [Area Chart Card](https://www.boardui.com/components/area-chart-card) | Multi-series area chart with stacked, overlapping and 100% variants, gradient fills, period dropdown and stat tiles. |
+| [Bar List Card](https://www.boardui.com/components/bar-list-card) | Analytics breakdown list: ranked rows with share bars behind the labels, tabbed lists, metric caption, and a show-more pill. |
+| [Calendar](https://www.boardui.com/components/calendar) | Month-view calendar with event chips, details popover, month switcher, and inbox feed. |
+| [Combo Chart Card](https://www.boardui.com/components/combo-chart-card) | Bar-plus-line combo chart with independent left and right axes, hover dimming, and a pulsing active dot. |
+| [Composer](https://www.boardui.com/components/composer) | The AI chat composer, whole package: attachment and model menus, voice and send controls, the status bar, and the liquid-glass loading treatment for its controls. |
+| [Contributions Card](https://www.boardui.com/components/contributions-card) | GitHub-style contributions heat grid with swappable accent family. |
+| [Earnings Chart Card](https://www.boardui.com/components/earnings-chart-card) | Bar chart card with period switcher, count-up headline, and hover outline. |
+| [Funnel Chart Card](https://www.boardui.com/components/funnel-chart-card) | Horizontal flow funnel with curved or sharp tapers, centred conversion pills, mono option, and a value/name footer under every column. |
+| [Heatmap Chart Card](https://www.boardui.com/components/heatmap-chart-card) | Matrix heatmap card (rows × columns) with a theme-following ramp, hover-linked headline, and Less → More legend. |
+| [Line Chart Card](https://www.boardui.com/components/line-chart-card) | Line/area chart card with gradient fill, curved or sharp interpolation, and animated active dot. |
+| [Most Active Days Card](https://www.boardui.com/components/most-active-days-card) | Continuous vertical month calendar with per-day mini activity rings. |
+| [Radar Chart Card](https://www.boardui.com/components/radar-chart-card) | Radar chart card with filled, dotted, lines-only, and centre-score variants, hover-linked headline, and multi-series legend. |
+| [Radial Chart Card](https://www.boardui.com/components/radial-chart-card) | Radial bar chart card: concentric rings (plain, labelled, or over a grid), single-value gauges, and a stacked half gauge. |
+| [Sankey Chart Card](https://www.boardui.com/components/sankey-chart-card) | Sankey flow card with pill nodes, target-tinted links, source and share labels, and hover isolation. |
+| [Scatter Chart Card](https://www.boardui.com/components/scatter-chart-card) | Scatter and bubble chart with grouped series, an optional size measure, hover isolation and stat tiles. |
+| [Sleep Score Card](https://www.boardui.com/components/sleep-score-card) | Segmented score ring with hover-focused sub-scores and metric rows. |
+| [Stage Bars Card](https://www.boardui.com/components/stage-bars-card) | Funnel stages as rounded horizontal pills with name, value, and share per stage, animated widths, and a mono option. |
+| [Steps Card](https://www.boardui.com/components/steps-card) | Weekly steps bar chart with week switcher, count-up headline, and hover outline. |
+| [Task List](https://www.boardui.com/components/task-list) | Streaming agent task log: tasks reveal step by step with soft height, blur, and a shimmering running title. |
+| [Web Search](https://www.boardui.com/components/web-search) | Streaming research trail: the queries an agent ran and the sources it opened, with real site marks. |
+
+</details>
 
 ## Before going public
 
