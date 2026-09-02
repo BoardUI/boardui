@@ -3,6 +3,9 @@
 import { useChat } from "@ai-sdk/react";
 import { RiCloseLine, RiMenuLine } from "@remixicon/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
+
+import { Button } from "@/components/base/buttons/button";
+import { DemoTransport, SwitchingTransport } from "@/components/application/agent-chat/demo-transport";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { AgentChatActions } from "@/components/application/agent-chat/agent-chat-actions";
@@ -35,6 +38,8 @@ import { cx } from "@/utils/cx";
 
 const ENDPOINT = "/api/chat";
 const STORAGE_KEY = "boardui:agent-chat-threads";
+/** Remembered so a reload of a keyless deploy lands back in the demo, not on the notice. */
+const DEMO_KEY = "boardui:agent-chat-demo";
 /** Enough history to be useful without letting localStorage grow unbounded. */
 const MAX_THREADS = 30;
 
@@ -98,8 +103,32 @@ export function AgentChat({
    *  and persisting that would erase stored history on every page load. */
   const [restored, setRestored] = useState(false);
 
+  // Demo mode: the visitor skipped the key notice. Only meaningful while the
+  // runtime reports no key; the moment a key exists, the real route answers.
+  const [demo, setDemo] = useState(false);
+  const demoActive = demo && probe.status === "unconfigured";
+  const [transport] = useState(
+    () => new SwitchingTransport(new DefaultChatTransport({ api: ENDPOINT }), new DemoTransport()),
+  );
+  useEffect(() => {
+    try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- restoring from localStorage after mount; there is no render-time source for it
+      setDemo(window.localStorage.getItem(DEMO_KEY) === "on");
+    } catch {
+      // Storage can be blocked; the notice simply shows again.
+    }
+  }, []);
+  const enterDemo = () => {
+    setDemo(true);
+    try {
+      window.localStorage.setItem(DEMO_KEY, "on");
+    } catch {
+      // Nothing to remember without storage.
+    }
+  };
+
   const { messages, sendMessage, setMessages, status, stop, error } = useChat({
-    transport: new DefaultChatTransport({ api: ENDPOINT }),
+    transport,
   });
 
   const busy = status === "submitted" || status === "streaming";
@@ -163,7 +192,7 @@ export function AgentChat({
   // render (it does not exist while server-rendering), so this is the one
   // place state has to be set from an effect.
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- restoring from localStorage after mount; there is no render-time source for it
     setActiveId(newThreadId());
     setThreads(orderThreads(readThreads()));
     setRestored(true);
@@ -208,7 +237,7 @@ export function AgentChat({
     const unseen = messages.filter((message) => messageAt[message.id] === undefined);
     if (unseen.length === 0) return;
     const now = Date.now();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- restoring from localStorage after mount; there is no render-time source for it
     setMessageAt((prev) => {
       const next = { ...prev };
       for (const message of unseen) next[message.id] = now;
@@ -240,7 +269,7 @@ export function AgentChat({
     const trimmed = text.trim();
     if (!trimmed || busy) return;
     setActiveUpdatedAt(Date.now());
-    sendMessage({ text: trimmed });
+    sendMessage({ text: trimmed }, { body: { demo: demoActive } });
     setInput("");
   };
 
@@ -415,8 +444,8 @@ export function AgentChat({
               />
             </header>
 
-            {probe.status === "unconfigured" && messages.length === 0 ? (
-              <SetupNotice />
+            {probe.status === "unconfigured" && messages.length === 0 && !demo ? (
+              <SetupNotice onSkip={enterDemo} />
             ) : (
               <>
                 <div
@@ -434,7 +463,7 @@ export function AgentChat({
                     )}
                   >
                     {messages.length === 0 ? (
-                      <EmptyState onPick={submit} />
+                      <EmptyState onPick={submit} demo={demoActive} />
                     ) : (
                       messages.map((message, index) => (
                         <AgentMessage
@@ -468,7 +497,7 @@ export function AgentChat({
                       onStop={stop}
                       busy={busy}
                       model={probe.model}
-                      provider={probe.label ?? probe.provider}
+                      provider={demoActive ? "Demo mode" : (probe.label ?? probe.provider)}
                       messageCount={messages.length}
                     />
                   </div>
@@ -477,7 +506,7 @@ export function AgentChat({
             )}
         </div>
 
-        {(probe.status !== "unconfigured" || messages.length > 0) && (
+        {(probe.status !== "unconfigured" || messages.length > 0 || demo) && (
             <AgentChatHistory
               threads={allThreads}
               activeId={activeId}
@@ -496,13 +525,15 @@ export function AgentChat({
   );
 }
 
-function EmptyState({ onPick }: { onPick: (text: string) => void }) {
+function EmptyState({ onPick, demo = false }: { onPick: (text: string) => void; demo?: boolean }) {
   return (
     <div className="flex flex-col items-center gap-4 text-center">
       <div className="flex flex-col gap-1">
         <h2 className="text-title-2-medium text-text-primary">What can I help with?</h2>
         <p className="text-body-regular text-text-secondary">
-          This chat runs against your own API key. History stays in this browser.
+          {demo
+            ? "Demo mode: the answers are scripted. Add AI_API_KEY for a real model."
+            : "This chat runs against your own API key. History stays in this browser."}
         </p>
       </div>
       <div className="flex flex-wrap justify-center gap-2">
@@ -526,7 +557,7 @@ function EmptyState({ onPick }: { onPick: (text: string) => void }) {
  * where the key goes, because the person seeing this has usually just clicked
  * Deploy and has no context for where that setting lives.
  */
-function SetupNotice() {
+function SetupNotice({ onSkip }: { onSkip: () => void }) {
   return (
     <div className="flex min-h-0 flex-1 items-center justify-center p-6">
       <div className="flex max-w-md flex-col gap-3 rounded-2xl bg-background-primary-default p-6 shadow-card">
@@ -546,6 +577,9 @@ function SetupNotice() {
           Running locally? Put the same variable in <code>.env.local</code> and restart the dev
           server.
         </p>
+        <Button variant="primary" size="medium" className="w-full" onClick={onSkip}>
+          Skip, show me the demo
+        </Button>
       </div>
     </div>
   );

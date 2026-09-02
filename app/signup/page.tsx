@@ -21,7 +21,15 @@ export default function SignupPage() {
         footnote={<>By clicking continue, you agree to our Terms of Service and Privacy Policy.</>}
         media={
           <AuthMediaCarousel
-            slides={[{ src: "/carousel/floral.webp" }, { src: "/carousel/sunrise.webp" }]}
+            slides={[
+              { src: "/carousel/floral.webp" },
+              { src: "/carousel/space-squid.webp" },
+              { src: "/carousel/sunrise.webp" },
+              { src: "/carousel/shark-collage.webp" },
+              { src: "/carousel/kitchen.webp" },
+              { src: "/carousel/seafood.webp" },
+              { src: "/carousel/vending-machine.webp" },
+            ]}
           />
         }
       />
