@@ -8,7 +8,7 @@
 [![X](https://img.shields.io/badge/X-boardui-black?logo=x)](https://x.com/boardui)
 [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/azcHkw8T6F)
 
-BoardUI is a React design system for agentic interfaces. It gives a product team the parts an AI product needs and the parts every dashboard needs, in one visual language, as source files that live in your project rather than behind a package. This repository is the free tier, all of it, and its homepage is a working AI chat app on your own model key.
+BoardUI is a React design system for agentic interfaces: the parts an AI product needs and the parts every dashboard needs, in one visual language, as source files in your project. This repository is the whole free tier, and its homepage is a working AI chat on your own model key.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FBoardUI%2Fboardui&env=AI_API_KEY&envDescription=Your+model+provider+key%3A+OpenAI%2C+Anthropic%2C+Google%2C+OpenRouter%2C+or+Vercel+AI+Gateway.+The+provider+is+read+from+the+key+itself.&envLink=https%3A%2F%2Fwww.boardui.com%2Fcomponents%2Fchat-starter&project-name=boardui-chat-starter&repository-name=boardui-chat-starter)
 
@@ -18,19 +18,17 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 
 ## Why BoardUI?
 
-- **Built for agent products.** A chat screen, a thinking indicator, an agent log, a composer and an app sidebar, next to the data table, stat cards, forms and settings the rest of the product needs. One system for the agent and the dashboard around it.
-- **Source, not a dependency.** `npx boardui add` copies the files into your project. Change anything, delete half of it, and never fight a theme API or wait on a maintainer.
-- **One visual language.** Designed in Figma first, then translated into 400+ design tokens: semantic text, background, border and foreground colours, a type scale, radii and shadows. Light and dark mode come from the same classes.
-- **Accessible by default.** Interactive components are built on React Aria Components for keyboard, focus and screen-reader behaviour, styled with Tailwind CSS v4 and no CSS-in-JS runtime.
-- **Agent-native.** An MCP server, an agent skill, always-on rules in `AGENTS.md` and `.cursor/rules`, and `llms.txt`, so Claude Code, Cursor and Codex build with the system rather than around it.
-- **Deployable.** The homepage here is a working chat on your own key, and the button above clones it into your account.
+- **Built for agent products.** Chat, thinking indicator, agent log, composer and sidebar, next to the tables, cards and forms around them.
+- **Source, not a dependency.** `npx boardui add` copies the files into your project. Change anything.
+- **One visual language.** Figma first, 400+ semantic tokens, light and dark from the same classes.
+- **Accessible by default.** React Aria Components underneath, Tailwind CSS v4 on top, no runtime CSS.
+- **Agent-native.** MCP server, agent skill, `AGENTS.md` rules and `llms.txt`, so coding agents build with the system.
 
 ## What's in this repository
 
-- Every free BoardUI item, 59 in all, as source under `components/`, `styles/` and `utils/`: the base components, the application blocks, the tokens and the type scale. The catalogue is below.
-- A streaming chat screen as the homepage: app sidebar, composer, thinking indicator, message actions, and a chat history rail kept in the visitor's own browser. No database.
-- `app/api/chat/route.ts`, the runtime. It reads your key server-side only, streams replies with the Vercel AI SDK, and never exposes the key to the browser.
-- BoardUI's design rules for coding agents in `AGENTS.md` and `.cursor/rules/`, so an agent building the next screen uses the same tokens and type scale.
+- All 59 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
+- The chat app: sidebar, composer, thinking indicator, history kept in the visitor's browser. No database.
+- `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
 ## Bring your own key
 
