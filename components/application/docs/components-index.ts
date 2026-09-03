@@ -83,7 +83,6 @@ const blocks: Entry[] = [
 ];
 
 const charts: Entry[] = [
-  { name: "Orders Chart", href: "/components/orders-chart-card", description: "Monthly bars, this year beside last.", tier: "free", status: "shipped", isNew: true },
   { name: "Revenue Chart", href: "/components/revenue-chart-card", description: "This year against last, area over a dashed line.", tier: "free", status: "shipped", isNew: true },
   { name: "Activity Rings", href: "/components/activity-rings-card", description: "Concentric progress rings, Apple style.", tier: "pro", status: "shipped" },
   { name: "Area Chart", href: "/components/area-chart-card", description: "Stacked, overlapping or 100% area series.", tier: "pro", status: "shipped", isNew: true },

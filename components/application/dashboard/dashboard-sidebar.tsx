@@ -63,7 +63,9 @@ function Collapsible({ collapsed, children, className }: { collapsed: boolean; c
     <span
       className={cx(
         "flex min-w-0 items-center overflow-hidden transition-[max-width,opacity,filter] duration-300 ease-in-out",
-        collapsed ? "max-w-0 opacity-0 blur-[3px]" : "max-w-40 opacity-100 blur-0",
+        // Expanded, the cap is the row itself: a fixed cap (it was 160px)
+        // clipped any label wider than it, "Components and Blocks" included.
+        collapsed ? "max-w-0 opacity-0 blur-[3px]" : "max-w-full opacity-100 blur-0",
         className,
       )}
     >

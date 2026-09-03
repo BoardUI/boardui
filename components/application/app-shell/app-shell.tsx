@@ -42,7 +42,11 @@ export const STARTER_SITE_PREFIX = "/templates/chat-starter";
 // Re-exported so the catalogue ships with the shell; the starter's pages are
 // copied into the public repo by path and can only import what a registry
 // item carries.
-export { ComponentsCatalog } from "@/components/application/app-shell/components-catalog";
+export {
+  CatalogTierFilter,
+  ComponentsCatalog,
+  type CatalogTier,
+} from "@/components/application/app-shell/components-catalog";
 
 /** "" in a deployed starter, the site prefix on boardui.com. */
 export function useStarterBase(): string {
@@ -88,6 +92,7 @@ export function AppShell({
   actions,
   children,
   className,
+  columnClassName,
 }: {
   /** The page's name, shown as the current breadcrumb item. */
   title: string;
@@ -99,6 +104,8 @@ export function AppShell({
   actions?: ReactNode;
   children: ReactNode;
   className?: string;
+  /** Overrides the 1300px content column, e.g. `max-w-[964px]` for the catalogue's grids. */
+  columnClassName?: string;
 }) {
   const [navOpen, setNavOpen] = useState(false);
   const items = starterNav(useStarterBase());
@@ -135,7 +142,7 @@ export function AppShell({
       )}
 
       <main className="relative flex min-h-0 min-w-0 flex-1 justify-center overflow-x-hidden overflow-y-auto bg-background-full sm:pt-3">
-        <div className="flex w-full max-w-[1300px] flex-col gap-2.5">
+        <div className={cx("flex w-full max-w-[1300px] flex-col gap-2.5", columnClassName)}>
           <header className="flex w-full flex-col gap-2">
             <Breadcrumb>
               <BreadcrumbItem href="#">
