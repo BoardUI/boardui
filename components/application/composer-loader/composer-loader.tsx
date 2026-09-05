@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { cx } from "@/utils/cx";
 
 /**
@@ -46,8 +46,27 @@ export interface ComposerLoaderProps {
   reverse?: boolean;
   /** Corner radius, px. Defaults to a full pill. */
   radius?: number;
+  /** Width of the crisp line, px; the tight glow scales with it. */
+  line?: number;
+  /** Draw the wide bloom alone, no line or tight glow: a soft wash for a beam to lead. */
+  bloomOnly?: boolean;
   /** Paint the pill surface behind the light (on by default). */
   surface?: boolean;
+  /**
+   * Fade the band's two ends instead of cutting them, 0–1: the fraction of
+   * the band's length that ramps. Each layer is stacked as shorter, centred
+   * copies at a fraction of its opacity; the blur melts the steps together.
+   */
+  taper?: number;
+  /** How the light composites over what's beneath, e.g. `screen` to read as light on a surface. */
+  blend?: CSSProperties["mixBlendMode"];
+  /**
+   * Moves the band forward along the lap, as a fraction of the perimeter
+   * (0–1). Lets two loaders on one pill line up: a short beam with
+   * `offset` equal to the difference of the two arcs (as fractions) leads
+   * a wider glow tip to tip.
+   */
+  offset?: number;
   className?: string;
 }
 
@@ -77,7 +96,12 @@ export function ComposerLoader({
   arc = 120,
   reverse = false,
   radius,
+  line = 2.5,
+  bloomOnly = false,
   surface = true,
+  taper = 0,
+  blend,
+  offset = 0,
   className,
 }: ComposerLoaderProps) {
   const gradientId = `bui-cl-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
@@ -112,33 +136,52 @@ export function ComposerLoader({
   const cornerR = Math.min(rx, box.w / 2, box.h / 2);
   const perimeter = Math.max(1, 2 * (box.w + box.h) - 8 * cornerR + 2 * Math.PI * cornerR);
   const pxUnits = (px: number) => (px * 100) / perimeter;
+  // A layer's delay is its phase: the larger the phase, the further BACK
+  // along the lap the band sits (a negative delay is a head start). So
+  // moving a band forward, `offset` included, means subtracting.
   const dashPhase = (len: number, backPx: number) =>
-    reverse ? pxUnits(backPx) : len - band + pxUnits(backPx);
+    (reverse ? pxUnits(backPx) : len - band + pxUnits(backPx)) - offset * 100;
 
-  const stroke = (width: number, blur: number, opacity: number, dashLen: number, backPx: number) => (
-    <rect
-      x={0}
-      y={0}
-      width={box.w}
-      height={box.h}
-      rx={rx}
-      pathLength={100}
-      fill="none"
-      stroke={`url(#${gradientId})`}
-      strokeWidth={width}
-      strokeLinecap="round"
-      strokeDasharray={`${dashLen} ${100 - dashLen}`}
-      className="bui-composer-loader-rect"
-      // SVG-native blur, not CSS filter: WebKit (iOS Safari and every iPhone
-      // browser) ignores CSS filters on individual SVG elements, which
-      // rendered the whole light razor-sharp on phones.
-      filter={blur > 0 ? `url(#${gradientId}-b${String(blur).replace(".", "_")})` : undefined}
-      style={{
-        opacity,
-        animation: `bui-composer-loader-dash ${speed}s linear ${(dashPhase(dashLen, backPx) * speed) / 100}s infinite ${direction}`,
-      }}
-    />
-  );
+  // Tapering stacks each layer as shorter, centred copies: the ramp at each
+  // end is a staircase with one step per copy, so it takes many copies and
+  // a little blur on the crisp line for the steps to melt into a gradient.
+  const TAPER_STEPS = 14;
+  const CRISP_BLUR = taper > 0 ? Math.max(0.5, line * 0.8) : 0.5;
+  const stroke = (width: number, blur: number, opacity: number, dashLen: number, backPx: number) => {
+    const copies = taper > 0 ? TAPER_STEPS : 1;
+    return Array.from({ length: copies }, (_, index) => {
+      // Copy 0 is the full band; each next one is shorter and moved forward
+      // by half the difference, so all of them share one midpoint and the
+      // ends thin out step by step.
+      const len = dashLen * (1 - (taper * index) / copies);
+      const phase = dashPhase(dashLen, backPx) - (dashLen - len) / 2;
+      return (
+        <rect
+          key={index}
+          x={0}
+          y={0}
+          width={box.w}
+          height={box.h}
+          rx={rx}
+          pathLength={100}
+          fill="none"
+          stroke={`url(#${gradientId})`}
+          strokeWidth={width}
+          strokeLinecap="round"
+          strokeDasharray={`${len} ${100 - len}`}
+          className="bui-composer-loader-rect"
+          // SVG-native blur, not CSS filter: WebKit (iOS Safari and every iPhone
+          // browser) ignores CSS filters on individual SVG elements, which
+          // rendered the whole light razor-sharp on phones.
+          filter={blur > 0 ? `url(#${gradientId}-b${String(blur).replace(".", "_")})` : undefined}
+          style={{
+            opacity: opacity / copies,
+            animation: `bui-composer-loader-dash ${speed}s linear ${(phase * speed) / 100}s infinite ${direction}`,
+          }}
+        />
+      );
+    });
+  };
 
   /** One feGaussianBlur per blur radius the layers use. The region is
    *  widened well past the stroke so the blur never clips at the filter
@@ -174,6 +217,7 @@ export function ComposerLoader({
           borderRadius: cornerRadius,
           opacity: active ? 1 : 0,
           transition: "opacity 450ms ease",
+          mixBlendMode: blend,
         }}
       >
         <svg
@@ -191,14 +235,14 @@ export function ComposerLoader({
               <stop offset="70%" stopColor={c2} />
               <stop offset="100%" stopColor={c3} />
             </linearGradient>
-            {[14, 6, 0.5].map(blurFilter)}
+            {[14, 6, CRISP_BLUR].map(blurFilter)}
           </defs>
           {/* wide bloom bleeding inward (outer half clipped by the pill) */}
-          {stroke(bloom * 2, 14, bloomStrength, band * 0.9, bloom + 16)}
+          {bloom > 0 && stroke(bloom * 2, 14, bloomStrength, band * 0.9, bloom + 16)}
           {/* tight glow */}
-          {stroke(8, 6, 0.8, band * 0.95, 10)}
+          {!bloomOnly && stroke(line * 3.2, 6, 0.8, band * 0.95, 10)}
           {/* crisp refraction line, tip leading */}
-          {stroke(2.5, 0.5, 1, band, 0)}
+          {!bloomOnly && stroke(line, CRISP_BLUR, 1, band, 0)}
         </svg>
       </span>
 
