@@ -118,6 +118,29 @@ When working with an agent, ask it to read the `direction` component and usage e
 
 See the [RTL setup guide and live Arabic/Hebrew examples](https://www.boardui.com/rtl).
 
+The live examples use the actual Auth Card, Date Range Picker, Radio Cards, and Checkbox components. For example, these preferences show both checkbox states in Arabic:
+
+```tsx
+"use client";
+
+import { DirectionProvider } from "@/components/foundations/direction/direction";
+import { Checkbox } from "@/components/base/checkbox/checkbox";
+
+export function Preferences() {
+  return (
+    <DirectionProvider locale="ar">
+      <div className="flex flex-col gap-4">
+        <Checkbox defaultSelected>إشعارات البريد الإلكتروني</Checkbox>
+        <Checkbox>تحديثات المنتج</Checkbox>
+      </div>
+    </DirectionProvider>
+  );
+}
+```
+
+For Hebrew, use `locale="he"` with the labels `התראות בדוא״ל` and `עדכוני מוצר`. The first checkbox starts checked; the second starts unchecked. Both remain interactive and follow the provider's direction.
+
+
 ## Components
 
 ### Application blocks
