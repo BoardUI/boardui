@@ -22,6 +22,7 @@ import {
 import { RiCalendarLine } from "@remixicon/react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "@/components/base/buttons/button";
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
 import {
   DateChipInput,
   MonthPanel,
@@ -75,6 +76,8 @@ export interface DateRangePickerProps {
   onChange?: (value: DateRangeValue | null) => void;
   isDisabled?: boolean;
   className?: string;
+  /** Extra classes for the portalled calendar, such as a locale-specific font. */
+  popoverClassName?: string;
   "aria-label"?: string;
   /** Trigger text shown when no range is committed yet. Default "Select date range". */
   placeholder?: string;
@@ -115,9 +118,10 @@ function QuickSelect({
   value: DateRangeValue | null;
   onSelect: (range: DateRangeValue) => void;
 }) {
+  const localize = useTemplateCopy();
   const presets = useQuickSelectPresets();
 
-  return (
+  return localize((
     <div className="flex w-[118px] shrink-0 flex-col gap-1.5">
       {presets.map((preset) => (
         <button
@@ -135,7 +139,7 @@ function QuickSelect({
         </button>
       ))}
     </div>
-  );
+  ));
 }
 
 function Footer({
@@ -149,7 +153,8 @@ function Footer({
   onCancel: () => void;
   onApply: () => void;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="flex items-center justify-between pt-3 pe-4">
       <div className="flex items-center gap-2.5">
         <AnimatePresence>
@@ -180,7 +185,7 @@ function Footer({
                 />
               </div>
               <span className="rounded-xl bg-background-tertiary-default px-2 py-2 text-body-medium text-text-secondary">
-                {daysInRange(value)} day{daysInRange(value) === 1 ? "" : "s"} selected
+                {`${daysInRange(value)} day${daysInRange(value) === 1 ? "" : "s"} selected`}
               </span>
             </motion.div>
           )}
@@ -195,7 +200,7 @@ function Footer({
         </Button>
       </div>
     </div>
-  );
+  ));
 }
 
 export function DateRangePicker({
@@ -204,9 +209,11 @@ export function DateRangePicker({
   onChange,
   isDisabled,
   className,
+  popoverClassName: calendarClassName,
   "aria-label": ariaLabel = "Date range",
   placeholder = "Select date range",
 }: DateRangePickerProps) {
+  const localize = useTemplateCopy();
   const { locale } = useLocale();
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<DateRangeValue | null>(defaultValue);
@@ -226,7 +233,7 @@ export function DateRangePicker({
   // Pressing the trigger while open closes the popover instead of reopening
   const allowOpenChange = useTriggerToggle(isOpen, triggerRef);
 
-  return (
+  return localize((
     <DialogTrigger
       isOpen={isOpen}
       onOpenChange={(open) => {
@@ -241,7 +248,7 @@ export function DateRangePicker({
           {committedValue ? `${formatTriggerDate(committedValue.start, locale)} - ${formatTriggerDate(committedValue.end, locale)}` : placeholder}
         </span>
       </AriaButton>
-      <Popover ref={popoverRef} offset={4} placement="bottom end" isNonModal className={popoverClassName}>
+      <Popover ref={popoverRef} offset={4} placement="bottom end" isNonModal className={cx(popoverClassName, calendarClassName)}>
         <Dialog aria-label={ariaLabel} className="outline-none">
           {({ close }) => (
             <RangeCalendar
@@ -281,5 +288,5 @@ export function DateRangePicker({
         </Dialog>
       </Popover>
     </DialogTrigger>
-  );
+  ));
 }
