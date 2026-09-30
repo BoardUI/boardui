@@ -125,11 +125,18 @@ The live examples use the actual Auth Card, Date Range Picker, Radio Cards, and 
 
 import { DirectionProvider } from "@/components/foundations/direction/direction";
 import { Checkbox } from "@/components/base/checkbox/checkbox";
+import { SegmentedControl, SegmentedControlItem } from "@/components/base/segmented-control/segmented-control";
 
 export function Preferences() {
   return (
     <DirectionProvider locale="ar">
       <div className="flex flex-col gap-4">
+        <SegmentedControl aria-label="الفترة" defaultSelectedKeys={["weekly"]}>
+          <SegmentedControlItem id="daily">يومي</SegmentedControlItem>
+          <SegmentedControlItem id="weekly">أسبوعي</SegmentedControlItem>
+          <SegmentedControlItem id="monthly">شهري</SegmentedControlItem>
+          <SegmentedControlItem id="yearly">سنوي</SegmentedControlItem>
+        </SegmentedControl>
         <Checkbox defaultSelected>إشعارات البريد الإلكتروني</Checkbox>
         <Checkbox>تحديثات المنتج</Checkbox>
       </div>
