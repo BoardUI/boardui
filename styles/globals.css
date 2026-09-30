@@ -16,6 +16,11 @@
  * --------------------------------------------------------------------------- */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Resolve the nearest direction boundary, including nested LTR regions.
+ * Tailwind's ancestor-based defaults also match inside an opposing region. */
+@custom-variant rtl (&:dir(rtl));
+@custom-variant ltr (&:dir(ltr));
+
 /* The next theme is revealed by ThemeToggle from the exact interaction point.
  * Native view-transition crossfades are disabled so only the soft circular
  * clip-path animation runs; unsupported browsers simply ignore these rules. */
@@ -200,6 +205,12 @@ input[type="search"]::-webkit-search-cancel-button {
  * or a bar. Every chart card drives its own focus feedback (hover darkening,
  * headline swap), so the outline is noise: hide it across every Recharts
  * chart. Keyboard users still get the cards' own active states. */
+.recharts-wrapper {
+  /* SVG axes use physical coordinates. Keep their data and numeric labels in
+   * order while card headers, legends and surrounding controls follow RTL. */
+  direction: ltr;
+}
+
 .recharts-wrapper:focus,
 .recharts-wrapper:focus-visible,
 .recharts-wrapper :focus,
@@ -684,14 +695,14 @@ input[type="search"]::-webkit-search-cancel-button {
  * React Aria renders real <table>/<thead>/<th>/<tr>/<td> elements.
  * --------------------------------------------------------------------------- */
 .bui-table {
-  @apply w-full border-collapse text-left;
+  @apply w-full border-collapse text-start;
 }
 /* Header background + border-y live on the cells: with border-collapse the
  * browser doesn't paint backgrounds/borders set on the <thead> row group.
  * Backgrounds/borders are set with explicit CSS (theme vars) rather than
  * @apply, which drops border-width/bg on these row-group cells. */
 .bui-table th {
-  @apply px-3 py-2.5 text-left align-middle text-body-medium text-text-tertiary whitespace-nowrap outline-none;
+  @apply px-3 py-2.5 text-start align-middle text-body-medium text-text-tertiary whitespace-nowrap outline-none;
   background-color: var(--color-background-secondary-default);
   border-top: 1px solid var(--color-separator-border);
   border-bottom: 1px solid var(--color-separator-border);

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useState, type ComponentType } from "react";
 import {
   RiArrowDownCircleFill,
@@ -137,23 +139,30 @@ const DELTA_STYLES: Record<
 /** Tinted pill with a direction glyph — the footer band's delta readout, in
  *  the same lime and rose the chart cards use for their trend chips. */
 function DeltaPill({ delta, deltaColor }: Pick<Stat, "delta" | "deltaColor">) {
+  const localize = useTemplateCopy();
   const { icon: Icon, className, pill } = DELTA_STYLES[deltaColor];
-  return (
-    <span className={cx("flex shrink-0 items-center gap-1 rounded-full py-0.5 pr-2 pl-1", pill)}>
+  return localize((
+    <span
+      className={cx(
+        "flex shrink-0 items-center gap-1 rounded-full py-0.5 pe-2 ps-1",
+        pill,
+      )}
+    >
       <Icon className={cx("size-4 shrink-0", className)} aria-hidden />
       <span className={cx("text-body-medium whitespace-nowrap tabular-nums", className)}>
         {delta}
       </span>
     </span>
-  );
+  ));
 }
 
 /** Bare info glyph with a tooltip — the footer header's trailing control.
  *  Opens on hover and focus as tooltips do, and on click as well, since a
  *  glyph this small reads as a button and gets tapped. */
 function StatHint({ label, hint }: { label: string; hint: string }) {
+  const localize = useTemplateCopy();
   const [open, setOpen] = useState(false);
-  return (
+  return localize((
     <TooltipTrigger delay={200} isOpen={open} onOpenChange={setOpen}>
       <Focusable>
         <button
@@ -167,11 +176,12 @@ function StatHint({ label, hint }: { label: string; hint: string }) {
       </Focusable>
       <Tooltip size="md">{hint}</Tooltip>
     </TooltipTrigger>
-  );
+  ));
 }
 
 function PlainStatCard({ stat }: { stat: Stat }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <section className="flex h-[132px] min-w-0 flex-col items-start justify-between rounded-2xl bg-background-secondary-default p-4">
       <span className="flex items-center rounded-md bg-stat-card-icon-background p-1.5">
         <stat.icon className="size-5 shrink-0 text-foreground-icon-primary" aria-hidden />
@@ -186,11 +196,12 @@ function PlainStatCard({ stat }: { stat: Stat }) {
         </div>
       </div>
     </section>
-  );
+  ));
 }
 
 function FooterStatCard({ stat }: { stat: Stat }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <section className="flex min-w-0 flex-col rounded-2xl bg-background-secondary-default p-2">
       {/* Icon tile + optional info glyph, both hanging from the same top inset */}
       <div className="flex w-full items-start justify-between gap-2.5 p-2">
@@ -214,14 +225,14 @@ function FooterStatCard({ stat }: { stat: Stat }) {
       </div>
 
       {/* Footer band: comparison caption + delta pill on an inner tile */}
-      <div className="mt-auto flex w-full items-center justify-between gap-2 rounded-2lg bg-background-inner-default py-1.5 pr-1.5 pl-2.5 shadow-card">
+      <div className="mt-auto flex w-full items-center justify-between gap-2 rounded-2lg bg-background-inner-default py-1.5 pe-1.5 ps-2.5 shadow-card">
         <p className="truncate text-body-regular text-text-secondary">
           {stat.caption ?? "From last month"}
         </p>
         <DeltaPill delta={stat.delta} deltaColor={stat.deltaColor} />
       </div>
     </section>
-  );
+  ));
 }
 
 export function StatCards({
@@ -242,8 +253,10 @@ export function StatCards({
   columns?: 1 | 2 | 4;
   className?: string;
 } = {}) {
-  const items = stats ?? (variant === "footer" ? DEFAULT_FOOTER_STATS : DEFAULT_STATS);
-  return (
+  const localize = useTemplateCopy();
+  const items =
+    stats ?? (variant === "footer" ? DEFAULT_FOOTER_STATS : DEFAULT_STATS);
+  return localize((
     <div
       className={cx(
         "grid w-full gap-4",
@@ -266,5 +279,5 @@ export function StatCards({
         ),
       )}
     </div>
-  );
+  ));
 }

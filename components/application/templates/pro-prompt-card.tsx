@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import type { ReactNode } from "react";
 import { motion } from "motion/react";
 
@@ -37,14 +39,15 @@ export function ProPromptCard({
   dismissLabel?: string;
   className?: string;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <motion.aside
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, delay: 1.2, ease: "easeOut" }}
       aria-label={ariaLabel}
       className={cx(
-        "fixed inset-x-3 bottom-3 z-60 flex w-auto flex-col items-start gap-3 overflow-hidden rounded-2xl border border-border-button-white bg-background-secondary-default p-4 shadow-waitlist sm:inset-x-auto sm:left-3 sm:w-[280px]",
+        "fixed inset-x-3 bottom-3 z-60 flex w-auto flex-col items-start gap-3 overflow-hidden rounded-2xl border border-border-button-white bg-background-secondary-default p-4 shadow-waitlist sm:inset-x-auto sm:start-3 sm:w-[280px]",
         className,
       )}
     >
@@ -80,8 +83,8 @@ export function ProPromptCard({
         size="xs"
         aria-label={dismissLabel}
         onClick={onDismiss}
-        className="absolute top-3 right-3 z-10"
+        className="absolute top-3 end-3 z-10"
       />
     </motion.aside>
-  );
+  ));
 }

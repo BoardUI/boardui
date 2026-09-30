@@ -14,6 +14,8 @@ import {
 } from "react";
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react";
 import { IconButton } from "@/components/base/buttons/icon-button";
+import { useDirection } from "@/components/foundations/direction/direction";
+import { inlineScrollOffset, scrollOffsetForItem } from "@/utils/scroll-direction";
 import { cx } from "@/utils/cx";
 
 /**
@@ -27,7 +29,7 @@ import { cx } from "@/utils/cx";
  * not answer on its own — which card is showing, and whether either end has
  * been reached.
  *
- * Positions are read from each item's `offsetLeft` instead of being computed
+ * Positions are read from each item's viewport bounds instead of being computed
  * from a card width, so items of different widths, responsive widths, or a
  * changed gap all keep working without the maths going stale.
  *
@@ -87,6 +89,7 @@ export function Carousel({
   ...props
 }: CarouselProps) {
   const trackRef = useRef<HTMLDivElement>(null);
+  const direction = useDirection();
   const [active, setActive] = useState(0);
   const [atStart, setAtStart] = useState(true);
   const [atEnd, setAtEnd] = useState(false);
@@ -104,8 +107,9 @@ export function Carousel({
 
     // 1px of slack: scrollLeft is fractional on hi-DPI displays, so an exact
     // comparison leaves the end arrow enabled on a fully scrolled track.
-    const start = track.scrollLeft <= 1;
-    const end = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+    const offset = inlineScrollOffset(track.scrollLeft, direction);
+    const start = offset <= 1;
+    const end = offset >= track.scrollWidth - track.clientWidth - 1;
     setAtStart(start);
     setAtEnd(end);
 
@@ -113,7 +117,7 @@ export function Carousel({
     if (all.length === 0) return;
 
     // At the far end the last cards share the viewport, so the final card can
-    // never reach the left edge and "nearest" would settle on the one before
+    // never reach the start edge and "nearest" would settle on the one before
     // it — leaving the last dot permanently unlit and making a click on it
     // look broken. The ends are therefore pinned rather than measured.
     if (end) {
@@ -128,14 +132,14 @@ export function Carousel({
     let nearest = 0;
     let shortest = Number.POSITIVE_INFINITY;
     all.forEach((item, index) => {
-      const distance = Math.abs(item.offsetLeft - track.scrollLeft);
+      const distance = Math.abs(scrollOffsetForItem(track.getBoundingClientRect(), item.getBoundingClientRect(), 0, direction, align));
       if (distance < shortest) {
         shortest = distance;
         nearest = index;
       }
     });
     setActive(nearest);
-  }, [items]);
+  }, [items, direction, align]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -159,13 +163,15 @@ export function Carousel({
     // `matchMedia` rather than a hook: this runs on click, so reading the
     // preference at that moment is both current and cheap.
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    track.scrollTo({ left: target.offsetLeft, behavior: reduce ? "auto" : "smooth" });
+    const left = scrollOffsetForItem(track.getBoundingClientRect(), target.getBoundingClientRect(), track.scrollLeft, direction, align);
+    track.scrollTo({ left, behavior: reduce ? "auto" : "smooth" });
   };
 
   return (
     <div
       ref={ref}
       role="group"
+      dir={direction}
       aria-roledescription="carousel"
       className={cx("flex w-full flex-col gap-4", className)}
       {...props}

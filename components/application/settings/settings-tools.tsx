@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useState, type ReactNode } from "react";
 import { RiAddLine, RiMoreFill } from "@remixicon/react";
 import { Chip } from "@/components/base/badges/chip";
@@ -111,7 +113,8 @@ const PLUGIN_SERVERS: McpServer[] = [SERVERS.paper, SERVERS.posthog, SERVERS.ver
 /** 32px rounded letter tile with a connection dot pinned to its corner,
  *  ringed in the card background so it reads as punched-through. */
 function ServerTile({ server }: { server: McpServer }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span className="relative flex size-8 shrink-0 items-center justify-center rounded-lg">
       <span
         className={cx(
@@ -124,19 +127,20 @@ function ServerTile({ server }: { server: McpServer }) {
       <span
         aria-hidden
         className={cx(
-          "absolute -bottom-0.5 -left-0.5 size-2.5 rounded-full ring-2 ring-background-secondary-default",
+          "absolute -bottom-0.5 -start-0.5 size-2.5 rounded-full ring-2 ring-background-secondary-default",
           server.status === "connected" ? "bg-green-500" : "bg-red-600",
         )}
       />
     </span>
-  );
+  ));
 }
 
 /** Bare "…" row action — quieter than IconButton on the grey card, same
  *  hover language as the sidebar rows. Opens the shared dropdown menu. */
 function ServerMenu({ name }: { name: string }) {
+  const localize = useTemplateCopy();
   const [isOpen, setIsOpen] = useState(false);
-  return (
+  return localize((
     <Dropdown isOpen={isOpen} onOpenChange={setIsOpen}>
       <DropdownTrigger
         aria-label={`Actions for ${name}`}
@@ -159,12 +163,13 @@ function ServerMenu({ name }: { name: string }) {
         </DropdownGroup>
       </DropdownPopover>
     </Dropdown>
-  );
+  ));
 }
 
 /** Quiet inline text action ("Logout", "Show Output"). */
 function InlineAction({ children, onClick }: { children: ReactNode; onClick?: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <button
       type="button"
       onClick={onClick}
@@ -176,13 +181,14 @@ function InlineAction({ children, onClick }: { children: ReactNode; onClick?: ()
     >
       {children}
     </button>
-  );
+  ));
 }
 
 function ServerRow({ server }: { server: McpServer }) {
+  const localize = useTemplateCopy();
   const [expanded, setExpanded] = useState(false);
-  return (
-    <div className="border-b border-separator-border py-2.5 pr-2.5 last:border-b-0">
+  return localize((
+    <div className="border-b border-separator-border py-2.5 pe-2.5 last:border-b-0">
       <div className="flex w-full items-center gap-2.5">
         <ServerTile server={server} />
         <div className="flex min-w-0 flex-1 flex-col">
@@ -230,7 +236,7 @@ function ServerRow({ server }: { server: McpServer }) {
           )}
         >
           <div className="overflow-hidden">
-            <div className="flex flex-wrap gap-1.5 pt-2 pl-[42px]">
+            <div className="flex flex-wrap gap-1.5 pt-2 ps-[42px]">
               {server.tools.map((tool) => (
                 <Chip key={tool} variant="caption" color="soft">
                   {tool}
@@ -241,15 +247,16 @@ function ServerRow({ server }: { server: McpServer }) {
         </div>
       )}
     </div>
-  );
+  ));
 }
 
 function NewServerRow() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <button
       type="button"
       className={cx(
-        "group flex w-full cursor-pointer items-center gap-2.5 py-2.5 pr-2.5 text-left",
+        "group flex w-full cursor-pointer items-center gap-2.5 py-2.5 pe-2.5 text-start",
         "outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-border-focus-ring",
       )}
     >
@@ -268,17 +275,18 @@ function NewServerRow() {
         </span>
       </span>
     </button>
-  );
+  ));
 }
 
 /* ------------------------------------------------------------------- page */
 
 export function SettingsTools() {
+  const localize = useTemplateCopy();
   const [scopeId, setScopeId] = useState("home");
   const [waitForAuth, setWaitForAuth] = useState(true);
   const scope = SCOPES.find((s) => s.id === scopeId) ?? SCOPES[0];
 
-  return (
+  return localize((
     <div className="flex w-full flex-col gap-6">
       {/* Scope switcher — the shared fully-rounded pill tabs (same component
           as the AI chat panel's Changes/Browser switcher). */}
@@ -359,5 +367,5 @@ export function SettingsTools() {
         </SettingsCard>
       </div>
     </div>
-  );
+  ));
 }

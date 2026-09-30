@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { RiNotificationLine } from "@remixicon/react";
 import { useRef, useState } from "react";
 import { Dialog, Popover } from "react-aria-components";
@@ -18,6 +20,7 @@ export function NotificationBell({
 }: {
   notifications?: NotificationCenterItem[];
 } = {}) {
+  const localize = useTemplateCopy();
   const triggerRef = useRef<HTMLButtonElement>(null);
   const popoverRef = useRef<HTMLElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +28,7 @@ export function NotificationBell({
 
   useDismissOnOutsidePress(isOpen, () => setIsOpen(false), [triggerRef, popoverRef]);
 
-  return (
+  return localize((
     <>
       <span className="group relative inline-flex">
         <IconButton
@@ -38,7 +41,7 @@ export function NotificationBell({
           onClick={() => setIsOpen((open) => !open)}
         />
         {unread > 0 && (
-          <span className="pointer-events-none absolute top-0.5 left-[18px] flex size-4 items-center justify-center rounded-full border-[1.5px] border-background-primary-default bg-red-600 group-hover:border-0 group-active:border-0">
+          <span className="pointer-events-none absolute top-0.5 start-[18px] flex size-4 items-center justify-center rounded-full border-[1.5px] border-background-primary-default bg-red-600 group-hover:border-0 group-active:border-0">
             <span className="w-4 text-center text-[10px] leading-4 font-bold text-white">{unread}</span>
           </span>
         )}
@@ -58,5 +61,5 @@ export function NotificationBell({
         </Dialog>
       </Popover>
     </>
-  );
+  ));
 }

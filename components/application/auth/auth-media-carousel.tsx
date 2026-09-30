@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDirection } from "@/components/foundations/direction/direction";
 import { cx } from "@/utils/cx";
 
 /**
@@ -92,6 +93,7 @@ export function AuthMediaCarousel({
 }) {
   const [index, setIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("idle");
+  const inlineSign = useDirection() === "rtl" ? -1 : 1;
   const count = slides.length;
 
   useEffect(() => {
@@ -132,7 +134,7 @@ export function AuthMediaCarousel({
         // viewer but still card-sized: growing is the beat after.
         const transform = current
           ? phase === "slide"
-            ? `translateX(-100%) translateZ(${-DEPTH}px) rotateY(${-TILT}deg) scale(${CARD_SCALE})`
+            ? `translateX(${-100 * inlineSign}%) translateZ(${-DEPTH}px) rotateY(${-TILT * inlineSign}deg) scale(${CARD_SCALE})`
             : phase === "shrink"
               ? `scale(${CARD_SCALE})`
               : phase === "enter"
@@ -140,7 +142,7 @@ export function AuthMediaCarousel({
                 : "scale(1)"
           : upNext && phase === "slide"
             ? `scale(${ENTER_SCALE})`
-            : `translateX(100%) translateZ(${-DEPTH}px) rotateY(${TILT}deg) scale(${ENTER_SCALE})`;
+            : `translateX(${100 * inlineSign}%) translateZ(${-DEPTH}px) rotateY(${TILT * inlineSign}deg) scale(${ENTER_SCALE})`;
 
         // Only the slides in motion this beat may transition. The rest are
         // being repositioned, and a transition would streak them across.

@@ -22,11 +22,12 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 - **Source, not a dependency.** `npx boardui add` copies the files into your project. Change anything.
 - **One visual language.** Figma first, 400+ semantic tokens, light and dark from the same classes.
 - **Accessible by default.** React Aria Components underneath, Tailwind CSS v4 on top, no runtime CSS.
+- **RTL Support.** Direction-aware layouts, keyboard navigation, and overlays for Arabic, Hebrew, and other right-to-left languages.
 - **Agent-native.** MCP server, agent skill, `AGENTS.md` rules and `llms.txt`, so coding agents build with the system.
 
 ## What's in this repository
 
-- All 62 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
+- All 66 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
 - The app: a chat at `/`, a dashboard with the two free charts, and sign-in and sign-up screens, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
 - `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
@@ -88,6 +89,34 @@ npx boardui@latest add data-table    # one component and what it depends on
 npx boardui@latest add --all         # everything in this repository
 ```
 
+
+## RTL Support
+
+BoardUI supports Arabic, Hebrew, and other right-to-left languages with the same component source. The app already uses `DirectionProvider` in `app/layout.tsx`. To switch the whole app to Arabic, change the document and provider together:
+
+```tsx
+import { DirectionProvider } from "@/components/foundations/direction/direction";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ar" dir="rtl">
+      <body>
+        <DirectionProvider locale="ar">{children}</DirectionProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+Keep the existing font classes, metadata, and theme script when updating your layout. Use `he` for Hebrew, or `en-US` with `dir="ltr"` for English. Choose a font with Arabic or Hebrew coverage. Nest providers for regions in another language; CSS direction alone does not configure React Aria keyboard navigation, calendars, or portalled menus.
+
+In an existing project, install the foundation with `npx boardui@latest add direction`. Use logical styles such as `ps`/`pe`, `ms`/`me`, `start`/`end`, and `text-start`/`text-end` for your own layouts. Mirror navigation arrows and drawer motion, and pass `dir={useDirection()}` to custom portal roots. Keep email addresses, URLs, code, and OTP digits in LTR regions; their fields still align with the surrounding layout.
+
+Translate labels, placeholders, and accessible names in your application's translation layer, and use `Intl` for dates, numbers, and currencies. The optional `template-copy` foundation provides `TemplateCopyProvider` for translating display copy. Direction and translation are configured separately; Chinese (`zh-CN`) uses LTR.
+
+When working with an agent, ask it to read the `direction` component and usage examples, install it, and configure the matching document and provider locale. The rules in `AGENTS.md` and `.cursor/rules/boardui.mdc` include the direction conventions. For an older installation, preserve your customizations before refreshing component source and global styles.
+
+See the [RTL setup guide and live Arabic/Hebrew examples](https://www.boardui.com/rtl).
 
 ## Components
 
@@ -167,8 +196,12 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 | [Agent runtime](https://www.boardui.com/components/chat-starter) | Streaming chat endpoint for agent templates: one AI_API_KEY from OpenAI, Anthropic, Google, OpenRouter, Groq, xAI or Vercel AI Gateway (or any OpenAI-compatible server by URL), a config probe for unconfigured deploys, and the message contract the BoardUI chat UI installs against. | `npx boardui@latest add agent-runtime` |
 | [Chevron icons](https://www.boardui.com/components/dropdown) | Custom chevron glyphs (select caret, sortable table headers) matching the Figma strokes. | `npx boardui@latest add chevrons` |
 | [cx utility](utils/cx.ts) | tailwind-merge wrapper aware of BoardUI's composite text styles, plus the sortCx helper. | `npx boardui@latest add cx` |
+| [Direction Provider](https://www.boardui.com/components/direction) | Locale and layout direction for RTL and LTR regions, React Aria interactions, and portals. | `npx boardui@latest add direction` |
+| [Directional icons](utils/directional-icon.ts) | Mirrors navigation arrows and sidebar glyphs in RTL while preserving non-directional icons. | `npx boardui@latest add directional-icon` |
+| [Directional scrolling](utils/scroll-direction.ts) | Logical horizontal scroll offsets and item alignment for RTL and LTR carousels and tab strips. | `npx boardui@latest add scroll-direction` |
 | [Global styles](styles/globals.css) | Tailwind entry css: dark-mode variant, base resets, component animations, and table styling. Imports theme.css and typography.css. | `npx boardui@latest add globals` |
 | [Logo](components/foundations/brand/logo.tsx) | BoardUI brand mark placeholder — swap with your own logo component. | `npx boardui@latest add logo` |
+| [Template copy](components/foundations/template-copy/template-copy.tsx) | Optional application translations for template labels, sample content, and accessible names, preserving identifiers and input values. | `npx boardui@latest add template-copy` |
 | [Theme tokens](https://www.boardui.com/components/color) | Color primitives, semantic tokens (text/background/border/foreground/chart), radii, shadows, and button gradient utilities. | `npx boardui@latest add theme` |
 | [Typography tokens](https://www.boardui.com/components/typography) | The full Figma type scale as composite text-{family}-{weight} Tailwind utilities. | `npx boardui@latest add typography` |
 | [useCountUp hook](hooks/use-count-up.ts) | Animated rolling number hook used by chart headline figures. | `npx boardui@latest add use-count-up` |

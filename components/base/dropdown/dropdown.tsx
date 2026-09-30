@@ -174,7 +174,7 @@ export function DropdownGroup({ label, className, children }: DropdownGroupProps
     // carry it, or its first row floats 4px lower than the panel padding
     // implies (visible as extra space above the first item's hover pill).
     <div className={cx("flex w-full flex-col gap-1.5", label && "pt-1", className)}>
-      {label && <span className="pl-2 text-body-medium text-text-secondary">{label}</span>}
+      {label && <span className="ps-2 text-body-medium text-text-secondary">{label}</span>}
       <div className="flex w-full flex-col gap-1">{children}</div>
     </div>
   );

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useState } from "react";
 
 import { HeroRays } from "@/components/application/landing/hero-rays/hero-rays";
@@ -19,6 +21,7 @@ const REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
  * Counts are the catalogue as of September 2026; update them when Pro grows.
  */
 export function ProOfferCard() {
+  const localize = useTemplateCopy();
   const [open, setOpen] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const theme = useThemeMode();
@@ -44,7 +47,7 @@ export function ProOfferCard() {
         }
       : TEMPLATE_PRO_RAYS;
 
-  return (
+  return localize((
     <ProPromptCard
       title="Get lifetime access to Pro"
       description="8 full-page templates and 23 Pro components, 17 of them chart cards. One payment, updates for life, installed into this project as source."
@@ -66,5 +69,5 @@ export function ProOfferCard() {
         }
       }}
     />
-  );
+  ));
 }

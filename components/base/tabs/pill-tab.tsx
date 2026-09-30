@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentType, HTMLAttributes, ReactNode, Ref } from "react";
 import { cx, sortCx } from "@/utils/cx";
@@ -69,6 +70,7 @@ export interface PillTabListProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function PillTabList({ children, className, ref, ...props }: PillTabListProps) {
+  const direction = useDirection();
   const innerRef = useRef<HTMLDivElement>(null);
   const [thumb, setThumb] = useState<Thumb | null>(null);
 
@@ -87,19 +89,23 @@ export function PillTabList({ children, className, ref, ...props }: PillTabListP
       });
     };
     measure();
-    const mo = new MutationObserver(measure);
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    const observeTabs = () => el.querySelectorAll("button").forEach(tab => ro.observe(tab));
+    observeTabs();
+    const mo = new MutationObserver(() => { observeTabs(); measure(); });
     mo.observe(el, {
       attributes: true,
+      childList: true,
+      characterData: true,
       subtree: true,
       attributeFilter: ["data-pill-selected"],
     });
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
     return () => {
       mo.disconnect();
       ro.disconnect();
     };
-  }, []);
+  }, [direction]);
 
   const setRefs = (node: HTMLDivElement | null) => {
     innerRef.current = node;

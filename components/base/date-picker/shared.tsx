@@ -10,9 +10,10 @@ import {
   CalendarHeaderCell,
   CalendarStateContext,
   RangeCalendarStateContext,
+  useLocale,
 } from "react-aria-components";
 import type { CalendarCellRenderProps } from "react-aria-components";
-import { CalendarDate, getLocalTimeZone } from "@internationalized/date";
+import { CalendarDate, endOfWeek, getLocalTimeZone, isSameDay, startOfWeek } from "@internationalized/date";
 import { cx } from "@/utils/cx";
 
 /**
@@ -28,7 +29,7 @@ import { cx } from "@/utils/cx";
  *  16×16 glyph, 2px round-capped stroke, mirrored around x=8. */
 export function ChevronLeft16({ className }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className} aria-hidden>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={cx("rtl:rotate-180", className)} aria-hidden>
       <path
         d="M9 4L5.70711 7.29289C5.31658 7.68342 5.31658 8.31658 5.70711 8.70711L9 12"
         stroke="currentColor"
@@ -41,7 +42,7 @@ export function ChevronLeft16({ className }: { className?: string }) {
 
 export function ChevronRight16({ className }: { className?: string }) {
   return (
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={className} aria-hidden>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" className={cx("rtl:rotate-180", className)} aria-hidden>
       <path
         d="M7 4L10.2929 7.29289C10.6834 7.68342 10.6834 8.31658 10.2929 8.70711L7 12"
         stroke="currentColor"
@@ -52,8 +53,8 @@ export function ChevronRight16({ className }: { className?: string }) {
   );
 }
 
-export function formatTriggerDate(date: CalendarDate) {
-  return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(
+export function formatTriggerDate(date: CalendarDate, locale?: string) {
+  return new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", year: "numeric" }).format(
     date.toDate(getLocalTimeZone()),
   );
 }
@@ -77,13 +78,15 @@ export function parseChipDate(text: string): CalendarDate | null {
 }
 
 export function DayCell(props: CalendarCellRenderProps & { isRange: boolean }) {
+  const { locale } = useLocale();
   const { date, formattedDate, isSelected, isSelectionStart, isSelectionEnd, isHovered, isFocusVisible, isDisabled, isOutsideMonth, isRange } = props;
 
   if (isOutsideMonth) {
     return <div className="size-8" />;
   }
 
-  const dayOfWeek = date.toDate(getLocalTimeZone()).getDay(); // 0 = Sun ... 6 = Sat
+  const isWeekStart = isSameDay(date, startOfWeek(date, locale));
+  const isWeekEnd = isSameDay(date, endOfWeek(date, locale));
 
   // A plain (non-range) Calendar never sets isSelectionStart/isSelectionEnd —
   // those are range-only concepts, so they stay false even for the one
@@ -97,8 +100,8 @@ export function DayCell(props: CalendarCellRenderProps & { isRange: boolean }) {
   // extending half of it (6px) toward each selected neighbor — never past
   // the first/last column of a row, where there's no neighbor to bridge to.
   // Only meaningful for a RangeCalendar; a plain Calendar never bridges.
-  const extendLeft = isRange && isSelected && !isSelectionStart && dayOfWeek !== 0;
-  const extendRight = isRange && isSelected && !isSelectionEnd && dayOfWeek !== 6;
+  const extendStart = isRange && isSelected && !isSelectionStart && !isWeekStart;
+  const extendEnd = isRange && isSelected && !isSelectionEnd && !isWeekEnd;
 
   // The blue backgrounds fade in/out on opacity instead of popping instantly.
   // Both layers always render (geometry computed regardless of selection) so
@@ -115,10 +118,10 @@ export function DayCell(props: CalendarCellRenderProps & { isRange: boolean }) {
         aria-hidden
         className={cx(
           "absolute inset-y-0 bg-date-range-background transition-[opacity,border-radius] duration-100 ease-out",
-          isSelectionStart ? "left-1/2" : extendLeft ? "-left-1.5" : "left-0",
-          isSelectionEnd ? "right-1/2" : extendRight ? "-right-1.5" : "right-0",
-          !isSelectionStart && dayOfWeek === 0 && "rounded-l-lg",
-          !isSelectionEnd && dayOfWeek === 6 && "rounded-r-lg",
+          isSelectionStart ? "start-1/2" : extendStart ? "-start-1.5" : "start-0",
+          isSelectionEnd ? "end-1/2" : extendEnd ? "-end-1.5" : "end-0",
+          !isSelectionStart && isWeekStart && "rounded-s-lg",
+          !isSelectionEnd && isWeekEnd && "rounded-e-lg",
           isSelected && !isSingleDay ? "opacity-100" : "opacity-0",
         )}
       />
@@ -135,8 +138,8 @@ export function DayCell(props: CalendarCellRenderProps & { isRange: boolean }) {
           className={cx(
             "absolute inset-0 bg-date-range-edge-background transition-[opacity,border-radius] duration-100 ease-out",
             isSingleDay && "rounded-lg",
-            isSelectionStart && !isSingleDay && "rounded-l-lg",
-            isSelectionEnd && !isSingleDay && "rounded-r-lg",
+            isSelectionStart && !isSingleDay && "rounded-s-lg",
+            isSelectionEnd && !isSingleDay && "rounded-e-lg",
             isEdge ? "opacity-100" : "opacity-0",
           )}
         />
@@ -168,6 +171,7 @@ export function MonthPanel({
    *  switcher pill) and only needs the day grid underneath it. */
   hideHeader?: boolean;
 }) {
+  const { locale } = useLocale();
   // Works inside either a RangeCalendar (DateRangePicker) or a plain Calendar
   // (DatePicker) — exactly one of these contexts is non-null depending on
   // which root rendered it, and both expose the same `visibleRange` shape.
@@ -177,7 +181,7 @@ export function MonthPanel({
   const isRange = rangeState != null;
   const panelDate = state ? state.visibleRange.start.add({ months: offset }) : null;
   const title = panelDate
-    ? new Intl.DateTimeFormat(undefined, { month: "long", year: "numeric" }).format(panelDate.toDate(getLocalTimeZone()))
+    ? new Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(panelDate.toDate(getLocalTimeZone()))
     : "";
 
   return (
@@ -265,6 +269,7 @@ export function DateChipInput({
   return (
     <input
       type="text"
+      dir="ltr"
       inputMode="numeric"
       value={text}
       onChange={(event) => setText(event.target.value)}

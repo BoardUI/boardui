@@ -1,8 +1,10 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
-import { Calendar, Dialog, Popover } from "react-aria-components";
+import { Calendar, Dialog, Popover, useLocale } from "react-aria-components";
 import type { CalendarDate } from "@internationalized/date";
 import { RiCalendarLine } from "@remixicon/react";
 import { AnimatePresence, motion } from "motion/react";
@@ -67,6 +69,8 @@ export function DatePicker({
   isOpen: controlledIsOpen,
   onOpenChange: controlledOnOpenChange,
 }: DatePickerProps) {
+  const localize = useTemplateCopy();
+  const { locale } = useLocale();
   const ownTriggerRef = useRef<HTMLButtonElement>(null);
   const triggerRef = externalTriggerRef ?? ownTriggerRef;
   const isExternal = externalTriggerRef !== undefined;
@@ -114,7 +118,7 @@ export function DatePicker({
 
   useDismissOnOutsidePress(isOpen, () => setIsOpen(false), [triggerRef, popoverRef]);
 
-  return (
+  return localize((
     <>
       {!isExternal && (
         <button
@@ -126,7 +130,7 @@ export function DatePicker({
         >
           <RiCalendarLine className="size-5 shrink-0 text-foreground-icon-primary" aria-hidden />
           <span className="flex items-center justify-center whitespace-nowrap px-1 text-body-medium text-text-primary">
-            {committedValue ? formatTriggerDate(committedValue) : "Select date"}
+            {committedValue ? formatTriggerDate(committedValue, locale) : "Select date"}
           </span>
         </button>
       )}
@@ -142,9 +146,9 @@ export function DatePicker({
       >
         <Dialog aria-label={ariaLabel} className="outline-none">
           <Calendar key={openKey} aria-label={ariaLabel} value={pendingValue} onChange={setPendingValue}>
-            <div className="flex flex-col pt-2 pr-2 pb-3 pl-2">
+            <div className="flex flex-col pt-2 pe-2 pb-3 ps-2">
               <MonthPanel offset={0} showPrev showNext />
-              <div className="flex items-center justify-between pt-3 pr-4 pl-4">
+              <div className="flex items-center justify-between pt-3 pe-4 ps-4">
                 <div>
                   <AnimatePresence>
                     {pendingValue && (
@@ -180,5 +184,5 @@ export function DatePicker({
         </Dialog>
       </Popover>
     </>
-  );
+  ));
 }

@@ -5,6 +5,7 @@ import type {
   Ref,
 } from "react";
 import { cx, sortCx } from "@/utils/cx";
+import { directionalIconClass } from "@/utils/directional-icon";
 
 /**
  * Button group — a row of secondary-style buttons fused into one control:
@@ -124,9 +125,9 @@ export function ButtonGroupItem({
       )}
       {...props}
     >
-      {Leading ? <Leading className={styles.icon[size]} aria-hidden /> : null}
+      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}
       {!iconOnly && children !== undefined && children !== null && <span>{children}</span>}
-      {!iconOnly && Trailing ? <Trailing className={styles.icon[size]} aria-hidden /> : null}
+      {!iconOnly && Trailing ? <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden /> : null}
     </button>
   );
 }

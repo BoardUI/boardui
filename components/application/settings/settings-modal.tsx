@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useRef, useState, type ComponentType } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -113,6 +114,7 @@ export function SettingsModal({
   defaultPage = "general",
   planArtSrc,
 }: SettingsModalProps) {
+  const direction = useDirection();
   const [page, setPage] = useState<SettingsPage>(defaultPage);
 
   // Mount/visible two-phase state so both the enter and the exit play the
@@ -177,7 +179,7 @@ export function SettingsModal({
   if (!mounted || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4" role="presentation">
+    <div dir={direction} className="fixed inset-0 z-100 flex items-center justify-center p-4" role="presentation">
       {/* Backdrop — dark-mode modal reference uses black at 70%. */}
       <button
         type="button"
@@ -223,11 +225,11 @@ export function SettingsModal({
         {/* Nav rail — the board-team dropdown group/item recipe */}
         <nav
           aria-label="Settings sections"
-          className="flex w-[274px] shrink-0 flex-col gap-5 overflow-y-auto border-r border-separator-border bg-background-secondary-default p-2.5"
+          className="flex w-[274px] shrink-0 flex-col gap-5 overflow-y-auto border-e border-separator-border bg-background-secondary-default p-2.5"
         >
           {NAV_GROUPS.map((group) => (
             <div key={group.label} className="flex w-full flex-col gap-1.5 pt-1">
-              <span className="pl-2 text-body-medium text-text-secondary">{group.label}</span>
+              <span className="ps-2 text-body-medium text-text-secondary">{group.label}</span>
               <div className="flex w-full flex-col gap-1">
                 {group.items.map((item) => {
                   const selected = item.page !== undefined && item.page === page;
@@ -245,7 +247,7 @@ export function SettingsModal({
                           : undefined
                       }
                       className={cx(
-                        "flex w-full cursor-pointer items-center gap-2 rounded-2lg p-2 text-left",
+                        "flex w-full cursor-pointer items-center gap-2 rounded-2lg p-2 text-start",
                         "outline-none transition-colors duration-150 ease focus-visible:ring-2 focus-visible:ring-border-focus-ring",
                         selected
                           ? "bg-background-secondary-hover"
@@ -329,7 +331,7 @@ export function SettingsModal({
         aria-live="polite"
         className={cx(
           "pointer-events-none absolute bottom-0 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1",
-          "rounded-full border border-border-button-default bg-background-primary-default py-1 pr-2.5 pl-1.5 shadow-dropdown",
+          "rounded-full border border-border-button-default bg-background-primary-default py-1 pe-2.5 ps-1.5 shadow-dropdown",
           "transition-[opacity,transform,filter] duration-200 ease-out",
           savedPhase === "shown" && "translate-y-1/2 opacity-100 scale-100 blur-0",
           // Starts below the resting spot, rises in; keeps drifting up on exit.

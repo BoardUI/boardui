@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useRouter } from "next/navigation";
 
 import { useStarterBase } from "@/components/application/app-shell/app-shell";
@@ -73,7 +75,8 @@ export function AgentChatHistory({
   disabled = false,
   className,
 }: AgentChatHistoryProps) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <aside
       aria-label="Chat history"
       className={cx(
@@ -120,7 +123,7 @@ export function AgentChatHistory({
 
       <RailFooter threads={threads} onExport={onExport} />
     </aside>
-  );
+  ));
 }
 
 /**
@@ -138,10 +141,11 @@ function RailFooter({
   threads: ChatThreadSummary[];
   onExport: () => void;
 }) {
+  const localize = useTemplateCopy();
   const count = threads.length;
   const label = count === 0 ? "No chats to export" : `Export ${count} chats`;
-  return (
-    <div className="mt-auto flex items-center gap-1 border-t border-separator-border pt-3 pr-1">
+  return localize((
+    <div className="mt-auto flex items-center gap-1 border-t border-separator-border pt-3 pe-1">
       <AccountMenu threads={threads} />
       <button
         type="button"
@@ -154,7 +158,7 @@ function RailFooter({
         <RiDownloadLine className="size-3.5 shrink-0" aria-hidden />
       </button>
     </div>
-  );
+  ));
 }
 
 /** The rail keeps at most this many chats, which is what makes "chats" a real
@@ -174,6 +178,7 @@ const STORAGE_BUDGET_BYTES = 5 * 1024 * 1024;
  * still means something once this ships inside someone else's app.
  */
 function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
+  const localize = useTemplateCopy();
   const [isOpen, setIsOpen] = useState(false);
   const [usageOpen, setUsageOpen] = useState(false);
   const [storedBytes, setStoredBytes] = useState(0);
@@ -195,7 +200,7 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
     setUsageOpen((open) => !open);
   };
 
-  return (
+  return localize((
     <Dropdown
       isOpen={isOpen}
       onOpenChange={(open) => {
@@ -206,7 +211,7 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
       <DropdownTrigger
         aria-label="Mertcan Esmergul account menu"
         className={cx(
-          "flex min-w-0 flex-1 items-center gap-2 rounded-2lg px-1 py-1 text-left",
+          "flex min-w-0 flex-1 items-center gap-2 rounded-2lg px-1 py-1 text-start",
           "transition-colors hover:bg-background-secondary-hover",
           isOpen && "bg-background-secondary-hover",
         )}
@@ -228,7 +233,7 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
             type="button"
             onClick={toggleUsage}
             aria-expanded={usageOpen}
-            className="flex w-full cursor-pointer items-center gap-2 rounded-2lg px-2 py-1.5 text-left transition-colors hover:bg-background-secondary-default"
+            className="flex w-full cursor-pointer items-center gap-2 rounded-2lg px-2 py-1.5 text-start transition-colors hover:bg-background-secondary-default"
           >
             <RiSpeedUpLine className="size-[18px] shrink-0 text-foreground-icon-secondary" aria-hidden />
             <span className="flex-1 truncate text-body-medium whitespace-nowrap text-text-primary">
@@ -250,7 +255,7 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
               <button
                 type="button"
                 onClick={close}
-                className="flex w-full cursor-pointer items-center gap-2 rounded-2lg py-1 pr-2 pl-9 text-left transition-colors hover:bg-background-secondary-default"
+                className="flex w-full cursor-pointer items-center gap-2 rounded-2lg py-1 pe-2 ps-9 text-start transition-colors hover:bg-background-secondary-default"
               >
                 <span className="flex-1 truncate text-body-2-medium whitespace-nowrap text-text-primary">
                   Upgrade to Max
@@ -286,18 +291,19 @@ function AccountMenu({ threads }: { threads: ChatThreadSummary[] }) {
         </DropdownGroup>
       </DropdownPopover>
     </Dropdown>
-  );
+  ));
 }
 
 /** A measured line under "Usage left": what it is, how much, how full. */
 function UsageRow({ label, value, percent }: { label: string; value: string; percent: number }) {
-  return (
-    <div className="flex items-center gap-2 py-0.5 pr-2 pl-9">
+  const localize = useTemplateCopy();
+  return localize((
+    <div className="flex items-center gap-2 py-0.5 pe-2 ps-9">
       <span className="flex-1 truncate text-body-2-medium text-text-primary">{label}</span>
       <span className="shrink-0 text-body-2-regular text-text-secondary">{value}</span>
-      <span className="w-9 shrink-0 text-right text-body-2-regular text-text-tertiary">{percent}%</span>
+      <span className="w-9 shrink-0 text-end text-body-2-regular text-text-tertiary">{percent}%</span>
     </div>
-  );
+  ));
 }
 
 /** Bytes the stored chats occupy. UTF-16 in storage, so two bytes a character. */
@@ -332,6 +338,7 @@ function ThreadRow({
   onToggleUnread: (id: string) => void;
   onDelete: (id: string) => void;
 }) {
+  const localize = useTemplateCopy();
   const [menuOpen, setMenuOpen] = useState(false);
   const [renaming, setRenaming] = useState(false);
   const [draft, setDraft] = useState(thread.title);
@@ -362,7 +369,7 @@ function ThreadRow({
   };
 
   if (renaming) {
-    return (
+    return localize((
       <div className="rounded-2lg bg-background-secondary-hover px-2 py-1.5">
         <label className="sr-only" htmlFor={`rename-${thread.id}`}>
           Rename chat
@@ -377,10 +384,10 @@ function ThreadRow({
           className="w-full bg-transparent text-body-2-regular text-text-primary outline-none"
         />
       </div>
-    );
+    ));
   }
 
-  return (
+  return localize((
     <div
       className={cx(
         "group/row relative flex items-center rounded-2lg transition-colors",
@@ -398,7 +405,7 @@ function ThreadRow({
         onClick={() => onSelect(thread.id)}
         disabled={disabled}
         aria-current={active ? "true" : undefined}
-        className="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 py-1.5 pl-2 text-left disabled:cursor-not-allowed disabled:opacity-50"
+        className="flex min-w-0 flex-1 cursor-pointer items-center gap-1.5 py-1.5 ps-2 text-start disabled:cursor-not-allowed disabled:opacity-50"
       >
         {thread.unread && (
           <span
@@ -423,7 +430,7 @@ function ThreadRow({
           load-bearing part: closing the menu with the pointer hands focus back
           to the trigger, and `focus-within` would keep the icon lit on top of
           the age that has already returned. */}
-      <span className="group/slot relative flex size-7 shrink-0 items-center justify-center pr-1">
+      <span className="group/slot relative flex size-7 shrink-0 items-center justify-center pe-1">
         <span
           aria-hidden={menuOpen}
           className={cx(
@@ -461,7 +468,7 @@ function ThreadRow({
         </span>
       </span>
     </div>
-  );
+  ));
 }
 
 /** DropdownTrigger is itself the button, so it is styled directly — putting an
@@ -481,12 +488,13 @@ function RowMenu({
   onToggleUnread: () => void;
   onDelete: () => void;
 }) {
+  const localize = useTemplateCopy();
   const choose = (action: () => void) => () => {
     onOpenChange(false);
     action();
   };
 
-  return (
+  return localize((
     <Dropdown isOpen={isOpen} onOpenChange={onOpenChange}>
       <DropdownTrigger
         aria-label={`More actions for ${title}`}
@@ -520,7 +528,7 @@ function RowMenu({
         </DropdownGroup>
       </DropdownPopover>
     </Dropdown>
-  );
+  ));
 }
 
 /** Compact ages for a narrow badge: now, 34m, 5h, 18h, 3d. */

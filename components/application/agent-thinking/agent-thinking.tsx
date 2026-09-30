@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { cx } from "@/utils/cx";
@@ -89,6 +91,7 @@ function dotOpacities(variant: "wave" | "spin", phase: number) {
 }
 
 function DotsIndicator({ variant }: { variant: "wave" | "spin" }) {
+  const localize = useTemplateCopy();
   const [opacities, setOpacities] = useState<number[]>(DOTS_SEED);
 
   useEffect(() => {
@@ -101,7 +104,7 @@ function DotsIndicator({ variant }: { variant: "wave" | "spin" }) {
     return () => window.clearInterval(id);
   }, [variant]);
 
-  return (
+  return localize((
     <span
       aria-hidden
       className="grid shrink-0"
@@ -123,7 +126,7 @@ function DotsIndicator({ variant }: { variant: "wave" | "spin" }) {
         />
       ))}
     </span>
-  );
+  ));
 }
 
 /* ------------------------------------------------------------------ stars */
@@ -141,8 +144,9 @@ const STAR_LAYOUT = [
 const STAR_PATH = "M12 0C13 7 17 11 24 12C17 13 13 17 12 24C11 17 7 13 0 12C7 11 11 7 12 0Z";
 
 function StarsIndicator() {
+  const localize = useTemplateCopy();
   const box = STAR_SIZE * 1.5;
-  return (
+  return localize((
     <span
       aria-hidden
       className="bui-agent-thinking-stars relative block shrink-0"
@@ -171,7 +175,7 @@ function StarsIndicator() {
         );
       })}
     </span>
-  );
+  ));
 }
 
 /* --------------------------------------------------------------- infinity */
@@ -184,7 +188,8 @@ const INFINITY_PATH =
   "M28 14C33 5 47 5 47 14C47 23 33 23 28 14C23 5 9 5 9 14C9 23 23 23 28 14Z";
 
 function InfinityIndicator() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <svg
       aria-hidden
       viewBox="0 0 56 28"
@@ -213,12 +218,13 @@ function InfinityIndicator() {
         style={{ animationDuration: `${INFINITY_DURATION_S}s` }}
       />
     </svg>
-  );
+  ));
 }
 
 /* ------------------------------------------------------------------ timer */
 
 function ElapsedTimer() {
+  const localize = useTemplateCopy();
   const [elapsed, setElapsed] = useState(0);
 
   useEffect(() => {
@@ -230,11 +236,11 @@ function ElapsedTimer() {
     return () => window.clearInterval(id);
   }, []);
 
-  return (
+  return localize((
     <span className="font-mono text-caption-1-regular text-text-tertiary tabular-nums">
       {elapsed.toFixed(1)}s
     </span>
-  );
+  ));
 }
 
 /* ----------------------------------------------------------------- loader */
@@ -247,9 +253,10 @@ export function AgentThinking({
   showTimer = true,
   className,
 }: AgentThinkingProps) {
+  const localize = useTemplateCopy();
   const color = TONE_COLORS[tone ?? VARIANT_TONE[variant]];
 
-  return (
+  return localize((
     <div
       role="status"
       className={cx("flex items-center gap-2.5", className)}
@@ -266,5 +273,5 @@ export function AgentThinking({
       </span>
       {showTimer && <ElapsedTimer />}
     </div>
-  );
+  ));
 }

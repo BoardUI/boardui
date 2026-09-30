@@ -18,6 +18,14 @@ export type Entry = {
 
 const foundations: Entry[] = [
   {
+    name: "Direction",
+    href: "/components/direction",
+    description: "RTL and LTR layout, locale, and portal direction.",
+    tier: "free",
+    status: "shipped",
+    isNew: true,
+  },
+  {
     name: "Color",
     href: "/components/color",
     description: "The full palette and semantic tokens.",

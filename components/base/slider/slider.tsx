@@ -90,7 +90,7 @@ function SliderBase<T extends SliderValue>({
                   <span
                     aria-hidden
                     className={cx(
-                      "absolute top-1/2 right-0 left-0 h-1.5 -translate-y-1/2 rounded-full",
+                      "absolute top-1/2 end-0 start-0 h-1.5 -translate-y-1/2 rounded-full",
                       "bg-background-tertiary-default shadow-[inset_0_1px_1px_rgb(0_0_0/0.06)]",
                       "transition-colors duration-150 ease",
                       isHovered && "bg-background-tertiary-hover",

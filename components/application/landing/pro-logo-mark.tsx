@@ -61,8 +61,9 @@ export function ProLogoMark({
       className={cx("relative shrink-0", className)}
       style={{ width: BASE_SIZE * scale, height: BASE_SIZE * scale }}
     >
+      {/* The 56px drawing uses physical coordinates, even inside an RTL layout. */}
       <div
-        className="relative rounded-[12.432px] shadow-[0px_0.896px_0.504px_0.336px_rgba(255,255,255,0.42),0px_-0.56px_1.221px_0.112px_rgba(0,0,0,0.21),0px_0.112px_0.582px_0.224px_rgba(56,56,56,0.25)]"
+        className="absolute top-0 left-0 rounded-[12.432px] shadow-[0px_0.896px_0.504px_0.336px_rgba(255,255,255,0.42),0px_-0.56px_1.221px_0.112px_rgba(0,0,0,0.21),0px_0.112px_0.582px_0.224px_rgba(56,56,56,0.25)]"
         style={
           {
             width: BASE_SIZE,

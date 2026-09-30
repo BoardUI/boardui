@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useRef, useState, type ComponentProps } from "react";
 import { CalendarDate } from "@internationalized/date";
 import { RiCalendarLine, RiExternalLinkLine, RiLogoutCircleLine, RiMailLine } from "@remixicon/react";
@@ -48,10 +50,11 @@ function SavableInput({
   ComponentProps<typeof Input>,
   "value" | "onChange" | "defaultValue"
 >) {
+  const localize = useTemplateCopy();
   const [value, setValue] = useState(initialValue);
   const committed = useRef(initialValue);
 
-  return (
+  return localize((
     <Input
       size="small"
       {...inputProps}
@@ -68,16 +71,17 @@ function SavableInput({
       }}
       className={cx("w-[202px] shrink-0", inputProps.className)}
     />
-  );
+  ));
 }
 
 export function SettingsProfile({ onSaved }: { onSaved?: () => void } = {}) {
+  const localize = useTemplateCopy();
   const [birthDate, setBirthDate] = useState<CalendarDate>(new CalendarDate(1997, 7, 28));
   const [birthOpen, setBirthOpen] = useState(false);
   const birthTriggerRef = useRef<HTMLButtonElement>(null);
   const [publicProfile, setPublicProfile] = useState(true);
 
-  return (
+  return localize((
     <div className="flex w-full flex-col gap-6">
       <SettingsCard>
         <SettingsRow label="Email">
@@ -149,5 +153,5 @@ export function SettingsProfile({ onSaved }: { onSaved?: () => void } = {}) {
         </SettingsRow>
       </SettingsCard>
     </div>
-  );
+  ));
 }

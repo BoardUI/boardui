@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useRef, useSyncExternalStore } from "react";
 import { flushSync } from "react-dom";
 import { RiMoonLine, RiSunLine } from "@remixicon/react";
@@ -225,6 +227,7 @@ export function ThemeToggle({
   className,
   transitionDuration = THEME_TRANSITION_DURATION,
 }: ThemeToggleProps) {
+  const localize = useTemplateCopy();
   const theme = useThemeMode();
   const dark = theme === "dark";
   const switchRef = useRef<HTMLLabelElement | null>(null);
@@ -248,7 +251,7 @@ export function ThemeToggle({
       { mode: "dark" as const, label: "Use dark mode", Icon: RiMoonLine },
     ];
 
-    return (
+    return localize((
       <div
         role="group"
         aria-label="Theme"
@@ -271,16 +274,16 @@ export function ThemeToggle({
         <span
           aria-hidden
           className={cx(
-            "pointer-events-none absolute top-1 left-1 size-8 rounded-full",
+            "pointer-events-none absolute top-1 start-1 size-8 rounded-full",
             "shadow-xs transition-transform duration-200 ease",
-            glass && "top-0.5 left-0.5 size-7 sm:top-1 sm:left-1 sm:size-8",
+            glass && "top-0.5 start-0.5 size-7 sm:top-1 sm:start-1 sm:size-8",
             glass
               ? "bg-white dark:bg-[#2e2e33]"
               : sidebarSurface
                 ? "bg-theme-toggle-sidebar-selected-background"
                 : "bg-background-primary-default",
             // Segment width + the 4px gap: 28+4 on mobile, 32+4 above it.
-            dark && (glass ? "translate-x-8 sm:translate-x-9" : "translate-x-9"),
+            dark && (glass ? "translate-x-8 rtl:-translate-x-8 sm:translate-x-9 sm:rtl:-translate-x-9" : "translate-x-9 rtl:-translate-x-9"),
           )}
         />
         {options.map(({ mode, label, Icon }) => {
@@ -325,12 +328,12 @@ export function ThemeToggle({
           );
         })}
       </div>
-    );
+    ));
   }
 
   if (collapsed) {
     const Icon = dark ? RiSunLine : RiMoonLine;
-    return (
+    return localize((
       <button
         type="button"
         aria-label={dark ? "Use light mode" : "Use dark mode"}
@@ -357,10 +360,10 @@ export function ThemeToggle({
       >
         <Icon className="size-5" aria-hidden />
       </button>
-    );
+    ));
   }
 
-  return (
+  return localize((
     <AriaSwitch
       ref={switchRef}
       isSelected={dark}
@@ -396,5 +399,5 @@ export function ThemeToggle({
         </>
       )}
     </AriaSwitch>
-  );
+  ));
 }

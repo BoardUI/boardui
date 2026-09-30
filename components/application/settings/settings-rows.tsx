@@ -1,3 +1,7 @@
+"use client";
+
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import type { ComponentType, ReactNode } from "react";
 import { cx } from "@/utils/cx";
 
@@ -22,23 +26,25 @@ type IconComponent = ComponentType<{
 
 /** Grouped card — rows divide themselves with borders that respect pl-12. */
 export function SettingsCard({ className, children }: { className?: string; children: ReactNode }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div
       className={cx(
-        "flex w-full flex-col rounded-2xl bg-background-secondary-default pl-3",
+        "flex w-full flex-col rounded-2xl bg-background-secondary-default ps-3",
         className,
       )}
     >
       {children}
     </div>
-  );
+  ));
 }
 
 /** Muted 13px section heading above a card ("Pull Requests", "Notifications"). */
 export function SettingsSectionLabel({ className, children }: { className?: string; children: ReactNode }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <p className={cx("w-full px-3 text-body-2-medium text-text-secondary", className)}>{children}</p>
-  );
+  ));
 }
 
 /** One label + control row. Rows separate themselves; the last has no border. */
@@ -51,10 +57,11 @@ export function SettingsRow({
   description?: string;
   children?: ReactNode;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div
       className={cx(
-        "flex min-h-[52px] w-full items-center justify-between gap-4 py-2.5 pr-2.5",
+        "flex min-h-[52px] w-full items-center justify-between gap-4 py-2.5 pe-2.5",
         "border-b border-separator-border last:border-b-0",
       )}
     >
@@ -66,7 +73,7 @@ export function SettingsRow({
       </div>
       {children}
     </div>
-  );
+  ));
 }
 
 /**
@@ -86,7 +93,8 @@ export function SettingsValueField({
   muted?: boolean;
   className?: string;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div
       className={cx(
         "flex h-8 w-[202px] shrink-0 items-center gap-0.5 rounded-2lg bg-background-tertiary-default px-1.5",
@@ -96,12 +104,12 @@ export function SettingsValueField({
       {Icon && <Icon className="size-5 shrink-0 text-foreground-icon-secondary" aria-hidden />}
       <span
         className={cx(
-          "truncate pl-1 text-body-regular",
+          "truncate ps-1 text-body-regular",
           muted ? "text-text-secondary" : "text-text-primary",
         )}
       >
         {children}
       </span>
     </div>
-  );
+  ));
 }

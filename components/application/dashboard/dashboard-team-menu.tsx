@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import {
   RiBankCardLine,
@@ -86,7 +88,8 @@ const GROUPS: MenuGroup[] = [
 
 /** Label/chevron slot on the trigger: blurs + fades away as the rail collapses. */
 function Collapsible({ collapsed, children }: { collapsed: boolean; children: ReactNode }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span
       className={cx(
         "flex min-w-0 items-center overflow-hidden transition-[max-width,opacity,filter] duration-300 ease-in-out",
@@ -95,11 +98,12 @@ function Collapsible({ collapsed, children }: { collapsed: boolean; children: Re
     >
       {children}
     </span>
-  );
+  ));
 }
 
 function TeamMenuItem({ icon: Icon, label, badge, isSelected, onSelect }: MenuRow & { onSelect: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <a
       href="#"
       aria-current={isSelected ? "page" : undefined}
@@ -124,7 +128,7 @@ function TeamMenuItem({ icon: Icon, label, badge, isSelected, onSelect }: MenuRo
         </Badge>
       )}
     </a>
-  );
+  ));
 }
 
 export function DashboardTeamMenu({
@@ -134,6 +138,8 @@ export function DashboardTeamMenu({
   collapsed?: boolean;
   className?: string;
 }) {
+  const localize = useTemplateCopy();
+  const direction = useDirection();
   const [isOpen, setIsOpen] = useState(false);
   // "right" placement assumes room to the sidebar's right (true in-flow on
   // desktop) — on mobile the sidebar can span the full viewport, so the
@@ -148,7 +154,7 @@ export function DashboardTeamMenu({
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  return (
+  return localize((
     <AriaDialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
       <AriaButton
         aria-label="Board team"
@@ -159,7 +165,7 @@ export function DashboardTeamMenu({
           "focus-visible:ring-2 focus-visible:ring-border-focus-ring focus-visible:ring-offset-2",
           collapsed
             ? "size-9 justify-start rounded-full bg-transparent p-0"
-            : "w-full justify-between rounded-xl bg-background-tertiary-default py-2 pr-4 pl-2.5",
+            : "w-full justify-between rounded-xl bg-background-tertiary-default py-2 pe-4 ps-2.5",
           className,
         )}
       >
@@ -182,7 +188,7 @@ export function DashboardTeamMenu({
       </AriaButton>
 
       <AriaPopover
-        placement={isMobile ? "bottom start" : "right bottom"}
+        placement={isMobile ? "bottom start" : direction === "rtl" ? "left bottom" : "right bottom"}
         offset={8}
         className={cx(
           "w-[265px] max-w-[calc(100vw-32px)] origin-bottom-left overflow-y-auto",
@@ -219,11 +225,12 @@ export function DashboardTeamMenu({
         </AriaDialog>
       </AriaPopover>
     </AriaDialogTrigger>
-  );
+  ));
 }
 
 function Group({ group, showDivider, onSelect }: { group: MenuGroup; showDivider: boolean; onSelect: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <>
       {showDivider && <div className="-mx-2.5 my-2.5 h-px bg-border-button-default" />}
       <div className={cx("flex w-full flex-col gap-1", group.label && "gap-1.5 pt-1")}>
@@ -237,5 +244,5 @@ function Group({ group, showDivider, onSelect }: { group: MenuGroup; showDivider
         </div>
       </div>
     </>
-  );
+  ));
 }

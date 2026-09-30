@@ -236,14 +236,14 @@ export function RowConnector({
   return (
     <span
       aria-hidden
-      className="pointer-events-none absolute inset-y-0 left-0 w-3 text-foreground-icon-quaternary"
+      className="pointer-events-none absolute inset-y-0 start-0 w-3 text-foreground-icon-quaternary"
     >
       <svg
         width={BRANCH_WIDTH}
         height={BRANCH_Y + 1}
         viewBox={`0 0 ${BRANCH_WIDTH} ${BRANCH_Y + 1}`}
         fill="none"
-        className="absolute top-0 left-0"
+        className="absolute top-0 start-0 rtl:-scale-x-100"
       >
         <motion.path
           d={BRANCH_PATH}
@@ -256,7 +256,7 @@ export function RowConnector({
       </svg>
       {!last && (
         <motion.span
-          className="absolute left-0 w-px origin-top bg-current"
+          className="absolute start-0 w-px origin-top bg-current"
           style={{ top: BRANCH_Y - BRANCH_RADIUS, bottom: 0 }}
           initial={reduce ? false : { scaleY: 0 }}
           animate={{ scaleY: 1 }}
@@ -295,7 +295,7 @@ export function GuideBridge({
     <motion.span
       aria-hidden
       className="pointer-events-none absolute w-px origin-top bg-current text-foreground-icon-quaternary"
-      style={{ top: -height, height, left: offset }}
+      style={{ top: -height, height, insetInlineStart: offset }}
       initial={reduce ? false : { scaleY: 0 }}
       animate={{ scaleY: 1 }}
       transition={TAIL_TRANSITION}
@@ -366,7 +366,7 @@ export function LogRow({
       animate={UNIT_ANIMATE}
       transition={UNIT_TRANSITION}
       {...mask}
-      className={cx("relative overflow-hidden pl-4", className)}
+      className={cx("relative overflow-hidden ps-4", className)}
     >
       <RowConnector first={first} last={last} reduce={reduce} />
       {children}

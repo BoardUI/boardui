@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import type { ComponentType, HTMLAttributes, Ref } from "react";
 import { useMemo, useState } from "react";
 import {
@@ -82,14 +84,15 @@ const TABS: { id: NotificationCenterTab; label: string }[] = [
 ];
 
 function NotificationVisual({ item }: { item: NotificationCenterItem }) {
+  const localize = useTemplateCopy();
   if (item.avatar) {
-    return <Avatar {...item.avatar} size="lg" className="size-10" />;
+    return localize(<Avatar {...item.avatar} size="lg" className="size-10" />);
   }
 
   const status = item.status ?? "neutral";
   const Icon = item.icon ?? STATUS_ICON[status];
 
-  return (
+  return localize((
     <span
       className={cx(
         "flex size-10 shrink-0 items-center justify-center rounded-full",
@@ -98,7 +101,7 @@ function NotificationVisual({ item }: { item: NotificationCenterItem }) {
     >
       <Icon className="size-5" aria-hidden />
     </span>
-  );
+  ));
 }
 
 function TabLabel({
@@ -108,14 +111,15 @@ function TabLabel({
   label: string;
   count: number;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span className="inline-flex items-center gap-1.5">
       {label}
       <span className="inline-flex min-w-5 items-center justify-center rounded-sm bg-badge-neutral-background px-1 py-px text-caption-1-medium text-text-secondary">
         {count}
       </span>
     </span>
-  );
+  ));
 }
 
 export function NotificationCenter({
@@ -130,6 +134,7 @@ export function NotificationCenter({
   ref,
   ...props
 }: NotificationCenterProps) {
+  const localize = useTemplateCopy();
   const [internalTab, setInternalTab] = useState<NotificationCenterTab>(defaultTab);
   const [readIds, setReadIds] = useState<Set<string>>(() => new Set());
   const activeTab = tab ?? internalTab;
@@ -163,7 +168,7 @@ export function NotificationCenter({
     setReadIds(new Set(notifications.filter((item) => item.unread).map((item) => item.id)));
   };
 
-  return (
+  return localize((
     <section
       ref={ref}
       aria-label={title}
@@ -278,5 +283,5 @@ export function NotificationCenter({
         </div>
       </div>
     </section>
-  );
+  ));
 }

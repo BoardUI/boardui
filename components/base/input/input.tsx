@@ -11,6 +11,7 @@ import {
   Group as AriaGroup,
   Input as AriaInput,
   TextField as AriaTextField,
+  useLocale,
 } from "react-aria-components";
 import type {
   InputProps as AriaInputProps,
@@ -136,8 +137,8 @@ const inputStyles = sortCx({
 
   // When a leadingAddon is present (Phone basic): tighten left padding.
   fieldWithAddonSize: {
-    medium: "h-9 pl-1 pr-2 py-2", // 36 / 4 / 8 / 8
-    small:  "h-8 pl-1 pr-1.5 py-2",
+    medium: "h-9 ps-1 pe-2 py-2", // 36 / 4 / 8 / 8
+    small:  "h-8 ps-1 pe-1.5 py-2",
   },
 
   content: "flex w-full items-center gap-2 min-w-0",
@@ -145,7 +146,7 @@ const inputStyles = sortCx({
 
   input: [
     "min-w-0 flex-1 bg-transparent border-0 outline-none p-0 m-0",
-    "font-sans text-body-regular text-text-primary pl-1",
+    "font-sans text-body-regular text-text-primary",
     "placeholder:text-text-tertiary",
     "focus:placeholder:text-text-primary",
     "disabled:text-input-disabled-text disabled:placeholder:text-input-disabled-text",
@@ -167,6 +168,7 @@ export function InputBase({
   groupRef,
   ...inputProps
 }: InputBaseProps) {
+  const { direction } = useLocale();
   const ctx = useContext(TextFieldContext);
   const size: InputSize = sizeProp ?? ctx.size ?? "medium";
   const hasAddon = leadingAddon !== undefined && leadingAddon !== null;
@@ -211,7 +213,8 @@ export function InputBase({
           <AriaInput
             ref={ref}
             {...inputProps}
-            className={cx(inputStyles.input, ctx.inputClassName, className)}
+            // Align to the field's start even when email/URL values use LTR.
+            className={cx(inputStyles.input, direction === "rtl" ? "pr-1 text-right" : "pl-1 text-left", ctx.inputClassName, className)}
           />
         </div>
         {Trailing ? (
@@ -244,6 +247,9 @@ export interface InputProps
   /** Show an info icon next to the label. Replace with tooltip when Tooltip lands. */
   tooltip?: boolean | string;
   placeholder?: string;
+  /** Direction of the editable value, independent of the label and adornments.
+   * Email, URL and telephone inputs default to LTR inside RTL forms. */
+  inputDir?: "ltr" | "rtl" | "auto";
 }
 
 export function Input({
@@ -251,6 +257,7 @@ export function Input({
   hint,
   tooltip,
   placeholder,
+  inputDir,
   leadingIcon,
   trailingIcon,
   leadingAddon,
@@ -283,6 +290,7 @@ export function Input({
             </Label>
           )}
           <InputBase
+            dir={inputDir ?? (["email", "url", "tel"].includes(textFieldProps.type ?? "") ? "ltr" : undefined)}
             ref={ref}
             groupRef={groupRef}
             placeholder={placeholder}

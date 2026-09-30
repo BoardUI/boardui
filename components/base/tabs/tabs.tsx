@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ComponentType, ReactNode, Ref } from "react";
 import {
@@ -67,6 +68,7 @@ export interface TabListProps<T extends object> extends AriaTabListProps<T> {
 type Underline = { left: number; width: number };
 
 export function TabList<T extends object>({ className, ref, ...props }: TabListProps<T>) {
+  const direction = useDirection();
   const wrapperRef = useRef<HTMLDivElement>(null);
   const [underline, setUnderline] = useState<Underline | null>(null);
 
@@ -80,16 +82,18 @@ export function TabList<T extends object>({ className, ref, ...props }: TabListP
       }
     };
     measure();
-    // Re-measure when selection flips (data-selected toggles) or size changes.
-    const mo = new MutationObserver(measure);
-    mo.observe(el, { attributes: true, subtree: true, attributeFilter: ["data-selected"] });
     const ro = new ResizeObserver(measure);
     ro.observe(el);
+    // Labels and fonts can change width without resizing the full tab strip.
+    const observeTabs = () => el.querySelectorAll("[role='tab']").forEach(tab => ro.observe(tab));
+    observeTabs();
+    const mo = new MutationObserver(() => { observeTabs(); measure(); });
+    mo.observe(el, { attributes: true, childList: true, characterData: true, subtree: true, attributeFilter: ["data-selected"] });
     return () => {
       mo.disconnect();
       ro.disconnect();
     };
-  }, []);
+  }, [direction]);
 
   return (
     <div ref={wrapperRef} className="relative w-full">

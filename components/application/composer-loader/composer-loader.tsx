@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { cx } from "@/utils/cx";
@@ -104,6 +106,7 @@ export function ComposerLoader({
   offset = 0,
   className,
 }: ComposerLoaderProps) {
+  const localize = useTemplateCopy();
   const gradientId = `bui-cl-${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const clipRef = useRef<HTMLSpanElement>(null);
   const [box, setBox] = useState({ w: 640, h: 52 });
@@ -199,7 +202,7 @@ export function ComposerLoader({
     </filter>
   );
 
-  return (
+  return localize((
     <div className={cx("relative", className)}>
       {surface && (
         <span
@@ -248,5 +251,5 @@ export function ComposerLoader({
 
       <div className="relative">{children}</div>
     </div>
-  );
+  ));
 }

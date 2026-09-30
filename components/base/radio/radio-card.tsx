@@ -33,7 +33,7 @@ export function RadioCard({ className, title, description, ref, ...props }: Radi
       {...props}
       className={(state) =>
         cx(
-          "group flex w-full items-center justify-between gap-3 rounded-2lg border border-border-button-default py-3 pr-5 pl-4 select-none",
+          "group flex w-full items-center justify-between gap-3 rounded-2lg border border-border-button-default py-3 pe-5 ps-4 select-none",
           "transition-colors duration-150 ease",
           state.isHovered && !state.isDisabled
             ? "bg-background-primary-hover"

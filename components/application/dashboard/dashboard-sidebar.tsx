@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import {
   useCallback,
   useEffect,
@@ -59,7 +61,8 @@ type IconComponent = ComponentType<{
  * place — only these label/badge slots animate — so nothing jumps to center.
  */
 function Collapsible({ collapsed, children, className }: { collapsed: boolean; children: ReactNode; className?: string }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span
       className={cx(
         "flex min-w-0 items-center overflow-hidden transition-[max-width,opacity,filter] duration-300 ease-in-out",
@@ -71,7 +74,7 @@ function Collapsible({ collapsed, children, className }: { collapsed: boolean; c
     >
       {children}
     </span>
-  );
+  ));
 }
 
 function NavItem({
@@ -92,7 +95,8 @@ function NavItem({
   /** Action rows (e.g. Settings → modal) intercept the navigation. */
   onClick?: () => void;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <a
       href={href}
       onClick={
@@ -133,7 +137,7 @@ function NavItem({
       </span>
       {badge && <Collapsible collapsed={collapsed}>{badge}</Collapsible>}
     </a>
-  );
+  ));
 }
 
 /** A primary navigation row. Rows without an `href` are decoration only. */
@@ -180,9 +184,10 @@ function NavRows({
   /** Whether Support or Settings matches, so "No results" only shows when nothing does. */
   secondaryMatch: boolean;
 }) {
+  const localize = useTemplateCopy();
   const shown = items.filter((item) => item.label.toLocaleLowerCase().includes(query));
   if (shown.length === 0 && !secondaryMatch && !collapsed) {
-    return <p className="px-2 py-3 text-body-regular text-text-tertiary">No results</p>;
+    return localize(<p className="px-2 py-3 text-body-regular text-text-tertiary">No results</p>);
   }
   return shown.map((item) => {
       const isSelected = selected === item.key;
@@ -233,6 +238,7 @@ export function DashboardSidebar({
   flat?: boolean;
   className?: string;
 } = {}) {
+  const localize = useTemplateCopy();
   const [collapsedState, setCollapsed] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [suppressUserHover, setSuppressUserHover] = useState(false);
@@ -291,7 +297,7 @@ export function DashboardSidebar({
     return () => window.removeEventListener("keydown", onShortcut);
   }, [activateSearch]);
 
-  return (
+  return localize((
     <aside
       className={cx(
         "flex h-full shrink-0 flex-col justify-between overflow-hidden",
@@ -357,7 +363,7 @@ export function DashboardSidebar({
               className={cx(
                 "flex h-9 items-center overflow-hidden rounded-full bg-background-tertiary-default transition-[width,box-shadow] duration-300 ease-in-out",
                 searchActive
-                  ? "w-full gap-2 pr-2.5 pl-2 ring-2 ring-inset ring-border-button-active"
+                  ? "w-full gap-2 pe-2.5 ps-2 ring-2 ring-inset ring-border-button-active"
                   : "w-9 gap-0 px-2",
               )}
             >
@@ -428,7 +434,7 @@ export function DashboardSidebar({
               )}
             >
               <RiSideBarFill
-                className={cx("size-5 transition-transform duration-300 ease-in-out", !collapsed && "-scale-x-100")}
+                className={cx("size-5 transition-transform duration-300 ease-in-out", collapsed ? "rtl:-scale-x-100" : "-scale-x-100 rtl:scale-x-100")}
                 aria-hidden
               />
             </button>
@@ -440,7 +446,7 @@ export function DashboardSidebar({
           {!flat && (searchActive && !collapsed ? (
             <div
               ref={searchFieldRef}
-              className="flex w-full items-center gap-2 rounded-full bg-background-tertiary-default py-2 pr-2.5 pl-2 ring-2 ring-inset ring-border-button-active transition-[background-color,box-shadow] duration-[var(--input-transition-ms)] ease"
+              className="flex w-full items-center gap-2 rounded-full bg-background-tertiary-default py-2 pe-2.5 ps-2 ring-2 ring-inset ring-border-button-active transition-[background-color,box-shadow] duration-[var(--input-transition-ms)] ease"
             >
               <RiSearchLine className="size-5 shrink-0 text-foreground-icon-secondary" aria-hidden />
               <input
@@ -548,5 +554,5 @@ export function DashboardSidebar({
         planArtSrc="/templates/settings-plan-art.png"
       />
     </aside>
-  );
+  ));
 }

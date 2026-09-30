@@ -5,6 +5,7 @@ import type {
   Ref,
 } from "react";
 import { cx, sortCx } from "@/utils/cx";
+import { directionalIconClass } from "@/utils/directional-icon";
 
 /**
  * Figma source: Board UI → dashboard 1 icon-only buttons (notification button
@@ -83,7 +84,7 @@ export function IconButton({
       className={cx(styles.base, styles.size[size], className)}
       {...props}
     >
-      <Icon className={styles.icon[size]} aria-hidden />
+      <Icon className={cx(styles.icon[size], directionalIconClass(Icon))} aria-hidden />
     </button>
   );
 }
@@ -102,7 +103,7 @@ export function IconLinkButton({
       className={cx(styles.base, styles.size[size], className)}
       {...props}
     >
-      <Icon className={styles.icon[size]} aria-hidden />
+      <Icon className={cx(styles.icon[size], directionalIconClass(Icon))} aria-hidden />
     </a>
   );
 }

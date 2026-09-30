@@ -81,7 +81,7 @@ const styles = sortCx({
   ].join(" "),
   content: "flex w-full flex-col items-start gap-1",
   icon: "size-5 shrink-0 text-foreground-icon-secondary",
-  close: "absolute right-3 top-3",
+  close: "absolute end-3 top-3",
   text: "flex w-full flex-col items-start gap-0.5",
   title: "w-full text-body-medium text-text-primary",
   description: "w-full text-body-2-medium text-text-secondary",

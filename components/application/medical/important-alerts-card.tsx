@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useState } from "react";
 import {
   RiAsterisk,
@@ -82,9 +84,10 @@ const ALERTS: Alert[] = [
 const ALERTS_THIS_WEEK_COUNT = 12;
 
 export function ImportantAlertsCard({ className }: { className?: string } = {}) {
+  const localize = useTemplateCopy();
   const [scrolled, setScrolled] = useState(false);
 
-  return (
+  return localize((
     <section
       className={cx(
         // The 1px border matches the card's own bg — invisible as a line,
@@ -125,7 +128,7 @@ export function ImportantAlertsCard({ className }: { className?: string } = {}) 
                 <p className="text-body-medium whitespace-nowrap text-text-primary">{alert.title}</p>
                 <p className="text-body-2-regular text-text-secondary">{alert.description}</p>
               </div>
-              <span className="absolute top-2.5 right-2.5 rounded-md bg-background-secondary-default px-1.5 py-px text-body-medium whitespace-nowrap text-text-secondary">
+              <span className="absolute top-2.5 end-2.5 rounded-md bg-background-secondary-default px-1.5 py-px text-body-medium whitespace-nowrap text-text-secondary">
                 {alert.date}
               </span>
             </div>
@@ -143,5 +146,5 @@ export function ImportantAlertsCard({ className }: { className?: string } = {}) 
         />
       </div>
     </section>
-  );
+  ));
 }

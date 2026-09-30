@@ -1,5 +1,8 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useState, type ComponentType, type ReactNode } from "react";
 import { RiAddFill, RiEqualizer3Line } from "@remixicon/react";
 import {
@@ -40,7 +43,8 @@ const USERS: UserRow[] = [
 
 /** Label slot on the trigger: blurs + fades away as the rail collapses. */
 function Collapsible({ collapsed, children }: { collapsed: boolean; children: ReactNode }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span
       className={cx(
         "flex min-w-0 items-center overflow-hidden transition-[max-width,opacity,filter] duration-300 ease-in-out",
@@ -49,11 +53,12 @@ function Collapsible({ collapsed, children }: { collapsed: boolean; children: Re
     >
       {children}
     </span>
-  );
+  ));
 }
 
 function UserMenuItem({ initials, color, name, isSelected, onSelect }: UserRow & { onSelect: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <a
       href="#"
       aria-current={isSelected ? "page" : undefined}
@@ -68,14 +73,15 @@ function UserMenuItem({ initials, color, name, isSelected, onSelect }: UserRow &
       <Avatar size="xs" color={color} initials={initials} />
       <span className="truncate text-body-medium text-text-primary">{name}</span>
     </a>
-  );
+  ));
 }
 
 /** The dropdown's contents — users-with-access list + Add user/Manage
  *  actions — split out so other triggers (e.g. the calendar template's
  *  inbox icon) can open the same panel without duplicating it. */
 export function AccountMenuContent({ onSelect }: { onSelect: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <>
       {/* Users with access */}
       <div className="flex w-full flex-col gap-1.5 pt-[5px]">
@@ -107,7 +113,7 @@ export function AccountMenuContent({ onSelect }: { onSelect: () => void }) {
         </Button>
       </div>
     </>
-  );
+  ));
 }
 
 export function DashboardUserMenu({
@@ -123,6 +129,8 @@ export function DashboardUserMenu({
   onHoverSuppressionEnd?: () => void;
   avatarClassName?: string;
 }) {
+  const localize = useTemplateCopy();
+  const direction = useDirection();
   const [isOpen, setIsOpen] = useState(false);
   // "right" placement assumes room to the sidebar's right (true in-flow on
   // desktop) — on mobile the sidebar can span the full viewport, so the
@@ -137,7 +145,7 @@ export function DashboardUserMenu({
     return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  return (
+  return localize((
     <AriaDialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
       <AriaButton
         aria-label="Mertcan Esmergul"
@@ -173,7 +181,7 @@ export function DashboardUserMenu({
       </AriaButton>
 
       <AriaPopover
-        placement={isMobile ? "bottom start" : "right top"}
+        placement={isMobile ? "bottom start" : direction === "rtl" ? "left top" : "right top"}
         offset={8}
         className={cx(
           "w-[265px] max-w-[calc(100vw-32px)] origin-top-left overflow-y-auto",
@@ -188,5 +196,5 @@ export function DashboardUserMenu({
         </AriaDialog>
       </AriaPopover>
     </AriaDialogTrigger>
-  );
+  ));
 }

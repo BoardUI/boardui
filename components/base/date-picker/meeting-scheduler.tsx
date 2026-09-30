@@ -243,7 +243,7 @@ export function MeetingScheduler({
           >
             <div className="flex h-[429px] gap-4">
               {/* Host + meeting summary */}
-              <div className="flex w-[207px] shrink-0 flex-col gap-4 py-4 pl-4">
+              <div className="flex w-[207px] shrink-0 flex-col gap-4 py-4 ps-4">
                 <div className="flex flex-col items-start gap-2">
                   <Avatar size="md" color="blue" initials={host.avatarInitial} />
                   <div className="flex flex-col text-body-medium">
@@ -283,7 +283,7 @@ export function MeetingScheduler({
               </div>
 
               {/* Timezone + hour format + time slots */}
-              <div className="flex h-full w-[170px] shrink-0 flex-col gap-3 overflow-hidden pt-4 pr-4">
+              <div className="flex h-full w-[170px] shrink-0 flex-col gap-3 overflow-hidden pt-4 pe-4">
                 <button
                   type="button"
                   className="flex cursor-pointer items-center justify-between rounded-2lg outline-none"

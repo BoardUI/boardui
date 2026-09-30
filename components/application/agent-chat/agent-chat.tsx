@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useChat } from "@ai-sdk/react";
 import { RiCloseLine, RiMenuLine } from "@remixicon/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
@@ -74,6 +76,7 @@ export function AgentChat({
    *  viewport, and keep the phone nav drawer inside the frame. */
   contained?: boolean;
 }) {
+  const localize = useTemplateCopy();
   const [probe, setProbe] = useState<Probe>({ status: "checking", provider: null, label: null, model: null });
   const [input, setInput] = useState("");
   const [navOpen, setNavOpen] = useState(false);
@@ -366,7 +369,7 @@ export function AgentChat({
     [busy, activeId, allThreads, keepLiveThread, toggleUnread, setMessages],
   );
 
-  return (
+  return localize((
     <div
       className={cx(
         "relative flex w-full gap-4 overflow-hidden bg-background-full p-3",
@@ -436,7 +439,7 @@ export function AgentChat({
               </span>
 
               <AgentChatActions
-                className="ml-auto"
+                className="ms-auto"
                 transcript={transcript}
                 onExport={exportThreads}
                 onToggleUnread={() => toggleUnread(activeId)}
@@ -525,11 +528,12 @@ export function AgentChat({
       {/* Fixed to the viewport, so not inside the docs preview frame. */}
       {!contained && <ProOfferCard />}
     </div>
-  );
+  ));
 }
 
 function EmptyState({ onPick, demo = false }: { onPick: (text: string) => void; demo?: boolean }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="flex flex-col items-center gap-4 text-center">
       <div className="flex flex-col gap-1">
         <h2 className="text-title-2-medium text-text-primary">What can I help with?</h2>
@@ -552,7 +556,7 @@ function EmptyState({ onPick, demo = false }: { onPick: (text: string) => void; 
         ))}
       </div>
     </div>
-  );
+  ));
 }
 
 /**
@@ -561,14 +565,15 @@ function EmptyState({ onPick, demo = false }: { onPick: (text: string) => void; 
  * Deploy and has no context for where that setting lives.
  */
 function SetupNotice({ onSkip }: { onSkip: () => void }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="flex min-h-0 flex-1 items-center justify-center p-6">
       <div className="flex max-w-md flex-col gap-3 rounded-2xl bg-background-primary-default p-6 shadow-card">
         <h2 className="text-headline-medium text-text-primary">Add an API key to start</h2>
         <p className="text-body-regular text-text-secondary">
           The chat is wired up and ready. It needs a model provider key before it can answer.
         </p>
-        <ol className="flex list-decimal flex-col gap-1.5 pl-5 text-body-regular text-text-secondary">
+        <ol className="flex list-decimal flex-col gap-1.5 ps-5 text-body-regular text-text-secondary">
           <li>Open your project on Vercel, then Settings, then Environment Variables.</li>
           <li>
             Add <code className="text-text-primary">AI_API_KEY</code> with a key from OpenAI,
@@ -585,7 +590,7 @@ function SetupNotice({ onSkip }: { onSkip: () => void }) {
         </Button>
       </div>
     </div>
-  );
+  ));
 }
 
 /** Newest message first, and trimmed from the oldest end. */

@@ -10,7 +10,8 @@ import { Input } from "@/components/base/input/input";
 import { InputOtp } from "@/components/base/input-otp/input-otp";
 import { LinkButton } from "@/components/base/buttons/link-button";
 import { SocialButton } from "@/components/base/social-button/social-button";
-import type { SocialProvider } from "@/components/base/social-button/social-providers";
+import { SOCIAL_PROVIDERS, type SocialProvider } from "@/components/base/social-button/social-providers";
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
 import { cx } from "@/utils/cx";
 
 // Re-exported so `media` has a batteries-included option and the registry
@@ -144,6 +145,7 @@ export function AuthCard({
   switchHref = "#",
   className,
 }: AuthCardProps) {
+  const localize = useTemplateCopy();
   const [remember, setRemember] = useState(true);
   const [code, setCode] = useState("");
   const copy = COPY[mode];
@@ -177,8 +179,11 @@ export function AuthCard({
           // `iconOnly` fixes a square width; the grid needs it to stretch,
           // and `className` is last into `cx` so it wins.
           className={layout === "grid" ? "w-full" : undefined}
+          aria-label={layout !== "stacked" ? `Continue with ${SOCIAL_PROVIDERS[provider].label}` : undefined}
           onClick={() => onProvider?.(provider)}
-        />
+        >
+          {`Continue with ${SOCIAL_PROVIDERS[provider].label}`}
+        </SocialButton>
       ))}
     </div>
   );
@@ -359,9 +364,9 @@ export function AuthCard({
     </div>
   );
 
-  if (!footnote) return card;
+  if (!footnote) return localize(card);
 
-  return (
+  return localize(
     <div className="flex w-full flex-col items-center gap-4">
       {card}
       <p className="max-w-[520px] text-center text-caption-1-regular text-text-tertiary">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { DirectionProvider } from "@/components/foundations/direction/direction";
 
 import "@/styles/globals.css";
 
@@ -26,7 +27,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
-      lang="en"
+      lang="en-US"
+      dir="ltr"
       className={`${inter.variable} ${jetbrainsMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
@@ -36,7 +38,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Script id="boardui-theme" strategy="beforeInteractive">
           {`(function(){try{var dark=localStorage.getItem("boardui:theme")==="dark";document.documentElement.classList.toggle("dark",dark)}catch(e){document.documentElement.classList.remove("dark")}})();`}
         </Script>
-        {children}
+        <DirectionProvider locale="en-US">{children}</DirectionProvider>
       </body>
     </html>
   );

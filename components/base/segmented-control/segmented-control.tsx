@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ReactNode, Ref } from "react";
 import {
@@ -46,6 +47,7 @@ export interface SegmentedControlProps
 type Thumb = { left: number; top: number; width: number; height: number };
 
 export function SegmentedControl({ className, children, variant = "solid", ref, ...props }: SegmentedControlProps) {
+  const direction = useDirection();
   const innerRef = useRef<HTMLDivElement>(null);
   const [thumb, setThumb] = useState<Thumb | null>(null);
 
@@ -64,16 +66,17 @@ export function SegmentedControl({ className, children, variant = "solid", ref, 
       }
     };
     measure();
-    // Re-measure when selection flips (data-selected toggles) or size changes.
-    const mo = new MutationObserver(measure);
-    mo.observe(el, { attributes: true, subtree: true, attributeFilter: ["data-selected"] });
     const ro = new ResizeObserver(measure);
     ro.observe(el);
+    const observeItems = () => el.querySelectorAll("button").forEach(item => ro.observe(item));
+    observeItems();
+    const mo = new MutationObserver(() => { observeItems(); measure(); });
+    mo.observe(el, { attributes: true, childList: true, characterData: true, subtree: true, attributeFilter: ["data-selected"] });
     return () => {
       mo.disconnect();
       ro.disconnect();
     };
-  }, []);
+  }, [direction]);
 
   const setRefs = (node: HTMLDivElement | null) => {
     innerRef.current = node;

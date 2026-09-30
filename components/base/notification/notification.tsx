@@ -1,5 +1,6 @@
 "use client";
 
+import { useDirection } from "@/components/foundations/direction/direction";
 import type {
   ComponentType,
   HTMLAttributes,
@@ -29,6 +30,10 @@ import { cx, sortCx } from "@/utils/cx";
 export type NotificationStatus = "neutral" | "information" | "success" | "error";
 
 export type NotificationPosition =
+  | "top-start"
+  | "top-end"
+  | "bottom-start"
+  | "bottom-end"
   | "top-left"
   | "top-center"
   | "top-right"
@@ -111,7 +116,7 @@ const STATUS_ICON: Record<NotificationStatus, IconComponent> = {
 
 const styles = sortCx({
   card: [
-    "relative flex w-full items-start gap-3 overflow-hidden p-4 pr-11",
+    "relative flex w-full items-start gap-3 overflow-hidden p-4 pe-11",
     "rounded-2xl border border-border-button-default",
     "bg-background-primary-default shadow-dropdown",
   ].join(" "),
@@ -123,7 +128,7 @@ const styles = sortCx({
   timestamp: "text-body-regular text-text-tertiary",
   description: "text-body-regular text-text-secondary",
   actions: "mt-1.5 flex flex-wrap items-center gap-2",
-  close: "absolute top-3 right-3",
+  close: "absolute top-3 end-3",
   status: {
     neutral: "bg-background-tertiary-default text-text-secondary",
     information:
@@ -141,6 +146,10 @@ const styles = sortCx({
 });
 
 const VIEWPORT_POSITION = {
+  "top-start": "top-3 start-3 items-start sm:top-6 sm:start-6",
+  "top-end": "top-3 end-3 items-end sm:top-6 sm:end-6",
+  "bottom-start": "bottom-3 start-3 items-start sm:bottom-6 sm:start-6",
+  "bottom-end": "end-3 bottom-3 items-end sm:end-6 sm:bottom-6",
   "top-left": "top-3 left-3 items-start sm:top-6 sm:left-6",
   "top-center": "top-3 left-1/2 -translate-x-1/2 items-center sm:top-6",
   "top-right": "top-3 right-3 items-end sm:top-6 sm:right-6",
@@ -168,7 +177,7 @@ function NotificationAvatarVisual({
         <span
           aria-hidden
           className={cx(
-            "absolute right-0 bottom-0 size-3 rounded-full border-2 border-background-primary-default",
+            "absolute end-0 bottom-0 size-3 rounded-full border-2 border-background-primary-default",
             styles.presence[presence],
           )}
         />
@@ -288,7 +297,7 @@ export function Notification({
           {autoDismissDuration && autoDismissDuration > 0 ? (
             <motion.span
               aria-hidden
-              className="absolute inset-x-0 bottom-0 h-[3px] origin-left bg-accent-600"
+              className="absolute inset-x-0 bottom-0 h-[3px] origin-left rtl:origin-right bg-accent-600"
               initial={{ scaleX: 1 }}
               animate={{ scaleX: 0 }}
               transition={{
@@ -317,7 +326,8 @@ export function NotificationViewport({
   "aria-label": ariaLabel = "Notifications",
   ...props
 }: NotificationViewportProps) {
-  const resolvedPosition = position ?? placement ?? "bottom-right";
+  const direction = useDirection();
+  const resolvedPosition = position ?? placement ?? "bottom-end";
   const mounted = useSyncExternalStore(
     subscribeToHydration,
     () => true,
@@ -329,6 +339,7 @@ export function NotificationViewport({
   return createPortal(
     <motion.div
       layoutRoot
+      dir={direction}
       aria-label={ariaLabel}
       className={cx(
         "pointer-events-none fixed z-100 flex w-[min(400px,calc(100vw-24px))] flex-col gap-3",

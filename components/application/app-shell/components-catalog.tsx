@@ -210,7 +210,7 @@ function CatalogCard({ entry }: { entry: Entry }) {
       <RiArrowRightLine
         aria-hidden
         className={cx(
-          "absolute top-4 right-4 size-4 text-foreground-icon-secondary",
+          "absolute top-4 end-4 size-4 text-foreground-icon-secondary",
           "-translate-x-1 opacity-0 transition-[opacity,translate] duration-150 ease",
           "group-hover:translate-x-0 group-hover:opacity-100",
         )}

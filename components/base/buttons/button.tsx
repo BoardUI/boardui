@@ -6,6 +6,7 @@ import type {
   Ref,
 } from "react";
 import { cx, sortCx } from "@/utils/cx";
+import { directionalIconClass } from "@/utils/directional-icon";
 
 /**
  * Figma source: Board UI → Buttons (node 3656:13819).
@@ -166,12 +167,12 @@ export function Button({
       )}
       {...props}
     >
-      {Leading ? <Leading className={styles.icon[size]} aria-hidden /> : null}
+      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}
       {!iconOnly && children !== undefined && children !== null && (
         <span className={styles.label[size]}>{children}</span>
       )}
       {!iconOnly && Trailing ? (
-        <Trailing className={styles.icon[size]} aria-hidden />
+        <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden />
       ) : null}
     </button>
   );
@@ -201,12 +202,12 @@ export function ButtonLink({
       )}
       {...props}
     >
-      {Leading ? <Leading className={styles.icon[size]} aria-hidden /> : null}
+      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}
       {!iconOnly && children !== undefined && children !== null && (
         <span className={styles.label[size]}>{children}</span>
       )}
       {!iconOnly && Trailing ? (
-        <Trailing className={styles.icon[size]} aria-hidden />
+        <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden />
       ) : null}
     </a>
   );

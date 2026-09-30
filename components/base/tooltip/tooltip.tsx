@@ -8,6 +8,7 @@ import {
 } from "react-aria-components";
 import type { TooltipProps as AriaTooltipProps } from "react-aria-components";
 import { cx, sortCx } from "@/utils/cx";
+import { useDirection } from "@/components/foundations/direction/direction";
 
 /**
  * Light-surface tooltip, styled to match the card / dropdown family:
@@ -76,8 +77,10 @@ export interface TooltipProps extends Omit<AriaTooltipProps, "children"> {
 }
 
 export function Tooltip({ children, className, size = "sm", showArrow = true, offset = 10, ...props }: TooltipProps) {
+  const direction = useDirection();
   return (
     <AriaTooltip
+      dir={direction}
       offset={offset}
       {...props}
       className={(state) =>

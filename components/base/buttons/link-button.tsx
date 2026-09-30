@@ -6,6 +6,7 @@ import type {
   Ref,
 } from "react";
 import { cx, sortCx } from "@/utils/cx";
+import { directionalIconClass } from "@/utils/directional-icon";
 
 /**
  * Link button — an inline text action styled like a link, sized on the same
@@ -107,9 +108,9 @@ export function LinkButton({
   const classes = cx(styles.base, styles.size[size], styles.variant[variant], className);
   const content = (
     <>
-      {Leading ? <Leading className={styles.icon[size]} aria-hidden /> : null}
+      {Leading ? <Leading className={cx(styles.icon[size], directionalIconClass(Leading))} aria-hidden /> : null}
       {children !== undefined && children !== null && <span>{children}</span>}
-      {Trailing ? <Trailing className={styles.icon[size]} aria-hidden /> : null}
+      {Trailing ? <Trailing className={cx(styles.icon[size], directionalIconClass(Trailing))} aria-hidden /> : null}
     </>
   );
 

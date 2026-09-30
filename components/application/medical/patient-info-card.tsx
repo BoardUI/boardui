@@ -1,3 +1,7 @@
+"use client";
+
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { RiAddLine, RiAsterisk, RiDropLine, RiMenLine, RiStethoscopeLine } from "@remixicon/react";
 import type { ComponentType } from "react";
 import { Avatar } from "@/components/base/avatar/avatar";
@@ -26,7 +30,8 @@ const DETAILS: Detail[] = [
 ];
 
 export function PatientInfoCard({ className }: { className?: string } = {}) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <section
       className={cx(
         "flex h-[330px] w-full min-w-0 flex-col items-center gap-[15px] rounded-[20px] bg-background-secondary-default px-2.5 pt-6 pb-2.5",
@@ -41,7 +46,7 @@ export function PatientInfoCard({ className }: { className?: string } = {}) {
           iconOnly
           leadingIcon={RiAddLine}
           aria-label="Add profile photo"
-          className="absolute -top-0.5 -right-0.5 rounded-full"
+          className="absolute -top-0.5 -end-0.5 rounded-full"
         />
       </div>
       <p className="text-title-2-medium whitespace-nowrap text-text-primary">Mertcan Esmergül</p>
@@ -62,5 +67,5 @@ export function PatientInfoCard({ className }: { className?: string } = {}) {
         ))}
       </div>
     </section>
-  );
+  ));
 }

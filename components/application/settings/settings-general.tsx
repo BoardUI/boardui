@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useState } from "react";
 import { Button } from "@/components/base/buttons/button";
 import { Select, SelectItem } from "@/components/base/select/select";
@@ -29,6 +31,7 @@ import {
 const SELECT_TRIGGER = "h-8 w-auto gap-1 rounded-lg px-2 py-1.5";
 
 export function SettingsGeneral({ planArtSrc }: { planArtSrc?: string }) {
+  const localize = useTemplateCopy();
   const [toggles, setToggles] = useState({
     critical: true,
     system: false,
@@ -39,14 +42,14 @@ export function SettingsGeneral({ planArtSrc }: { planArtSrc?: string }) {
   const setToggle = (key: keyof typeof toggles) => (value: boolean) =>
     setToggles((t) => ({ ...t, [key]: value }));
 
-  return (
+  return localize((
     <div className="flex w-full flex-col gap-6">
       {/* Current plan */}
       <div className="relative w-full overflow-hidden rounded-2xl bg-background-secondary-default">
         {/* Artwork bleeding off the right edge, fading into the card bg.
             Rendered through a WebGL shader: waving like a wind-torn flag with
             a continuous burning-edge effect (see plan-art-flame.tsx). */}
-        <div aria-hidden className="absolute -top-[11px] left-[328px] size-[277px]">
+        <div aria-hidden className="absolute -top-[11px] start-[328px] size-[277px]">
           <PlanArtFlame
             src={planArtSrc}
             className="size-full object-cover"
@@ -68,7 +71,7 @@ export function SettingsGeneral({ planArtSrc }: { planArtSrc?: string }) {
           />
         </div>
 
-        <div className="relative flex flex-col gap-2.5 py-3 pr-2.5 pl-3">
+        <div className="relative flex flex-col gap-2.5 py-3 pe-2.5 ps-3">
           <div className="flex flex-col gap-2">
             <span className="inline-flex w-fit items-center rounded-md bg-background-tertiary-default px-1.5 py-0.5 text-body-2-medium text-text-secondary">
               Current plan
@@ -176,5 +179,5 @@ export function SettingsGeneral({ planArtSrc }: { planArtSrc?: string }) {
         </SettingsCard>
       </div>
     </div>
-  );
+  ));
 }

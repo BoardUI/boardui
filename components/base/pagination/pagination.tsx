@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useRef, useState } from "react";
 import { RiArrowLeftLine, RiArrowRightLine } from "@remixicon/react";
 import { Button } from "@/components/base/buttons/button";
@@ -29,6 +31,10 @@ export interface PaginationProps {
   /** Page numbers shown on each side of the current page. Default 1. */
   siblingCount?: number;
   className?: string;
+  /** Visible and accessible navigation labels for the application's locale. */
+  previousLabel?: string;
+  nextLabel?: string;
+  "aria-label"?: string;
 }
 
 const DOTS = "dots";
@@ -92,15 +98,19 @@ export function Pagination({
   onChange,
   siblingCount = 1,
   className,
+  previousLabel = "Previous",
+  nextLabel = "Next",
+  "aria-label": ariaLabel = "Pagination",
 }: PaginationProps) {
+  const localize = useTemplateCopy();
   const [navRef, isCompact] = useIsCompact();
   if (totalPages <= 1) return null;
   const pages = paginationRange(page, totalPages, isCompact ? 0 : siblingCount);
 
-  return (
+  return localize((
     <nav
       ref={navRef}
-      aria-label="Pagination"
+      aria-label={ariaLabel}
       className={cx("flex w-full items-center justify-between gap-2", className)}
     >
       <Button
@@ -108,11 +118,11 @@ export function Pagination({
         size="small"
         iconOnly={isCompact}
         leadingIcon={RiArrowLeftLine}
-        aria-label={isCompact ? "Previous page" : undefined}
+        aria-label={isCompact ? previousLabel : undefined}
         disabled={page <= 1}
         onClick={() => onChange(page - 1)}
       >
-        {isCompact ? undefined : "Previous"}
+        {isCompact ? undefined : previousLabel}
       </Button>
 
       <ul className="flex min-w-0 items-center gap-0.5">
@@ -153,12 +163,12 @@ export function Pagination({
         iconOnly={isCompact}
         leadingIcon={isCompact ? RiArrowRightLine : undefined}
         trailingIcon={isCompact ? undefined : RiArrowRightLine}
-        aria-label={isCompact ? "Next page" : undefined}
+        aria-label={isCompact ? nextLabel : undefined}
         disabled={page >= totalPages}
         onClick={() => onChange(page + 1)}
       >
-        {isCompact ? undefined : "Next"}
+        {isCompact ? undefined : nextLabel}
       </Button>
     </nav>
-  );
+  ));
 }

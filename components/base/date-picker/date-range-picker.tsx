@@ -7,6 +7,7 @@ import {
   DialogTrigger,
   Popover,
   RangeCalendar,
+  useLocale,
 } from "react-aria-components";
 import {
   CalendarDate,
@@ -124,7 +125,7 @@ function QuickSelect({
           type="button"
           onClick={() => onSelect(preset.range)}
           className={cx(
-            "w-full cursor-pointer rounded-2lg px-2 py-1.5 text-left text-body-medium text-text-primary transition-colors duration-150 ease",
+            "w-full cursor-pointer rounded-2lg px-2 py-1.5 text-start text-body-medium text-text-primary transition-colors duration-150 ease",
             isPresetActive(value, preset.range)
               ? "bg-background-tertiary-default"
               : "hover:bg-background-secondary-hover",
@@ -149,7 +150,7 @@ function Footer({
   onApply: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between pt-3 pr-4">
+    <div className="flex items-center justify-between pt-3 pe-4">
       <div className="flex items-center gap-2.5">
         <AnimatePresence>
           {value && (
@@ -206,6 +207,7 @@ export function DateRangePicker({
   "aria-label": ariaLabel = "Date range",
   placeholder = "Select date range",
 }: DateRangePickerProps) {
+  const { locale } = useLocale();
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<DateRangeValue | null>(defaultValue);
   const committedValue = isControlled ? (value ?? null) : internalValue;
@@ -236,7 +238,7 @@ export function DateRangePicker({
       <AriaButton ref={triggerRef} isDisabled={isDisabled} className={cx(triggerButtonClassName, className)}>
         <RiCalendarLine className="size-5 shrink-0 text-foreground-icon-primary" aria-hidden />
         <span className="flex items-center justify-center whitespace-nowrap px-1 text-body-medium text-text-primary">
-          {committedValue ? `${formatTriggerDate(committedValue.start)} - ${formatTriggerDate(committedValue.end)}` : placeholder}
+          {committedValue ? `${formatTriggerDate(committedValue.start, locale)} - ${formatTriggerDate(committedValue.end, locale)}` : placeholder}
         </span>
       </AriaButton>
       <Popover ref={popoverRef} offset={4} placement="bottom end" isNonModal className={popoverClassName}>
@@ -249,13 +251,13 @@ export function DateRangePicker({
               onChange={setPendingValue}
             >
               <div className="flex gap-3">
-                <div className="pt-4 pl-4">
+                <div className="pt-4 ps-4">
                   <QuickSelect
                     value={pendingValue}
                     onSelect={(range) => setPendingValue(range)}
                   />
                 </div>
-                <div className="flex flex-col pt-2 pr-2 pb-3">
+                <div className="flex flex-col pt-2 pe-2 pb-3">
                   <div className="flex gap-2">
                     <MonthPanel offset={0} showPrev />
                     <MonthPanel offset={1} showNext />

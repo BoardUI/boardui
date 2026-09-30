@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { RiCheckLine, RiFileCopyLine, RiVolumeMuteLine, RiVolumeUpLine } from "@remixicon/react";
 import { motion, useReducedMotion } from "motion/react";
 import { memo, useEffect, useMemo, useState, type ReactNode } from "react";
@@ -28,22 +30,23 @@ export interface AgentMessageProps {
 }
 
 export function AgentMessage({ role, text, streaming = false, at }: AgentMessageProps) {
+  const localize = useTemplateCopy();
   if (!text) return null;
 
   if (role === "user") {
-    return (
-      <p className="ml-auto flex w-fit max-w-[75%] flex-col rounded-2xl bg-background-primary-default px-3 py-[11px] text-left text-body-regular break-words whitespace-pre-wrap text-text-primary shadow-card">
+    return localize((
+      <p className="ms-auto flex w-fit max-w-[75%] flex-col rounded-2xl bg-background-primary-default px-3 py-[11px] text-start text-body-regular break-words whitespace-pre-wrap text-text-primary shadow-card">
         {text}
       </p>
-    );
+    ));
   }
 
-  return (
+  return localize((
     <div className="group/message flex flex-col gap-1 px-1">
       <StreamedText text={text} />
       <MessageActions text={text} at={at} hidden={streaming} />
     </div>
-  );
+  ));
 }
 
 /**
@@ -61,16 +64,17 @@ export function AgentMessage({ role, text, streaming = false, at }: AgentMessage
  * whole words on a steady tick (see `smoothStream` in the route).
  */
 function StreamedText({ text }: { text: string }) {
+  const localize = useTemplateCopy();
   const reduceMotion = useReducedMotion();
   const lines = useMemo(() => text.split("\n").filter((line) => line.trim() !== ""), [text]);
 
-  return (
+  return localize((
     <div className="flex flex-col gap-3">
       {lines.map((line, index) => (
         <Line key={index} text={line} animate={!reduceMotion} />
       ))}
     </div>
-  );
+  ));
 }
 
 /**
@@ -106,6 +110,7 @@ const Line = memo(function Line({ text, animate }: { text: string; animate: bool
 });
 
 function MessageActions({ text, at, hidden }: { text: string; at?: number; hidden: boolean }) {
+  const localize = useTemplateCopy();
   const [copied, setCopied] = useState(false);
   const [speaking, setSpeaking] = useState(false);
 
@@ -149,7 +154,7 @@ function MessageActions({ text, at, hidden }: { text: string; at?: number; hidde
     setSpeaking(true);
   };
 
-  return (
+  return localize((
     <div
       className={cx(
         "flex items-center gap-1 transition-opacity duration-150",
@@ -172,12 +177,12 @@ function MessageActions({ text, at, hidden }: { text: string; at?: number; hidde
       </ActionButton>
 
       {at ? (
-        <time dateTime={new Date(at).toISOString()} className="ml-1 text-caption-1-regular text-text-tertiary">
+        <time dateTime={new Date(at).toISOString()} className="ms-1 text-caption-1-regular text-text-tertiary">
           {formatAgo(at)}
         </time>
       ) : null}
     </div>
-  );
+  ));
 }
 
 function ActionButton({
@@ -189,7 +194,8 @@ function ActionButton({
   onClick: () => void;
   children: ReactNode;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <button
       type="button"
       onClick={onClick}
@@ -199,7 +205,7 @@ function ActionButton({
     >
       {children}
     </button>
-  );
+  ));
 }
 
 /** "just now", "3 minutes ago", "2 hours ago" — matching how the rail reads. */

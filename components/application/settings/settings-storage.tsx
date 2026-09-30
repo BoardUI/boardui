@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import {
   useEffect,
   useMemo,
@@ -106,21 +108,22 @@ function kindForFile(name: string): FileKind {
 }
 
 function StoredFileIcon({ kind }: { kind: FileKind }) {
+  const localize = useTemplateCopy();
   const { light, dark } = FILE_ICONS[kind];
 
   if (dark) {
-    return (
+    return localize((
       <>
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative registry-packaged SVG */}
         <img src={light} alt="" className="theme-asset-light size-6 shrink-0 object-contain" />
         {/* eslint-disable-next-line @next/next/no-img-element -- decorative registry-packaged SVG */}
         <img src={dark} alt="" className="theme-asset-dark size-6 shrink-0 object-contain" />
       </>
-    );
+    ));
   }
 
   // eslint-disable-next-line @next/next/no-img-element -- decorative registry-packaged SVG
-  return <img src={light} alt="" className="size-6 shrink-0 object-contain" />;
+  return localize(<img src={light} alt="" className="size-6 shrink-0 object-contain" />);
 }
 
 /** mulberry32 — deterministic PRNG so the mock inventory is stable across
@@ -199,8 +202,9 @@ function SortableHeader({
   sort: SortState;
   onSort: (key: SortKey) => void;
 }) {
+  const localize = useTemplateCopy();
   const active = sort?.key === sortKey;
-  return (
+  return localize((
     <button
       type="button"
       aria-label={`Sort by ${label}`}
@@ -220,18 +224,19 @@ function SortableHeader({
         />
       </span>
     </button>
-  );
+  ));
 }
 
 function RowActionButton({ icon, label }: { icon: typeof RiDeleteBin6Line; label: string }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <TooltipTrigger delay={200}>
       <Focusable>
         <IconButton icon={icon} size="small" aria-label={label} />
       </Focusable>
       <Tooltip size="md">{label}</Tooltip>
     </TooltipTrigger>
-  );
+  ));
 }
 
 const MORE_MENU_ACTIONS = [
@@ -244,8 +249,9 @@ const MORE_MENU_ACTIONS = [
  *  as the customers table's more-menu (trigger styled as a small secondary
  *  IconButton because nesting the real one would nest <button>s). */
 function RowMoreMenu({ name }: { name: string }) {
+  const localize = useTemplateCopy();
   const [isOpen, setIsOpen] = useState(false);
-  return (
+  return localize((
     <Dropdown isOpen={isOpen} onOpenChange={setIsOpen}>
       <TooltipTrigger delay={200}>
         <DropdownTrigger
@@ -273,7 +279,7 @@ function RowMoreMenu({ name }: { name: string }) {
         </DropdownGroup>
       </DropdownPopover>
     </Dropdown>
-  );
+  ));
 }
 
 type RowAnimationPhase = "idle" | "entering" | "exiting";
@@ -289,7 +295,8 @@ function AnimatedRow({
   phase: RowAnimationPhase;
   children: ReactNode;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div
       className={cx(
         "grid grid-rows-[1fr]",
@@ -308,12 +315,13 @@ function AnimatedRow({
         </div>
       </div>
     </div>
-  );
+  ));
 }
 
 /* -------------------------------------------------------------------- page */
 
 export function SettingsStorage() {
+  const localize = useTemplateCopy();
   const [files, setFiles] = useState<StoredFile[]>(STORED_FILES);
   const [selected, setSelected] = useState<Set<string>>(
     () => new Set(STORED_FILES.filter((f) => f.selected).map((f) => f.id)),
@@ -428,7 +436,7 @@ export function SettingsStorage() {
     );
   };
 
-  return (
+  return localize((
     // pt-2.5 gives the percentage badge (which straddles the dropzone's top
     // border, overhanging 9.5px) headroom inside the modal's scroll clip.
     <div className="flex w-full flex-col gap-6 pt-2.5">
@@ -518,7 +526,7 @@ export function SettingsStorage() {
         </div>
 
         {/* Column headers */}
-        <div className="mt-2 flex w-full items-center border-y border-separator-border bg-background-secondary-default pl-3">
+        <div className="mt-2 flex w-full items-center border-y border-separator-border bg-background-secondary-default ps-3">
           <div className="flex min-w-0 flex-1 items-center gap-2 py-2.5">
             <Checkbox
               isSelected={allOnPageSelected}
@@ -540,7 +548,7 @@ export function SettingsStorage() {
         </div>
 
         {/* Rows */}
-        <div className="flex w-full flex-col pl-3">
+        <div className="flex w-full flex-col ps-3">
           {rows.length > 0 ? (
             rows.map((file) => {
               const phase: RowAnimationPhase = deletingIds.has(file.id)
@@ -585,7 +593,7 @@ export function SettingsStorage() {
               );
             })
           ) : (
-            <div className="flex w-full items-center justify-center py-10 pr-3">
+            <div className="flex w-full items-center justify-center py-10 pe-3">
               <span className="text-body-medium text-text-tertiary">No files match your filters.</span>
             </div>
           )}
@@ -597,5 +605,5 @@ export function SettingsStorage() {
         </div>
       </section>
     </div>
-  );
+  ));
 }

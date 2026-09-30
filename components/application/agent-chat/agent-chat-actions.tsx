@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { RiCheckLine, RiMoreFill, RiUploadLine } from "@remixicon/react";
 import { useEffect, useState } from "react";
 
@@ -40,6 +42,7 @@ export function AgentChatActions({
   disabled = false,
   className,
 }: AgentChatActionsProps) {
+  const localize = useTemplateCopy();
   const [menuOpen, setMenuOpen] = useState(false);
   const [shared, setShared] = useState(false);
 
@@ -71,7 +74,7 @@ export function AgentChatActions({
     action();
   };
 
-  return (
+  return localize((
     <div className={cx("flex shrink-0 items-center gap-0.5", className)}>
       <button
         type="button"
@@ -122,7 +125,7 @@ export function AgentChatActions({
         </DropdownPopover>
       </Dropdown>
     </div>
-  );
+  ));
 }
 
 /** DropdownTrigger is itself a button, so both controls share plain classes

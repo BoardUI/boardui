@@ -134,6 +134,7 @@ export function InputOtp({
     <div
       ref={ref}
       role="group"
+      dir="ltr"
       aria-label={ariaLabel}
       // No `aria-invalid` here: `group` does not support it. Each box carries
       // its own, which is where a screen reader looks anyway.
@@ -144,7 +145,7 @@ export function InputOtp({
         const gapBefore = groupEvery !== undefined && index > 0 && index % groupEvery === 0;
 
         return (
-          <div key={index} className={cx("flex items-center", gapBefore && "ml-3")}>
+          <div key={index} className={cx("flex items-center", gapBefore && "ms-3")}>
             <input
               ref={(node) => {
                 inputsRef.current[index] = node;

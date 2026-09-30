@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useState } from "react";
 import { ChevronLeft16, ChevronRight16 } from "@/components/base/date-picker/shared";
 import { cx } from "@/utils/cx";
@@ -19,6 +21,7 @@ const NAV_BUTTON = cx(
  * reads like a counter tick rather than a crossfade.
  */
 function AnimatedLabel({ label }: { label: string }) {
+  const localize = useTemplateCopy();
   const [current, setCurrent] = useState(label);
   const [previous, setPrevious] = useState<string | null>(null);
 
@@ -35,7 +38,7 @@ function AnimatedLabel({ label }: { label: string }) {
     return () => clearTimeout(t);
   }, [previous]);
 
-  return (
+  return localize((
     <span className="relative flex-1 overflow-hidden text-center text-body-medium whitespace-nowrap text-text-primary">
       {/* Invisible spacer keeps the line box height/width for the absolutes. */}
       <span className="invisible">{current}</span>
@@ -57,7 +60,7 @@ function AnimatedLabel({ label }: { label: string }) {
         {current}
       </span>
     </span>
-  );
+  ));
 }
 
 /**
@@ -82,8 +85,9 @@ export function WeekRangePill({
   /** Override the default 151px width (e.g. the narrower month switcher). */
   className?: string;
 }) {
+  const localize = useTemplateCopy();
   const interactive = !!(onPrev || onNext);
-  return (
+  return localize((
     <div
       className={cx(
         "flex h-8 w-[151px] shrink-0 items-center justify-between gap-1 rounded-2lg border border-border-button-default bg-background-primary-default px-1 py-1 shadow-xs",
@@ -118,5 +122,5 @@ export function WeekRangePill({
         </span>
       )}
     </div>
-  );
+  ));
 }

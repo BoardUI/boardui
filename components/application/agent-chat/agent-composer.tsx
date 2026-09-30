@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import {
   RiArrowUpLine,
   RiAttachment2,
@@ -54,6 +56,7 @@ export function AgentComposer({
   messageCount,
   className,
 }: AgentComposerProps) {
+  const localize = useTemplateCopy();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const submit = (event: FormEvent) => {
@@ -68,7 +71,7 @@ export function AgentComposer({
     }
   };
 
-  return (
+  return localize((
     <div className={cx("flex w-full flex-col gap-2.5", className)}>
       {/* radius omitted: ComposerLoader defaults to a full pill, matching the form. */}
       <ComposerLoader active={busy}>
@@ -119,7 +122,7 @@ export function AgentComposer({
             <span
               // Static where the Pro composer puts its model picker: the model
               // is set by an env var, so there is nothing to switch at runtime.
-              className="flex h-8 shrink-0 items-center gap-1 rounded-xl py-1.5 pr-2 pl-2 text-body-2-medium text-text-secondary"
+              className="flex h-8 shrink-0 items-center gap-1 rounded-xl py-1.5 pe-2 ps-2 text-body-2-medium text-text-secondary"
               title={`Answering with ${model}`}
             >
               <RiSparklingLine className="size-4 shrink-0 text-foreground-icon-secondary" aria-hidden />
@@ -127,7 +130,7 @@ export function AgentComposer({
             </span>
           ) : null}
 
-          <div className="flex shrink-0 items-center gap-2 pl-1.5">
+          <div className="flex shrink-0 items-center gap-2 ps-1.5">
             {busy ? (
               <button
                 type="button"
@@ -163,7 +166,7 @@ export function AgentComposer({
         </div>
       </div>
     </div>
-  );
+  ));
 }
 
 function StatusItem({
@@ -173,12 +176,13 @@ function StatusItem({
   icon: typeof RiInfinityLine;
   label: string;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span className="flex items-center gap-1">
       <Icon className="size-4 shrink-0 text-foreground-icon-secondary" aria-hidden />
       <span className="whitespace-nowrap text-body-2-medium text-text-secondary">{label}</span>
     </span>
-  );
+  ));
 }
 
 /** "openai/gpt-5-nano" reads better in a 13ch slot as "gpt-5-nano". */
