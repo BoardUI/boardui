@@ -64,6 +64,8 @@
    * Figma name: radius/2lg.
    * --------------------------------------------------------------------------*/
   --radius-2lg: 10px;
+  /* Figma `radius/2,5xl`: kanban columns and other large inset panels. */
+  --radius-2-5xl: 20px;
   --radius-notification-card: 10px;
 
   /* ----- Shadows -------------------------------------------------------------
@@ -180,11 +182,29 @@
   --color-text-disabled-danger: var(--color-red-300);
   --color-text-placeholder:     var(--color-neutral-400);
   --color-text-error-primary:   var(--color-red-500);
+  --color-text-destructive: color-mix(in srgb, var(--color-red-700) 80%, var(--color-neutral-600));
   --color-input-disabled-text:  var(--color-neutral-300);
   --color-text-white:           var(--color-white);
 
   /* Background */
   --color-background-full:              var(--color-white);
+  /* Ticket detail, Figma 4509:12272. The raw #fafafa surface matches neutral/50. */
+  --color-ticket-detail-surface: var(--color-white);
+  --color-ticket-detail-low-background: var(--color-indigo-200);
+  --color-ticket-detail-low-hover: var(--color-indigo-300);
+  --color-ticket-detail-medium-hover: var(--color-yellow-300);
+  --color-ticket-detail-high-hover: var(--color-orange-300);
+  --color-ticket-detail-urgent-hover: var(--color-rose-300);
+  --color-ticket-detail-low-text: var(--color-indigo-800);
+  --color-ticket-detail-resource-background: var(--color-blue-100);
+  --color-ticket-detail-resource-text: var(--color-blue-600);
+  --color-ticket-detail-favorite: #ffb83c; /* raw Figma fill, no token yet */
+  /* Empty-state illustration: raw Figma fills from node 4488:11848. */
+  --color-project-board-empty-panel: rgb(242 242 242 / 0.8);
+  --color-project-board-empty-front: #d9d9d9;
+  --color-project-board-empty-middle: #e5e5e5;
+  --color-project-board-empty-back: #ededed;
+  --color-project-board-empty-detail: var(--color-white);
   --color-background-primary-default:   var(--color-white);
   --color-background-inner-default:     var(--color-white);
   --color-background-primary-hover:     var(--color-neutral-100);
@@ -253,6 +273,28 @@
    * lighter of the two and the button steps the other way. */
   --color-ai-chat-composer-add-background:       var(--color-neutral-100);
   --color-ai-chat-composer-add-hover-background: var(--color-neutral-200);
+  /* Composer Panel (Figma node 4430:12203): the status tab hanging off the
+   * card's top edge and the card's plus button are both neutral-200 in light
+   * mode. Dark mode steps them up instead, so they still separate from the
+   * neutral-800 card they touch. */
+  --color-composer-panel-tab-background:         var(--color-neutral-200);
+  --color-composer-panel-add-background:         var(--color-neutral-200);
+  --color-composer-panel-add-hover-background:   var(--color-neutral-300);
+  /* Attachment tile edge: the Figma neutral-200 in light mode; dark mode
+   * uses a translucent white so the ring reads on the neutral-800 card
+   * (border/button/default is one neutral step away there and vanishes). */
+  --color-composer-panel-tile-border:            var(--color-neutral-200);
+  /* Model picker provider rail: background/secondary in light mode, at
+   * half opacity in dark so it recedes on the neutral-800 panel. */
+  --color-composer-panel-rail-background:        var(--color-neutral-100);
+  /* Questionnaire (Figma nodes 4435:14749 / 4435:15042): the answer rows share
+   * the card's background/primary surface in both modes, separated by their
+   * border alone, and the "Other" row uses the stock Input untouched. The
+   * single-select number key is background/secondary in light mode and one
+   * tone lighter than the row in dark mode (never darker), stepping again
+   * while its row is hovered so it stays legible on the lifted fill. */
+  --color-questionnaire-key-background:          var(--color-neutral-100);
+  --color-questionnaire-key-hover-background:    var(--color-neutral-200);
   --color-agent-progress-ring:                     var(--color-neutral-700);
   --color-button-ghost-background:                var(--color-accent-100);
   --color-button-ghost-hover:                     var(--color-accent-200);
@@ -300,6 +342,8 @@
   --color-status-rose-text:         var(--color-rose-800);
   --color-status-cyan-background:   var(--color-cyan-200);
   --color-status-cyan-text:         var(--color-cyan-800);
+  --color-status-orange-background: var(--color-orange-200);
+  --color-status-orange-text: var(--color-orange-800);
   --color-status-blue-background:   var(--color-blue-200);
   --color-status-blue-text:         var(--color-blue-800);
   --color-status-purple-background: var(--color-purple-100);
@@ -396,10 +440,25 @@
   --color-text-tertiary: var(--color-neutral-600);
   --color-text-disabled: var(--color-neutral-800);
   --color-text-error-primary: var(--color-red-400);
+  --color-text-destructive: color-mix(in srgb, var(--color-red-500) 80%, var(--color-neutral-500));
   --color-input-disabled-text: color-mix(in srgb, var(--color-neutral-500) 40%, transparent);
 
   /* Background */
   --color-background-full:              var(--color-neutral-925);
+  --color-ticket-detail-surface: var(--color-neutral-925);
+  --color-ticket-detail-low-background: color-mix(in srgb, var(--color-indigo-950) 60%, transparent);
+  --color-ticket-detail-low-hover: color-mix(in srgb, var(--color-indigo-950) 80%, transparent);
+  --color-ticket-detail-medium-hover: color-mix(in srgb, var(--color-yellow-950) 80%, transparent);
+  --color-ticket-detail-high-hover: color-mix(in srgb, var(--color-orange-950) 80%, transparent);
+  --color-ticket-detail-urgent-hover: color-mix(in srgb, var(--color-rose-950) 80%, transparent);
+  --color-ticket-detail-low-text: var(--color-indigo-300);
+  --color-ticket-detail-resource-background: color-mix(in srgb, var(--color-blue-950) 60%, transparent);
+  --color-ticket-detail-resource-text: var(--color-blue-300);
+  --color-project-board-empty-panel: color-mix(in srgb, var(--color-neutral-800) 60%, transparent);
+  --color-project-board-empty-front: color-mix(in srgb, var(--color-neutral-800) 75%, var(--color-neutral-700));
+  --color-project-board-empty-middle: var(--color-neutral-700);
+  --color-project-board-empty-back: color-mix(in srgb, var(--color-neutral-600) 35%, var(--color-neutral-700));
+  --color-project-board-empty-detail: var(--color-neutral-500);
   --color-background-primary-default:   var(--color-neutral-800);
   --color-background-inner-default:     color-mix(in srgb, var(--color-neutral-800) 60%, transparent);
   --color-background-primary-hover:     color-mix(in srgb, var(--color-neutral-700) 60%, transparent);
@@ -427,6 +486,13 @@
   --color-theme-toggle-sidebar-selected-background: var(--color-neutral-700);
   --color-ai-chat-composer-add-background:       var(--color-neutral-700);
   --color-ai-chat-composer-add-hover-background: var(--color-neutral-600);
+  --color-composer-panel-tab-background:         color-mix(in srgb, var(--color-neutral-700) 50%, transparent);
+  --color-composer-panel-add-background:         var(--color-neutral-700);
+  --color-composer-panel-add-hover-background:   var(--color-neutral-600);
+  --color-composer-panel-tile-border:            color-mix(in srgb, var(--color-white) 14%, transparent);
+  --color-composer-panel-rail-background:        color-mix(in srgb, var(--color-neutral-900) 50%, transparent);
+  --color-questionnaire-key-background:          var(--color-neutral-700);
+  --color-questionnaire-key-hover-background:    var(--color-neutral-600);
   --color-agent-progress-ring:                     color-mix(in srgb, var(--color-white) 50%, transparent);
   --color-button-ghost-background:                var(--color-accent-900);
   --color-button-ghost-hover:                     var(--color-accent-800);
@@ -512,6 +578,8 @@
   --color-status-rose-text:         var(--color-rose-500);
   --color-status-cyan-background:   color-mix(in srgb, var(--color-cyan-950) 60%, transparent);
   --color-status-cyan-text:         var(--color-cyan-400);
+  --color-status-orange-background: color-mix(in srgb, var(--color-orange-950) 60%, transparent);
+  --color-status-orange-text: var(--color-orange-500);
   --color-status-blue-background:   color-mix(in srgb, var(--color-blue-950) 60%, transparent);
   --color-status-blue-text:         var(--color-blue-300);
   --color-status-purple-background: color-mix(in srgb, var(--color-purple-900) 50%, transparent);
@@ -595,10 +663,21 @@
   --color-text-disabled-danger: var(--color-text-disabled-danger);
   --color-text-placeholder:     var(--color-text-placeholder);
   --color-text-error-primary:   var(--color-text-error-primary);
+  --color-text-destructive: var(--color-text-destructive);
   --color-input-disabled-text:  var(--color-input-disabled-text);
   --color-text-white:           var(--color-text-white);
 
   --color-background-full:              var(--color-background-full);
+  --color-ticket-detail-surface: var(--color-ticket-detail-surface);
+  --color-ticket-detail-low-background: var(--color-ticket-detail-low-background);
+  --color-ticket-detail-low-hover: var(--color-ticket-detail-low-hover);
+  --color-ticket-detail-medium-hover: var(--color-ticket-detail-medium-hover);
+  --color-ticket-detail-high-hover: var(--color-ticket-detail-high-hover);
+  --color-ticket-detail-urgent-hover: var(--color-ticket-detail-urgent-hover);
+  --color-ticket-detail-low-text: var(--color-ticket-detail-low-text);
+  --color-ticket-detail-resource-background: var(--color-ticket-detail-resource-background);
+  --color-ticket-detail-resource-text: var(--color-ticket-detail-resource-text);
+  --color-ticket-detail-favorite: var(--color-ticket-detail-favorite);
   --color-background-primary-default:   var(--color-background-primary-default);
   --color-background-inner-default:     var(--color-background-inner-default);
   --color-background-primary-hover:     var(--color-background-primary-hover);
@@ -652,6 +731,13 @@
   --color-theme-toggle-sidebar-selected-background: var(--color-theme-toggle-sidebar-selected-background);
   --color-ai-chat-composer-add-background:       var(--color-ai-chat-composer-add-background);
   --color-ai-chat-composer-add-hover-background: var(--color-ai-chat-composer-add-hover-background);
+  --color-composer-panel-tab-background:         var(--color-composer-panel-tab-background);
+  --color-composer-panel-add-background:         var(--color-composer-panel-add-background);
+  --color-composer-panel-add-hover-background:   var(--color-composer-panel-add-hover-background);
+  --color-composer-panel-tile-border:            var(--color-composer-panel-tile-border);
+  --color-composer-panel-rail-background:        var(--color-composer-panel-rail-background);
+  --color-questionnaire-key-background:          var(--color-questionnaire-key-background);
+  --color-questionnaire-key-hover-background:    var(--color-questionnaire-key-hover-background);
   --color-agent-progress-ring:                     var(--color-agent-progress-ring);
   --color-button-ghost-background:                var(--color-button-ghost-background);
   --color-button-ghost-hover:                     var(--color-button-ghost-hover);
@@ -691,6 +777,8 @@
   --color-status-rose-text:         var(--color-status-rose-text);
   --color-status-cyan-background:   var(--color-status-cyan-background);
   --color-status-cyan-text:         var(--color-status-cyan-text);
+  --color-status-orange-background: var(--color-status-orange-background);
+  --color-status-orange-text: var(--color-status-orange-text);
   --color-status-blue-background:   var(--color-status-blue-background);
   --color-status-blue-text:         var(--color-status-blue-text);
   --color-status-purple-background: var(--color-status-purple-background);

@@ -25,6 +25,7 @@ export const PREVIEW_IMAGE_SLUGS = new Set<string>([
   "combo-chart-card",
   "composer-loader",
   "contributions-card",
+  "data-grid",
   "data-table",
   "date-picker",
   "divider",
@@ -67,6 +68,7 @@ export const PREVIEW_IMAGE_SLUGS = new Set<string>([
   "table",
   "tabs",
   "task-list",
+  "tree-view",
   "tooltip",
   "typography",
   "web-search"

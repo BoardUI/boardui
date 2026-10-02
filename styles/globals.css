@@ -712,9 +712,14 @@ input[type="search"]::-webkit-search-cancel-button {
   @apply px-3 py-2.5 align-middle text-body-medium text-text-primary outline-none;
   transition: padding 200ms ease, font-size 200ms ease;
 }
+/* Separators sit *between* rows only: the trailing row's boundary is drawn by
+ * whatever follows the table (the container's bottom edge, or the pagination
+ * footer's own border-top), so a filtered-down table never doubles up lines. */
+.bui-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid var(--color-separator-border);
+}
 .bui-table tbody tr {
   @apply transition-colors duration-150;
-  border-bottom: 1px solid var(--color-separator-border);
 }
 .bui-table tbody tr[data-focus-visible] {
   @apply ring-2 ring-inset ring-border-focus-ring;

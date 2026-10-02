@@ -1,8 +1,9 @@
 "use client";
 
-import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+import { useTemplateCopy, useTemplateLanguageSelector } from "@/components/foundations/template-copy/template-copy";
+
 import { useDirection } from "@/components/foundations/direction/direction";
-import { useEffect, useState, type ComponentType, type ReactNode } from "react";
+import { useState, useSyncExternalStore, type ComponentType, type ReactNode } from "react";
 import {
   RiBankCardLine,
   RiBankLine,
@@ -12,6 +13,7 @@ import {
   RiLogoutBoxRLine,
   RiMessage2Line,
   RiNotification3Line,
+  RiPaletteLine,
   RiSchoolLine,
   RiShieldUserLine,
 } from "@remixicon/react";
@@ -21,6 +23,7 @@ import {
   DialogTrigger as AriaDialogTrigger,
   Popover as AriaPopover,
 } from "react-aria-components";
+import { ThemeToggle } from "@/components/application/theme/theme-toggle";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Badge } from "@/components/base/badges/badge";
 import { ChevronDownSmall } from "@/components/foundations/icons/chevrons";
@@ -104,12 +107,12 @@ function Collapsible({ collapsed, children }: { collapsed: boolean; children: Re
 function TeamMenuItem({ icon: Icon, label, badge, isSelected, onSelect }: MenuRow & { onSelect: () => void }) {
   const localize = useTemplateCopy();
   return localize((
-    <a
-      href="#"
+    <AriaButton
+      type="button"
       aria-current={isSelected ? "page" : undefined}
-      onClick={onSelect}
+      onPress={onSelect}
       className={cx(
-        "flex w-full items-center gap-2.5 rounded-2lg p-2 outline-none transition-colors",
+        "flex w-full cursor-pointer items-center gap-2.5 rounded-2lg p-2 text-start outline-none transition-colors",
         isSelected
           ? "bg-background-primary-hover"
           : "hover:bg-background-primary-hover focus-visible:bg-background-primary-hover",
@@ -127,32 +130,36 @@ function TeamMenuItem({ icon: Icon, label, badge, isSelected, onSelect }: MenuRo
           {badge}
         </Badge>
       )}
-    </a>
+    </AriaButton>
   ));
 }
+
+const mobileSnapshot = () => window.matchMedia("(max-width: 639px)").matches;
+const subscribeMobile = (listener: () => void) => {
+  const query = window.matchMedia("(max-width: 639px)");
+  query.addEventListener("change", listener);
+  return () => query.removeEventListener("change", listener);
+};
 
 export function DashboardTeamMenu({
   collapsed = false,
   className,
+  showThemeToggle = false,
 }: {
   collapsed?: boolean;
   className?: string;
+  /** Show appearance controls inside the menu instead of the sidebar. */
+  showThemeToggle?: boolean;
 }) {
   const localize = useTemplateCopy();
+  const languageSelector = useTemplateLanguageSelector();
   const direction = useDirection();
   const [isOpen, setIsOpen] = useState(false);
   // "right" placement assumes room to the sidebar's right (true in-flow on
   // desktop) — on mobile the sidebar can span the full viewport, so the
   // 265px panel would render off-screen. Below sm, drop into a plain
   // dropdown under the trigger instead.
-  const [isMobile, setIsMobile] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    setIsMobile(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
+  const isMobile = useSyncExternalStore(subscribeMobile, mobileSnapshot, () => false);
 
   return localize((
     <AriaDialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
@@ -211,7 +218,18 @@ export function DashboardTeamMenu({
           {/* Grouped sidebar-style rows */}
           <div className="flex w-full flex-col">
             {GROUPS.map((group, index) => (
-              <Group key={group.id} group={group} showDivider={index > 0} onSelect={() => setIsOpen(false)} />
+              <Group key={group.id} group={group} showDivider={index > 0} onSelect={() => setIsOpen(false)}>
+                {showThemeToggle && group.id === "personal" && (
+                  <div className="flex w-full items-center justify-between gap-2.5 rounded-2lg px-2 py-1">
+                    <span className="flex min-w-0 flex-1 items-center gap-2">
+                      <RiPaletteLine className="size-5 shrink-0 text-foreground-icon-secondary" aria-hidden />
+                      <span className="truncate text-body-medium text-text-primary">Appearance</span>
+                    </span>
+                    <ThemeToggle appearance="segmented" size="small" className="shrink-0" />
+                  </div>
+                )}
+                {group.id === "personal" && languageSelector}
+              </Group>
             ))}
           </div>
 
@@ -228,7 +246,7 @@ export function DashboardTeamMenu({
   ));
 }
 
-function Group({ group, showDivider, onSelect }: { group: MenuGroup; showDivider: boolean; onSelect: () => void }) {
+function Group({ group, showDivider, onSelect, children }: { group: MenuGroup; showDivider: boolean; onSelect: () => void; children?: ReactNode }) {
   const localize = useTemplateCopy();
   return localize((
     <>
@@ -241,6 +259,7 @@ function Group({ group, showDivider, onSelect }: { group: MenuGroup; showDivider
           {group.items.map((item) => (
             <TeamMenuItem key={item.label} {...item} onSelect={onSelect} />
           ))}
+          {children}
         </div>
       </div>
     </>

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 /**
  * The index and landing showcase card: preview on top, caption below, the
  * whole card a link. On its own so the starter can use it too.
@@ -44,6 +46,7 @@ export function ShowcaseCard({
   className,
   external = false,
 }: ShowcaseCardProps) {
+  const localize = useTemplateCopy();
   const overflowTimerRef = useRef<number | null>(null);
   const [overflowReleased, setOverflowReleased] = useState(false);
 
@@ -68,7 +71,7 @@ export function ShowcaseCard({
     setOverflowReleased(false);
   };
 
-  return (
+  return localize((
     <article
       className={cx(
         "landing-showcase-card group/card relative h-[332px] cursor-pointer overflow-hidden rounded-[28px] border border-transparent bg-background-primary-default [container-type:inline-size] dark:bg-transparent xl:h-[299px]",
@@ -127,7 +130,7 @@ export function ShowcaseCard({
         </CardLink>
       )}
     </article>
-  );
+  ));
 }
 
 /** Next's Link for the site, a plain anchor in a new tab when linking out. */
@@ -144,16 +147,17 @@ function CardLink({
   children: ReactNode;
   "aria-label"?: string;
 }) {
+  const localize = useTemplateCopy();
   if (external) {
-    return (
+    return localize((
       <a href={href} target="_blank" rel="noreferrer" className={className} {...props}>
         {children}
       </a>
-    );
+    ));
   }
-  return (
-    <Link href={href} className={className} {...props}>
+  return localize((
+    <Link href={href} prefetch={false} className={className} {...props}>
       {children}
     </Link>
-  );
+  ));
 }

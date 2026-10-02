@@ -27,7 +27,7 @@ import { cx, sortCx } from "@/utils/cx";
  */
 
 type ChipVariant = "bold" | "subtle" | "caption";
-type ChipColor = "lime" | "rose" | "yellow" | "cyan" | "blue" | "purple" | "neutral" | "gray" | "soft";
+type ChipColor = "orange" | "lime" | "rose" | "yellow" | "cyan" | "blue" | "purple" | "neutral" | "gray" | "soft";
 
 export interface ChipProps extends HTMLAttributes<HTMLSpanElement> {
   variant?: ChipVariant;
@@ -43,6 +43,7 @@ const styles = sortCx({
     caption: "py-1 text-caption-1-medium",
   },
   color: {
+    orange: "bg-status-orange-background text-status-orange-text",
     lime: "bg-status-lime-background text-status-lime-text",
     rose: "bg-status-rose-background text-status-rose-text",
     yellow: "bg-status-yellow-background text-status-yellow-text",

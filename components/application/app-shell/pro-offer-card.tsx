@@ -49,8 +49,8 @@ export function ProOfferCard() {
 
   return localize((
     <ProPromptCard
-      title="Get lifetime access to Pro"
-      description="8 full-page templates and 23 Pro components, 17 of them chart cards. One payment, updates for life, installed into this project as source."
+      title="Buy once. Build forever."
+      description="8 full-page templates and 23 Pro components, 17 of them chart cards. One payment. Keep the code forever, with Pro updates for one year or forever."
       backdropHeight={TEMPLATE_PRO_RAYS.height}
       backdrop={
         <HeroRays config={rays} paused={reduceMotion} className="absolute inset-0 size-full" />

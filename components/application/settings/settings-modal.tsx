@@ -1,7 +1,7 @@
 "use client";
 
 import { useDirection } from "@/components/foundations/direction/direction";
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import {
   RiBankCardLine,
@@ -18,6 +18,7 @@ import {
   RiSettings6Line,
   RiSettingsLine,
   RiToolsFill,
+  RiStore2Line,
 } from "@remixicon/react";
 import { cx } from "@/utils/cx";
 import { SettingsGeneral } from "./settings-general";
@@ -34,11 +35,11 @@ import { SettingsTools } from "./settings-tools";
  * Shell (1:1 with Figma):
  *   backdrop  color/bg_separator — black at 20%.
  *   panel     871×614 (max-height 614), radius/3xl (24px), white, shadow/xs.
- *   rail      274px, bg background/secondary, 1px right border, p 10 —
+ *   rail      240px desktop / 192px compact, bg background/secondary, 1px right border, p 10 —
  *             same group/item recipe as the board-team dropdown menus
  *             (label pl-8, items p-8 radius/2lg icon-20 + body-medium),
  *             selected row bg background/secondary/hover.
- *   content   px 32 (274 + 32 = Figma's 306 title inset), title row fixed,
+ *   content   px 32, title row fixed,
  *             the page itself scrolls when taller than the shell (General).
  *
  * Open/close animation: the panel fades + blurs in from scale 0.85 (300ms),
@@ -46,7 +47,7 @@ import { SettingsTools } from "./settings-tools";
  * and the modal unmounts only after the exit transition finishes.
  */
 
-export type SettingsPage = "general" | "profile" | "storage" | "tools";
+export type SettingsPage = "general" | "profile" | "storage" | "tools" | "marketplace";
 
 export interface SettingsModalProps {
   /** Controlled open state, owned by the host page, sidebar, or menu. */
@@ -57,6 +58,8 @@ export interface SettingsModalProps {
   defaultPage?: SettingsPage;
   /** Optional product artwork used by the animated Current plan card. */
   planArtSrc?: string;
+  /** Optional marketplace pane, including its own fixed header and scroll region. */
+  marketplace?: ReactNode;
 }
 
 type IconComponent = ComponentType<{
@@ -77,6 +80,7 @@ const NAV_GROUPS: { label: string; items: NavEntry[] }[] = [
     items: [
       { label: "General", icon: RiSettings6Line, page: "general" },
       { label: "Profile", icon: RiSchoolLine, page: "profile" },
+      { label: "Marketplace", icon: RiStore2Line, page: "marketplace" },
       { label: "Appearance", icon: RiPaletteLine },
       { label: "Billing", icon: RiBankCardLine },
       { label: "Rules and Workflows", icon: RiOrganizationChart },
@@ -106,6 +110,7 @@ const PAGE_TITLES: Record<SettingsPage, string> = {
   profile: "Profile",
   storage: "Storage",
   tools: "Tools",
+  marketplace: "Marketplace",
 };
 
 export function SettingsModal({
@@ -113,6 +118,7 @@ export function SettingsModal({
   onClose,
   defaultPage = "general",
   planArtSrc,
+  marketplace,
 }: SettingsModalProps) {
   const direction = useDirection();
   const [page, setPage] = useState<SettingsPage>(defaultPage);
@@ -225,18 +231,20 @@ export function SettingsModal({
         {/* Nav rail — the board-team dropdown group/item recipe */}
         <nav
           aria-label="Settings sections"
-          className="flex w-[274px] shrink-0 flex-col gap-5 overflow-y-auto border-e border-separator-border bg-background-secondary-default p-2.5"
+          className="flex w-14 shrink-0 flex-col gap-5 overflow-y-auto border-e border-separator-border bg-background-secondary-default p-2.5 sm:w-48 lg:w-60"
         >
           {NAV_GROUPS.map((group) => (
             <div key={group.label} className="flex w-full flex-col gap-1.5 pt-1">
-              <span className="ps-2 text-body-medium text-text-secondary">{group.label}</span>
+              <span className="hidden ps-2 text-body-medium text-text-secondary sm:block">{group.label}</span>
               <div className="flex w-full flex-col gap-1">
-                {group.items.map((item) => {
+                {group.items.filter(item => item.page !== "marketplace" || marketplace != null).map((item) => {
                   const selected = item.page !== undefined && item.page === page;
                   return (
                     <button
                       key={`${group.label}:${item.label}`}
                       type="button"
+                      aria-label={item.label}
+                      title={item.label}
                       aria-current={selected ? "page" : undefined}
                       onClick={
                         item.page
@@ -257,7 +265,7 @@ export function SettingsModal({
                       <item.icon className="size-5 shrink-0 text-foreground-icon-secondary" aria-hidden />
                       <span
                         className={cx(
-                          "truncate text-body-medium",
+                          "hidden truncate text-body-medium sm:block",
                           selected ? "text-text-primary" : "text-text-secondary",
                         )}
                       >
@@ -273,6 +281,7 @@ export function SettingsModal({
 
         {/* Content pane — fixed title row, scrollable page below */}
         <div className="flex min-w-0 flex-1 flex-col">
+          {page === "marketplace" && marketplace != null ? marketplace : <>
           {/* Storage keeps a tighter title gap: its page already carries
               10px of scroll-safe headroom for the upload progress badge, so
               the shared pb-3 read as a double margin above the dropzone. */}
@@ -323,6 +332,7 @@ export function SettingsModal({
               )}
             />
           </div>
+          </>}
         </div>
       </div>
 

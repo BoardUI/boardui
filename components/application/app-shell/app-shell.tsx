@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import {
   RiAddFill,
   RiChatAiLine,
@@ -51,9 +53,9 @@ export {
 /** "" in a deployed starter, the site prefix on boardui.com. */
 export function useStarterBase(): string {
   const pathname = usePathname() ?? "";
-  const onSite =
-    pathname === STARTER_SITE_PREFIX || pathname.startsWith(`${STARTER_SITE_PREFIX}/`);
-  return onSite ? STARTER_SITE_PREFIX : "";
+  // Preserve an optional language prefix on the hosted preview. Installed
+  // starters still use their normal root routes.
+  return pathname.match(/^((?:\/[a-z]{2}(?:-[a-zA-Z]{2})?)?\/templates\/chat-starter)(?:\/|$)/)?.[1] ?? "";
 }
 
 export function starterNav(base: string): DashboardNavItem[] {
@@ -107,11 +109,12 @@ export function AppShell({
   /** Overrides the 1300px content column, e.g. `max-w-[964px]` for the catalogue's grids. */
   columnClassName?: string;
 }) {
+  const localize = useTemplateCopy();
   const [navOpen, setNavOpen] = useState(false);
   const items = starterNav(useStarterBase());
   const selected = useStarterSelected();
 
-  return (
+  return localize((
     <div
       className={cx(
         "relative flex h-dvh w-full gap-4 overflow-hidden bg-background-full p-3",
@@ -190,5 +193,5 @@ export function AppShell({
       </main>
       <ProOfferCard />
     </div>
-  );
+  ));
 }

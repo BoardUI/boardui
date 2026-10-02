@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { RiArrowRightLine } from "@remixicon/react";
 
 import { COMPONENT_SECTIONS, type Entry } from "@/components/application/docs/components-index";
@@ -30,7 +32,8 @@ export function CatalogTierFilter({
   tier: CatalogTier;
   onChange: (tier: CatalogTier) => void;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <SegmentedControl
       aria-label="Show"
       selectedKeys={[tier]}
@@ -43,7 +46,7 @@ export function CatalogTierFilter({
       <SegmentedControlItem id="free">Free</SegmentedControlItem>
       <SegmentedControlItem id="pro">Pro</SegmentedControlItem>
     </SegmentedControl>
-  );
+  ));
 }
 
 /**
@@ -56,13 +59,14 @@ export function CatalogTierFilter({
  * of the code. `tier` narrows every section to Free or Pro.
  */
 export function ComponentsCatalog({ tier = "all" }: { tier?: CatalogTier }) {
+  const localize = useTemplateCopy();
   const shipped = COMPONENT_SECTIONS.flatMap((s) => s.entries).filter((e) => e.status === "shipped");
   const free = shipped.filter((e) => e.tier === "free").length;
   const sections = COMPONENT_SECTIONS.map((section) => ({
     ...section,
     entries: section.entries.filter((entry) => tier === "all" || entry.tier === tier),
   })).filter((section) => section.entries.length > 0);
-  return (
+  return localize((
     // The shell's column is narrowed to 964px for this page (two 472px
     // template cards and a gap), so the heading and every grid share one edge.
     <div className="flex w-full flex-col gap-10">
@@ -96,7 +100,7 @@ export function ComponentsCatalog({ tier = "all" }: { tier?: CatalogTier }) {
         </section>
       ))}
     </div>
-  );
+  ));
 }
 
 const slugOf = (entry: Entry) => entry.href.replace("/components/", "");
@@ -124,7 +128,8 @@ const TEMPLATE_EMBEDS: Record<string, string> = {
  * card, so the embedded page lays out exactly as the live one on the site.
  */
 function TemplateEmbed({ id, title }: { id: string; title: string }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <TemplateFrame>
       <iframe
         src={`${SITE}/embed/templates/${id}`}
@@ -135,7 +140,7 @@ function TemplateEmbed({ id, title }: { id: string; title: string }) {
         className="pointer-events-none size-full border-0"
       />
     </TemplateFrame>
-  );
+  ));
 }
 
 /**
@@ -144,10 +149,11 @@ function TemplateEmbed({ id, title }: { id: string; title: string }) {
  * components show the captured picture. No Pro code ever comes here.
  */
 function PreviewCard({ entry }: { entry: Entry }) {
+  const localize = useTemplateCopy();
   const Preview = FREE_COMPONENT_PREVIEWS[entry.href as PreviewHref];
   const slug = slugOf(entry);
   const embed = TEMPLATE_EMBEDS[slug];
-  return (
+  return localize((
     <ShowcaseCard
       external
       href={`${SITE}${entry.href}`}
@@ -171,12 +177,13 @@ function PreviewCard({ entry }: { entry: Entry }) {
         </>
       )}
     </ShowcaseCard>
-  );
+  ));
 }
 
 function CatalogCard({ entry }: { entry: Entry }) {
+  const localize = useTemplateCopy();
   if (entry.status !== "shipped") {
-    return (
+    return localize((
       <div className="flex flex-col gap-1 rounded-2lg border border-dashed border-border-button-default p-4">
         <div className="flex items-center gap-2">
           <span className="text-body-medium text-text-tertiary">{entry.name}</span>
@@ -184,9 +191,9 @@ function CatalogCard({ entry }: { entry: Entry }) {
         </div>
         <span className="text-body-regular text-text-tertiary">{entry.description}</span>
       </div>
-    );
+    ));
   }
-  return (
+  return localize((
     <a
       href={`${SITE}${entry.href}`}
       target="_blank"
@@ -216,12 +223,13 @@ function CatalogCard({ entry }: { entry: Entry }) {
         )}
       />
     </a>
-  );
+  ));
 }
 
 /** The docs index's small uppercase tags, as they are drawn on the site. */
 function Tag({ tone = "neutral", children }: { tone?: "neutral" | "new"; children: string }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span
       className={cx(
         "inline-flex items-center rounded-sm px-1 py-px text-[10px] leading-4 font-semibold tracking-wide uppercase",
@@ -232,5 +240,5 @@ function Tag({ tone = "neutral", children }: { tone?: "neutral" | "new"; childre
     >
       {children}
     </span>
-  );
+  ));
 }

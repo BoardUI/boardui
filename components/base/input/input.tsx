@@ -46,7 +46,7 @@ import { cx, sortCx } from "@/utils/cx";
  * Visuals stay 1:1 with Figma — see `styles/theme.css` for the tokens.
  */
 
-type InputSize = "medium" | "small";
+export type InputSize = "medium" | "small";
 
 type IconComponent = ComponentType<{
   className?: string;
@@ -57,13 +57,17 @@ type IconComponent = ComponentType<{
 /*  TextFieldContext                                                           */
 /* -------------------------------------------------------------------------- */
 
-interface TextFieldContextValue {
+export interface TextFieldContextValue {
   size?: InputSize;
   fieldClassName?: string;
   inputClassName?: string;
 }
 
-const TextFieldContext = createContext<TextFieldContextValue>({});
+/**
+ * Shared by every field that wants Input's shell — `Textarea` reads the same
+ * size and class overrides out of it, so a composed form stays consistent.
+ */
+export const TextFieldContext = createContext<TextFieldContextValue>({});
 
 /* -------------------------------------------------------------------------- */
 /*  TextField                                                                  */

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useRef, useState } from "react";
 import { RiAddLine, RiArrowRightSLine, RiCheckboxCircleFill, RiDeleteBinLine, RiFileTextLine, RiFolder3Line, RiHome5Line, RiMailLine, RiSearchLine, RiSettings3Line, RiUserLine } from "@remixicon/react";
 import { AgentThinkingPreview, DataTablePreview, DropdownPreview, FileUploadPreview, MeetingSchedulePreview, SidebarPreview } from "@/components/application/docs/free-landing-previews";
@@ -35,6 +37,9 @@ import { Select, SelectItem } from "@/components/base/select/select";
 import { Slider } from "@/components/base/slider/slider";
 import { SocialButton } from "@/components/base/social-button/social-button";
 import { Switch } from "@/components/base/switch/switch";
+import { Textarea } from "@/components/base/textarea/textarea";
+import { TreeViewPreview } from "@/components/application/docs/tree-view-preview";
+import { DataGridExample } from "@/components/application/docs/examples/data-grid-example";
 import { TOOLTIP_CARETS } from "@/components/base/tooltip/tooltip";
 import { cx } from "@/utils/cx";
 
@@ -51,11 +56,12 @@ function Center({
   children: React.ReactNode;
   className?: string;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className={`absolute inset-0 flex items-center justify-center p-5 ${className ?? ""}`}>
       {children}
     </div>
-  );
+  ));
 }
 
 /**
@@ -114,12 +120,14 @@ const SCALED_FIT: Record<number, string> = {
   330: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),330px)] sm:[--sc-fit:min(calc((100cqw_-_16px)*1),330px)]",
   404: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),404px)] sm:[--sc-fit:min(calc((100cqw_-_16px)*1),404px)]",
   560: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),560px)] sm:[--sc-fit:min(calc((100cqw_-_16px)*1),560px)]",
+  648: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),648px)] sm:[--sc-fit:min(calc((100cqw_-_16px)*1),648px)]",
+  960: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),960px)] sm:[--sc-fit:min(calc((100cqw_-_16px)*1),960px)]",
 };
 
 /**
  * The `insetRight` counterpart: from `sm:` up the chart clears 16px on both
  * sides, so the fit has to give back 32px rather than 16px or it would paint
- * straight through the new right padding.
+ * straight through the new end padding.
  */
 const SCALED_FIT_INSET: Record<number, string> = {
   330: "[--sc-fit:min(calc((100cqw_-_16px)*0.92),330px)] sm:[--sc-fit:min(calc(100cqw_-_32px),330px)]",
@@ -128,9 +136,9 @@ const SCALED_FIT_INSET: Record<number, string> = {
 /**
  * Scales a full-size card into the preview area.
  *
- * Padded on the left only by default, so the card runs to the right edge of
+ * Padded on the start only by default, so the card runs to the end edge of
  * the container rather than sitting in a box, which is how the landing's own
- * previews read. `insetRight` opts a chart into matching padding on the right
+ * previews read. `insetRight` opts a chart into matching padding on the end
  * — the self-contained square charts read as cropped without it, where the
  * wide ones are meant to bleed. The fit expression trims the card back from
  * filling the full width, leaving it a little air; the bottom is covered by
@@ -146,26 +154,27 @@ export function Scaled({
   insetRight?: boolean;
   children: React.ReactNode;
 }) {
+  const localize = useTemplateCopy();
   // The wrapper's own clientWidth already accounts for the insets — its
-  // `left-4` / `sm:right-4` classes are what the CSS expressions subtracted.
-  // Mobile leaves a right inset equal to the wrapper's 16px left one, so the
-  // two gaps match instead of the ~8% remainder all falling on the right.
+  // `start-4` / `sm:end-4` classes are what the CSS expressions subtracted.
+  // Mobile leaves a end inset equal to the wrapper's 16px start one, so the
+  // two gaps match instead of the ~8% remainder all falling on the end.
   // `sm:` and up keeps the full-width bleed the desktop cards were tuned to.
   const { ref, scale } = useMeasuredScale((available, sm) =>
     Math.min(sm ? available : Math.max(available - 16, 1), width) / width,
   );
 
-  return (
+  return localize((
     <div
       ref={ref}
-      className={`absolute inset-y-0 top-4 left-4 overflow-hidden ${
-        insetRight ? "right-0 sm:right-4" : "right-0"
+      className={`absolute inset-y-0 top-4 start-4 overflow-hidden ${
+        insetRight ? "end-0 sm:end-4" : "end-0"
       }`}
     >
       {/* The calc casts the length ratio to the number `scale()` demands;
           the measured value replaces it after mount (see useMeasuredScale). */}
       <div
-        className={`origin-top-left ${(insetRight ? SCALED_FIT_INSET[width] : SCALED_FIT[width]) ?? ""}`}
+        className={`origin-top-left rtl:origin-top-right ${(insetRight ? SCALED_FIT_INSET[width] : SCALED_FIT[width]) ?? ""}`}
         style={{
           width,
           transform:
@@ -177,7 +186,7 @@ export function Scaled({
         {children}
       </div>
     </div>
-  );
+  ));
 }
 
 /**
@@ -190,13 +199,14 @@ export function Scaled({
  * at roughly 1px / 12px after the ~0.33 scale.
  */
 export function TemplateFrame({ children }: { children: React.ReactNode }) {
+  const localize = useTemplateCopy();
   // Mirrors the CSS: a 390 canvas capped at 300px painted below `sm`, the
   // 1280 canvas filling the card minus 12px each side above it.
   const { ref, scale } = useMeasuredScale((available, sm) =>
     sm ? (available - 24) / 1280 : Math.min(available - 24, 300) / 390,
   );
 
-  return (
+  return localize((
     <div
       ref={ref}
       className="absolute inset-0 flex items-center justify-center overflow-hidden"
@@ -232,13 +242,13 @@ export function TemplateFrame({ children }: { children: React.ReactNode }) {
         {children}
       </div>
     </div>
-  );
+  ));
 }
 
 /**
  * The hand-rolled cousin of `Scaled` for previews with their own factor —
  * same measured-scale override, same top-left anchoring. `fullBleed` drops
- * the left inset so the content starts at the card's very edge (the table).
+ * the start inset so the content starts at the card's very edge (the table).
  */
 function InlineScaled({
   width,
@@ -251,25 +261,26 @@ function InlineScaled({
   fullBleed?: boolean;
   children: React.ReactNode;
 }) {
+  const localize = useTemplateCopy();
   // Same equal-inset rule for the hand-scaled previews. The preview's own
   // trim (`factor`) is a desktop tuning: on a phone it was the leftover on
-  // the right, so below `sm` the content fills to the matching inset.
+  // the end, so below `sm` the content fills to the matching inset.
   const { ref, scale } = useMeasuredScale(
     (available, sm) =>
       (Math.max(fullBleed ? available : available - 16, 1) * (sm ? factor : 1)) / width,
   );
 
-  return (
+  return localize((
     <div
       ref={ref}
       className={
         fullBleed
           ? "absolute inset-0 overflow-hidden"
-          : "absolute inset-y-0 top-4 right-0 left-4 overflow-hidden"
+          : "absolute inset-y-0 top-4 end-0 start-4 overflow-hidden"
       }
     >
       <div
-        className="origin-top-left"
+        className="origin-top-left rtl:origin-top-right"
         style={{
           width,
           transform:
@@ -281,7 +292,7 @@ function InlineScaled({
         {children}
       </div>
     </div>
-  );
+  ));
 }
 
 /**
@@ -329,7 +340,8 @@ function useCardHover() {
 }
 
 function CheckboxPreview() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <Center>
       <div className="flex flex-col gap-3">
         <Checkbox defaultSelected>Selected</Checkbox>
@@ -337,11 +349,12 @@ function CheckboxPreview() {
         <Checkbox isIndeterminate>Indeterminate</Checkbox>
       </div>
     </Center>
-  );
+  ));
 }
 
 /** On hover, selection walks the options top to bottom and wraps. */
 function RadioPreview() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
   const [value, setValue] = useState("weekly");
 
@@ -359,7 +372,7 @@ function RadioPreview() {
     };
   }, [hovered]);
 
-  return (
+  return localize((
     <Center>
       <RadioGroup
         ref={ref}
@@ -373,11 +386,12 @@ function RadioPreview() {
         <Radio value="yearly">Yearly</Radio>
       </RadioGroup>
     </Center>
-  );
+  ));
 }
 
 /** On hover, the switches take turns flipping: first one, then the other. */
 function SwitchPreview() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
   const [on, setOn] = useState([true, false]);
 
@@ -395,18 +409,19 @@ function SwitchPreview() {
     };
   }, [hovered]);
 
-  return (
+  return localize((
     <Center>
       <div ref={ref} className="flex flex-col items-start gap-4">
         <Switch isSelected={on[0]} onChange={(v) => setOn((p) => [v, p[1]])} aria-label="First" />
         <Switch isSelected={on[1]} onChange={(v) => setOn((p) => [p[0], v])} aria-label="Second" />
       </div>
     </Center>
-  );
+  ));
 }
 
-/** On hover: the thumb nudges right, sweeps left, and settles back home. */
+/** On hover: the thumb nudges end, sweeps start, and settles back home. */
 function SliderPreview() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
   const [value, setValue] = useState(62);
 
@@ -437,13 +452,13 @@ function SliderPreview() {
     return () => cancelAnimationFrame(raf);
   }, [hovered]);
 
-  return (
+  return localize((
     <Center>
       <div ref={ref} className="w-full max-w-[220px]">
         <Slider value={value} onChange={(v) => setValue(v as number)} thumbLabel="Value" />
       </div>
     </Center>
-  );
+  ));
 }
 
 /**
@@ -453,6 +468,7 @@ function SliderPreview() {
  * the demo drives the same scroll the arrow buttons do.
  */
 function CarouselPreviewCard() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
 
   useEffect(() => {
@@ -477,7 +493,7 @@ function CarouselPreviewCard() {
     };
   }, [hovered, ref]);
 
-  return (
+  return localize((
     <Center>
       <div ref={ref} className="w-full max-w-[240px]">
         <Carousel aria-label="Preview" showArrows={false}>
@@ -494,15 +510,16 @@ function CarouselPreviewCard() {
         </Carousel>
       </div>
     </Center>
-  );
+  ));
 }
 
 /**
- * On hover the filled code deletes right-to-left, a new one types in
+ * On hover the filled code deletes end-to-left, a new one types in
  * digit-by-digit, and a small success line confirms it — the whole lifecycle
  * of the component in one pass. Leaving the card resets it for the next pass.
  */
 function InputOtpPreviewCard() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
   const [value, setValue] = useState("204915");
   const [verified, setVerified] = useState(false);
@@ -541,13 +558,13 @@ function InputOtpPreviewCard() {
   // the input's own focus ring, minus the focus.
   const activeIndex = Math.min(value.length, 5);
 
-  return (
+  return localize((
     <Center>
       <div ref={ref} className="relative scale-[0.82]">
         <InputOtp value={value} onChange={setValue} aria-label="Verification code" />
         <div
           aria-hidden
-          className={`pointer-events-none absolute top-0 size-12 rounded-2lg border border-border-focus-ring ring-2 ring-border-focus-ring transition-[left,opacity] duration-200 ease ${hovered && !verified ? "opacity-100" : "opacity-0"}`}
+          className={`pointer-events-none absolute top-0 size-12 rounded-2lg border border-border-focus-ring ring-2 ring-border-focus-ring transition-[start,opacity] duration-200 ease ${hovered && !verified ? "opacity-100" : "opacity-0"}`}
           style={{ left: activeIndex * 56 }}
         />
       </div>
@@ -559,7 +576,7 @@ function InputOtpPreviewCard() {
         Code verified
       </div>
     </Center>
-  );
+  ));
 }
 
 /**
@@ -577,8 +594,8 @@ function InputOtpPreviewCard() {
 const TOOLTIP_TAIL_POSITION = {
   top: "top-full left-1/2 -translate-x-1/2",
   bottom: "bottom-full left-1/2 -translate-x-1/2",
-  left: "left-full top-1/2 -translate-y-1/2",
-  right: "right-full top-1/2 -translate-y-1/2",
+  left: "start-full top-1/2 -translate-y-1/2",
+  right: "end-full top-1/2 -translate-y-1/2",
 } as const;
 
 function TooltipBubble({
@@ -588,8 +605,9 @@ function TooltipBubble({
   placement: keyof typeof TOOLTIP_TAIL_POSITION;
   children: React.ReactNode;
 }) {
+  const localize = useTemplateCopy();
   const caret = TOOLTIP_CARETS[placement];
-  return (
+  return localize((
     <div className="relative w-fit rounded-lg border border-border-button-default bg-background-primary-default px-2.5 py-1.5 text-caption-1-medium text-text-primary shadow-dropdown">
       {children}
       <svg
@@ -606,11 +624,12 @@ function TooltipBubble({
         <path d={caret.path} />
       </svg>
     </div>
-  );
+  ));
 }
 
 function TooltipPreviewCard() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <Center>
       <div className="grid grid-cols-2 place-items-center gap-x-5 gap-y-6">
         <TooltipBubble placement="top">Top</TooltipBubble>
@@ -619,7 +638,7 @@ function TooltipPreviewCard() {
         <TooltipBubble placement="right">Right</TooltipBubble>
       </div>
     </Center>
-  );
+  ));
 }
 
 /**
@@ -633,6 +652,7 @@ function TooltipPreviewCard() {
  * last in the field's own `cx` chain, so it wins over the resting ring.
  */
 function InputPreviewCard() {
+  const localize = useTemplateCopy();
   const { ref, hovered } = useCardHover();
   const [email, setEmail] = useState("");
   const [query, setQuery] = useState("");
@@ -676,7 +696,7 @@ function InputPreviewCard() {
   const ring = (field: "email" | "query") =>
     active === field ? "ring-border-button-active" : undefined;
 
-  return (
+  return localize((
     <Center>
       <div ref={ref} className="flex w-full max-w-[230px] flex-col gap-3">
         <Input
@@ -695,7 +715,52 @@ function InputPreviewCard() {
         />
       </div>
     </Center>
-  );
+  ));
+}
+
+/**
+ * The auto-growing field, typed on hover: the shell gains a line as the note
+ * wraps and the counter keeps pace, which is the whole point of the component.
+ */
+function TextareaPreviewCard() {
+  const localize = useTemplateCopy();
+  const { ref, hovered } = useCardHover();
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    if (!hovered) return;
+    const NOTE = "Ship the release notes before Friday.";
+    const timers: number[] = [];
+    let delay = 350;
+    for (let i = 1; i <= NOTE.length; i++) {
+      const next = NOTE.slice(0, i);
+      timers.push(window.setTimeout(() => setNote(next), delay));
+      delay += 45;
+    }
+    return () => {
+      timers.forEach((t) => window.clearTimeout(t));
+      setNote("");
+    };
+  }, [hovered]);
+
+  return localize((
+    <Center>
+      <div ref={ref} className="w-full max-w-[230px]">
+        <Textarea
+          aria-label="Note"
+          placeholder="Leave a note"
+          value={note}
+          onChange={setNote}
+          autoResize
+          rows={2}
+          maxRows={4}
+          maxLength={120}
+          showCount
+          fieldClassName={hovered ? "ring-border-button-active" : undefined}
+        />
+      </div>
+    </Center>
+  ));
 }
 
 /**
@@ -703,7 +768,8 @@ function InputPreviewCard() {
  * which is a different component entirely.
  */
 function SelectPreviewCard() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <Center>
       <div className="w-full max-w-[168px]">
         <Select aria-label="Framework" defaultSelectedKey="react">
@@ -713,7 +779,7 @@ function SelectPreviewCard() {
         </Select>
       </div>
     </Center>
-  );
+  ));
 }
 
 export type PreviewOptions = {
@@ -726,6 +792,7 @@ export type PreviewOptions = {
   };
 
 export const FREE_PREVIEW_OPTIONS: Record<string, PreviewOptions> = {
+  "/components/data-grid": { fade: true },
   "/components/data-table": { fade: true },
   "/components/sidebar": { fade: true, fadeOnHover: "sidebar", releaseOverflowAfter: 1150 },
   "/components/dropdown": { fade: true, fadeOnHover: "dropdown", releaseOverflowAfter: 525 },
@@ -750,6 +817,7 @@ export const FREE_PREVIEW_OPTIONS: Record<string, PreviewOptions> = {
 };
 
 export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.ReactElement>> = {
+  "/components/data-grid": () => <Scaled width={960}><DataGridExample rowCount={48} showTitle={false} height={264} /></Scaled>,
   "/components/data-table": DataTablePreview,
   "/components/stat-cards": () => (
     <Scaled width={330} insetRight>
@@ -803,7 +871,7 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
     </div>
   ),
   "/components/typography": () => (
-    <div className="absolute inset-0 flex flex-col justify-center gap-1 overflow-hidden pl-6">
+    <div className="absolute inset-0 flex flex-col justify-center gap-1 overflow-hidden ps-6">
       <span className="text-display-4-semibold text-text-primary">Display</span>
       <span className="text-title-2-medium text-text-primary">Title</span>
       <span className="text-headline-medium text-text-secondary">Headline</span>
@@ -828,8 +896,8 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
   "/components/table": () => (
     <div className="absolute inset-0 overflow-hidden">
       {/* Deliberately unscaled: the table reads better at its real size,
-          running off the right edge, than shrunk to fit the card. */}
-      <div className="w-[520px] origin-top-left">
+          running off the end edge, than shrunk to fit the card. */}
+      <div className="w-[520px] origin-top-left rtl:origin-top-right">
         <Table aria-label="Customers">
           <TableHeader>
             <TableColumn id="name" isRowHeader>
@@ -886,7 +954,11 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
   ),
   "/components/auth-card": () => (
     <InlineScaled width={400} factor={0.95}>
-      <AuthCard layout="inline" providers={["google", "apple", "github", "x"]} />
+      <AuthCard
+        layout="inline"
+        providers={["google", "apple", "github", "x"]}
+        headingLevel={3}
+      />
     </InlineScaled>
   ),
 
@@ -911,7 +983,7 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
   ),
   // Overlapped stack that fans apart on hover — the group is how avatars
   // actually appear in the templates, and the spread is what makes the
-  // stacking order readable. Each tile also lifts, staggered left to right,
+  // stacking order readable. Each tile also lifts, staggered start to end,
   // so the motion has a direction instead of everything moving at once.,
   "/components/avatar": () => (
     <Center>
@@ -929,7 +1001,7 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
               i > 0 && "-ml-3",
               // Fan out symmetrically around the centre — the outer pair
               // travels 27px, the inner pair 9px — so the group spreads in
-              // place instead of drifting right off the middle of the card.
+              // place instead of drifting end off the middle of the card.
               i === 0 && "sm:group-hover/card:-translate-x-[27px]",
               i === 1 && "sm:group-hover/card:-translate-x-[9px]",
               i === 2 && "sm:group-hover/card:translate-x-[9px]",
@@ -1110,5 +1182,7 @@ export const FREE_COMPONENT_PREVIEWS: Partial<Record<PreviewHref, () => React.Re
     </Center>
   ),
   "/components/switch": SwitchPreview,
+  "/components/textarea": TextareaPreviewCard,
   "/components/tooltip": TooltipPreviewCard,
+  "/components/tree-view": () => <Scaled width={384} insetRight><TreeViewPreview compact /></Scaled>,
 };

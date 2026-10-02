@@ -98,6 +98,14 @@ export interface AuthCardProps {
   onProvider?: (provider: SocialProvider) => void;
   /** Footer link target, e.g. to the opposite mode. */
   switchHref?: string;
+  /**
+   * Heading level for the card title. Defaults to `1`, because on a real
+   * sign-in screen the card *is* the page. Drop it to `2`+ wherever the card
+   * is embedded as a preview inside a page that already has an `<h1>` — two
+   * `<h1>`s in one document flattens the outline for screen readers and for
+   * anything reading the page as a document.
+   */
+  headingLevel?: 1 | 2 | 3 | 4 | 5 | 6;
   className?: string;
 }
 
@@ -143,9 +151,11 @@ export function AuthCard({
   onSubmit,
   onProvider,
   switchHref = "#",
+  headingLevel = 1,
   className,
 }: AuthCardProps) {
   const localize = useTemplateCopy();
+  const TitleHeading = `h${headingLevel}` as const;
   const [remember, setRemember] = useState(true);
   const [code, setCode] = useState("");
   const copy = COPY[mode];
@@ -209,7 +219,9 @@ export function AuthCard({
       ) : null}
 
       <div className={cx("flex flex-col gap-1.5", centerContent && "text-center")}>
-        <h1 className="text-title-2-medium text-text-primary">{title ?? copy.title}</h1>
+        <TitleHeading className="text-title-2-medium text-text-primary">
+          {title ?? copy.title}
+        </TitleHeading>
         <p className="text-body-regular text-text-secondary">
           {description ??
             (verify && email ? (

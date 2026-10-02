@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   RiFileExcel2Line,
@@ -121,6 +123,7 @@ export function FileUpload({
   renderFileIcon,
   className,
 }: FileUploadProps) {
+  const localize = useTemplateCopy();
   const [phase, setPhase] = useState<UploadPhase>("idle");
   const [progress, setProgress] = useState(0);
   const [file, setFile] = useState<File | null>(null);
@@ -197,7 +200,7 @@ export function FileUpload({
     .map((extension) => extension.toUpperCase())
     .join(", ");
 
-  return (
+  return localize(
     <div
       ref={boxRef}
       role="button"
@@ -232,6 +235,7 @@ export function FileUpload({
       <input
         ref={inputRef}
         type="file"
+        aria-label="Choose a file to upload"
         accept={allowedExtensions.map((extension) => `.${extension}`).join(",")}
         className="sr-only"
         tabIndex={-1}

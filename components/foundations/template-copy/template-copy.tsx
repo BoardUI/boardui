@@ -3,11 +3,23 @@
 import { cloneElement, createContext, isValidElement, useContext, useMemo, type ReactNode } from "react";
 
 export type TemplateCopyTranslator = (text: string) => string;
-const CopyContext = createContext<TemplateCopyTranslator | null>(null);
+type CopySettings = { translate: TemplateCopyTranslator; render?: <T>(node: T) => T };
+const CopyContext = createContext<CopySettings | null>(null);
+const MenuContext = createContext<ReactNode>(null);
+
+/** Optional application language control shared by template account menus. */
+export function TemplateMenuProvider({ languageSelector, children }: { languageSelector?: ReactNode; children: ReactNode }) {
+  return <MenuContext.Provider value={languageSelector ?? null}>{children}</MenuContext.Provider>;
+}
+
+export function useTemplateLanguageSelector() {
+  return useContext(MenuContext);
+}
 
 /** Optional application copy for templates. Without a provider, source copy is unchanged. */
-export function TemplateCopyProvider({ translate, children }: { translate: TemplateCopyTranslator; children: ReactNode }) {
-  return <CopyContext.Provider value={translate}>{children}</CopyContext.Provider>;
+export function TemplateCopyProvider({ translate, render, children }: CopySettings & { children: ReactNode }) {
+  const settings = useMemo(() => ({ translate, render }), [translate, render]);
+  return <CopyContext.Provider value={settings}>{children}</CopyContext.Provider>;
 }
 
 // Only display copy is translated. IDs, form values, data keys, URLs, styles,
@@ -55,6 +67,6 @@ export function translateTemplateCopy<T>(value: T, translate: TemplateCopyTransl
 
 /** Apply to a template component's returned JSX; copy updates through React, including portals. */
 export function useTemplateCopy() {
-  const translate = useContext(CopyContext);
-  return useMemo(() => <T,>(node: T): T => translate ? translateTemplateCopy(node, translate) : node, [translate]);
+  const settings = useContext(CopyContext);
+  return useMemo(() => <T,>(node: T): T => settings?.render ? settings.render(node) : settings ? translateTemplateCopy(node, settings.translate) : node, [settings]);
 }

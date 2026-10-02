@@ -18,14 +18,6 @@ export type Entry = {
 
 const foundations: Entry[] = [
   {
-    name: "Direction",
-    href: "/components/direction",
-    description: "RTL and LTR layout, locale, and portal direction.",
-    tier: "free",
-    status: "shipped",
-    isNew: true,
-  },
-  {
     name: "Color",
     href: "/components/color",
     description: "The full palette and semantic tokens.",
@@ -71,18 +63,25 @@ const components: Entry[] = [
   { name: "Switch", href: "/components/switch", description: "On/off toggle with spring motion.", tier: "free", status: "shipped" },
   { name: "Table", href: "/components/table", description: "Sortable columns, sticky header.", tier: "free", status: "shipped" },
   { name: "Tabs", href: "/components/tabs", description: "Underline and pill tab lists.", tier: "free", status: "shipped" },
+  { name: "Textarea", href: "/components/textarea", description: "Multiline field with auto-grow and character count.", tier: "free", status: "shipped", isNew: true },
+  { name: "Tree View", href: "/components/tree-view", description: "Nested folders with selection and keyboard navigation.", tier: "free", status: "shipped", isNew: true },
   { name: "Tooltip", href: "/components/tooltip", description: "Positioned hints on hover and focus.", tier: "free", status: "shipped" },
 ];
 
 const blocks: Entry[] = [
   { name: "Agent Thinking", href: "/components/agent-thinking", description: "Agent thinking indicators for chat composers.", tier: "free", status: "shipped", isNew: true },
   { name: "Composer Loader", href: "/components/composer-loader", description: "Orbiting light band for a working composer.", tier: "free", status: "shipped", isNew: true },
+  { name: "Composer Panel", href: "/components/composer-panel", description: "Two-row chat input with permission modes.", tier: "pro", status: "shipped", isNew: true },
+  { name: "Composer Attachments", href: "/components/composer-attachments", description: "File tiles landing one by one above the prompt.", tier: "pro", status: "shipped", isNew: true },
   { name: "Auth Card", href: "/components/auth-card", description: "Sign-in and sign-up blocks with social login.", tier: "free", status: "shipped", isNew: true },
   { name: "Web Search", href: "/components/web-search", description: "Research trail with the sources an agent opened.", tier: "pro", status: "shipped", isNew: true },
   { name: "Task List", href: "/components/task-list", description: "Streaming agent log that reveals step by step.", tier: "pro", status: "shipped", isNew: true },
   { name: "Agent Limits", href: "/components/agent-limits-card", description: "Context window and plan usage limits.", tier: "pro", status: "shipped", isNew: true },
+  { name: "Questionnaire", href: "/components/questionnaire", description: "Plan-mode questions, one step at a time.", tier: "pro", status: "shipped", isNew: true },
+  { name: "Agent Creator", href: "/components/agent-creator", description: "Create an agent’s identity, animated avatar, and voice preferences.", tier: "pro", status: "shipped", isNew: true },
   { name: "Agent Progress", href: "/components/agent-progress", description: "Collapsible progress for multi-step AI tasks.", tier: "pro", status: "shipped" },
   { name: "Calendar", href: "/components/calendar", description: "Full month view with event pills.", tier: "pro", status: "shipped" },
+  { name: "Data Grid", href: "/components/data-grid", description: "Editable spreadsheet with selection, filters, and live summaries.", tier: "free", status: "shipped", isNew: true },
   { name: "Data Table", href: "/components/data-table", description: "Filters, selection, and pagination wired up.", tier: "free", status: "shipped" },
   { name: "Notification Center", href: "/components/notification-center", description: "Grouped activity inbox with tabs and actions.", tier: "free", status: "shipped" },
   { name: "Settings Modal", href: "/components/settings-modal", description: "Multi-page settings in a controlled dialog.", tier: "free", status: "shipped" },
@@ -113,6 +112,7 @@ const charts: Entry[] = [
 
 const templates: Entry[] = [
   { name: "Chat Starter", href: "/components/chat-starter", description: "Free, deployable chat on your own model key.", tier: "free", status: "shipped", isNew: true },
+  { name: "Multi-agent Chat", href: "/components/multi-agent-chat", description: "Animated agents, individual and group chat, and a live avatar editor.", tier: "pro", status: "shipped", isNew: true },
   { name: "AI Chat", href: "/components/ai-chat", description: "Full chat app with code panel and composer.", tier: "pro", status: "shipped" },
   { name: "AI Image Generation", href: "/components/ai-image-generation", description: "Prompt thread with generation frame and gallery panel.", tier: "pro", status: "shipped" },
   { name: "AI Profile", href: "/components/ai-profile", description: "Contributions profile with heatmap and charts.", tier: "pro", status: "shipped" },
@@ -120,6 +120,7 @@ const templates: Entry[] = [
   { name: "Home Dashboard", href: "/components/home-dashboard", description: "KPIs, revenue trend, and customers table.", tier: "pro", status: "shipped" },
   { name: "Marketing Dashboard", href: "/components/marketing-dashboard", description: "Acquisition funnel, spend charts, and campaigns table.", tier: "pro", status: "shipped", isNew: true },
   { name: "Medical Profile", href: "/components/medical-profile", description: "Patient overview with health charts.", tier: "pro", status: "shipped" },
+  { name: "Project Board", href: "/components/project-board", description: "Kanban workspace with ticket panels, comments, and token charts.", tier: "pro", status: "shipped", isNew: true },
 ];
 
 /**

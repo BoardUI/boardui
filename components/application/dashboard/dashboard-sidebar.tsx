@@ -19,6 +19,7 @@ import {
   RiCustomerServiceLine,
   RiHomeLine,
   RiImageAiLine,
+  RiKanbanView2,
   RiMegaphoneLine,
   RiSearchLine,
   RiSettings4Line,
@@ -155,6 +156,7 @@ export type DashboardNavKey = string;
 /** The Pro dashboard's navigation, the default set. */
 export const DASHBOARD_NAV: DashboardNavItem[] = [
   { key: "home", label: "Home", icon: RiHomeLine, href: "/templates/dashboard", badge: 152 },
+  { key: "project-board", label: "Project board", icon: RiKanbanView2, href: "/templates/project-board" },
   { key: "marketing", label: "Marketing", icon: RiMegaphoneLine, href: "/templates/marketing" },
   { key: "calendar", label: "Calendar", icon: RiCalendarLine, href: "/templates/calendar" },
   { key: "finance", label: "Finance", icon: RiBankLine, href: "/templates/finance" },

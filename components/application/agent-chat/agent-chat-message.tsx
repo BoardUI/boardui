@@ -63,10 +63,10 @@ export function AgentMessage({ role, text, streaming = false, at }: AgentMessage
  * snaps. Evenness of the text itself comes from the server, which releases
  * whole words on a steady tick (see `smoothStream` in the route).
  */
-function StreamedText({ text }: { text: string }) {
+export function StreamedText({ text, paragraphs = false }: { text: string; paragraphs?: boolean }) {
   const localize = useTemplateCopy();
   const reduceMotion = useReducedMotion();
-  const lines = useMemo(() => text.split("\n").filter((line) => line.trim() !== ""), [text]);
+  const lines = useMemo(() => text.split(paragraphs ? /\n\s*\n/ : "\n").filter((line) => line.trim() !== ""), [text, paragraphs]);
 
   return localize((
     <div className="flex flex-col gap-3">

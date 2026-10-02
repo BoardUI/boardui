@@ -68,7 +68,7 @@ import {
  */
 
 /** Bumped when the contract below changes in a way templates can depend on. */
-export const RUNTIME_CONTRACT = 1;
+const RUNTIME_CONTRACT = 1;
 
 /** Streaming replies outlive the default budget on longer answers. */
 export const maxDuration = 30;

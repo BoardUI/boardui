@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 /**
  * Landing/index previews of free components, kept apart from the landing
  * section (which also previews Pro) so the starter can render them live.
@@ -20,33 +22,36 @@ import { Avatar } from "@/components/base/avatar/avatar";
 import { cx } from "@/utils/cx";
 
 export function DataTablePreview() {
-  return (
-    <div className="absolute top-[15px] right-4 left-4 h-[212px] overflow-hidden rounded-[6px] xl:right-auto xl:left-[15px] xl:h-[179px] xl:w-[275px]">
+  const localize = useTemplateCopy();
+  return localize((
+    <div className="absolute top-[15px] end-4 start-4 h-[212px] overflow-hidden rounded-[6px] xl:end-auto xl:start-[15px] xl:h-[179px] xl:w-[275px]">
       {/* On desktop the table is painted at its real 790px width and cropped
           by the card, the same way the sidebar preview is, so the rows read at
           their true size instead of being shrunk to a third. Narrower screens
           keep scaling to fit, where a crop would leave too little of it. */}
-      <div className="w-[790px] origin-top-left scale-[calc((100cqw-32px)/790)] xl:scale-100">
+      <div className="w-[790px] origin-top-left rtl:origin-top-right scale-[calc((100cqw-32px)/790)] xl:scale-100">
         <DataTableExample showSizeToggle={false} pageSize={5} />
       </div>
     </div>
-  );
+  ));
 }
 
 export function SidebarPreview() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="absolute top-[19px] left-1/2 h-[732px] w-[260px] -translate-x-1/2 transition-transform duration-[1400ms] ease-[cubic-bezier(.22,1,.36,1)] [transition-delay:250ms] sm:group-hover/card:-translate-y-[554px] sm:group-hover/card:[transition-delay:0ms]">
       <DashboardSidebar fluid showThemeToggle={false} />
     </div>
-  );
+  ));
 }
 
 export function DropdownPreview() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="absolute top-5 left-1/2 flex min-h-[235px] w-[266px] -translate-x-1/2 flex-col rounded-2xl border border-border-button-default bg-background-primary-default p-2.5 shadow-dropdown transition-transform duration-[700ms] ease-[cubic-bezier(.22,1,.36,1)] [transition-delay:250ms] sm:group-hover/card:-translate-y-[58px] sm:group-hover/card:[transition-delay:0ms]">
       <AccountMenuContent onSelect={() => {}} />
     </div>
-  );
+  ));
 }
 
 /**
@@ -57,7 +62,8 @@ export function DropdownPreview() {
  * ticking in one card is noise, and the detail page is where they matter.
  */
 export function AgentThinkingPreview() {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <div className="absolute inset-0 flex items-center justify-center p-5">
       {/* Left-aligned inside a centred column, so the indicators line up with
           each other rather than each row centring on its own label length. */}
@@ -68,11 +74,12 @@ export function AgentThinkingPreview() {
         <AgentThinking variant="infinity" label="Writing the answer" showTimer={false} />
       </div>
     </div>
-  );
+  ));
 }
 
 function DocumentPluginIcon({ className }: { className?: string }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <span className={cx("inline-flex shrink-0", className)}>
       <Image
         src="/ai-chat/plugin-documents.svg"
@@ -93,10 +100,11 @@ function DocumentPluginIcon({ className }: { className?: string }) {
         aria-hidden
       />
     </span>
-  );
+  ));
 }
 
 export function FileUploadPreview() {
+  const localize = useTemplateCopy();
   const containerRef = useRef<HTMLDivElement>(null);
   const dropTimerRef = useRef<number | null>(null);
   const busyUntilRef = useRef(0);
@@ -145,7 +153,7 @@ export function FileUploadPreview() {
     };
   }, [cancelPendingDrop, startDropDemo]);
 
-  return (
+  return localize((
     <div
       ref={containerRef}
       className="absolute top-8 left-1/2 w-[265px] -translate-x-1/2 sm:top-6"
@@ -162,14 +170,15 @@ export function FileUploadPreview() {
         </span>
       ) : null}
     </div>
-  );
+  ));
 }
 
 export function MeetingSchedulePreview() {
+  const localize = useTemplateCopy();
   const [date, setDate] = useState<CalendarDate>(parseDate("2026-08-10"));
 
-  return (
-    <div className="absolute top-[19px] left-4 flex h-[430px] w-[700px] origin-top-left scale-[calc((100cqw-32px)/1000)] gap-4 rounded-3xl bg-background-secondary-default p-3 sm:scale-[calc((100cqw-32px)/700)] xl:left-5 xl:scale-[0.47]">
+  return localize((
+    <div className="absolute top-[19px] start-4 flex h-[430px] w-[700px] origin-top-left rtl:origin-top-right scale-[calc((100cqw-32px)/1000)] gap-4 rounded-3xl bg-background-secondary-default p-3 sm:scale-[calc((100cqw-32px)/700)] xl:start-5 xl:scale-[0.47]">
       <div className="flex w-[220px] shrink-0 flex-col gap-4 rounded-2xl bg-background-primary-default p-4 shadow-xs">
         <Avatar size="sm" color="blue" initials="M" />
         <div>
@@ -196,5 +205,5 @@ export function MeetingSchedulePreview() {
         ))}
       </div>
     </div>
-  );
+  ));
 }

@@ -13,6 +13,7 @@
  */
 export const PREVIEW_HREFS = [
   // Shared with the landing showcase
+  "/components/data-grid",
   "/components/data-table",
   "/components/stat-cards",
   "/components/activity-rings-card",
@@ -44,6 +45,7 @@ export const PREVIEW_HREFS = [
   "/components/heatmap-chart-card",
   "/components/stage-bars-card",
   "/components/agent-limits-card",
+  "/components/agent-creator",
   "/components/bar-list-card",
   "/components/area-chart-card",
   "/components/combo-chart-card",
@@ -51,8 +53,13 @@ export const PREVIEW_HREFS = [
   // Blocks
   "/components/agent-thinking",
   "/components/composer-loader",
+  "/components/composer-panel",
+  "/components/composer-attachments",
+  "/components/questionnaire",
   // Templates and foundations
   "/components/home-dashboard",
+  "/components/project-board",
+  "/components/multi-agent-chat",
   "/components/medical-profile",
   "/components/marketing-dashboard",
   "/components/finance-dashboard",
@@ -87,6 +94,8 @@ export const PREVIEW_HREFS = [
   "/components/slider",
   "/components/social-button",
   "/components/switch",
+  "/components/textarea",
+  "/components/tree-view",
   "/components/tooltip",
 ] as const;
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+
 import { useMemo, useState } from "react";
 import {
   RiArchiveLine,
@@ -179,7 +181,8 @@ function PurchaseSelect({
   name: string;
   size?: SelectSize;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <Select
       aria-label={`Purchase status for ${name}`}
       defaultSelectedKey={value}
@@ -199,11 +202,12 @@ function PurchaseSelect({
         Processing
       </SelectItem>
     </Select>
-  );
+  ));
 }
 
 function SortChevron({ dir }: { dir: false | "asc" | "desc" }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <ChevronSortDown
       className={cx(
         "size-6 shrink-0 transition-[transform,color] duration-150",
@@ -211,7 +215,7 @@ function SortChevron({ dir }: { dir: false | "asc" | "desc" }) {
         dir ? "text-text-secondary" : "text-text-tertiary",
       )}
     />
-  );
+  ));
 }
 
 /** Icon-only row action with a tooltip label - `IconButton` (a plain
@@ -224,14 +228,15 @@ function RowActionButton({
   icon: typeof RiEditLine;
   label: string;
 }) {
-  return (
+  const localize = useTemplateCopy();
+  return localize((
     <TooltipTrigger delay={200}>
       <Focusable>
         <IconButton icon={icon} size="small" aria-label={label} />
       </Focusable>
       <Tooltip size="md">{label}</Tooltip>
     </TooltipTrigger>
-  );
+  ));
 }
 
 const MORE_MENU_ACTIONS = [
@@ -245,8 +250,9 @@ const MORE_MENU_ACTIONS = [
  *  trigger is styled to match `IconButton`'s small secondary recipe (nesting
  *  the real IconButton inside DropdownTrigger would nest <button>s). */
 function RowMoreMenu({ name }: { name: string }) {
+  const localize = useTemplateCopy();
   const [isOpen, setIsOpen] = useState(false);
-  return (
+  return localize((
     <Dropdown isOpen={isOpen} onOpenChange={setIsOpen}>
       <TooltipTrigger delay={200}>
         <DropdownTrigger
@@ -274,7 +280,7 @@ function RowMoreMenu({ name }: { name: string }) {
         </DropdownGroup>
       </DropdownPopover>
     </Dropdown>
-  );
+  ));
 }
 
 export function DataTableExample({
@@ -286,6 +292,7 @@ export function DataTableExample({
   /** Rows per page - the landing collage shows the 5-row crop from Figma. */
   pageSize?: number;
 } = {}) {
+  const localize = useTemplateCopy();
   const [sorting, setSorting] = useState<SortingState>([]);
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({ "1": true, "2": true });
   const [pagination, setPagination] = useState<PaginationState>({ pageIndex: 0, pageSize });
@@ -315,7 +322,7 @@ export function DataTableExample({
         header: "Customer name",
         cell: ({ row }) => {
           const c = row.original;
-          return (
+          return localize((
             <div className="flex min-w-0 items-center gap-2">
               <Checkbox
                 slot={null}
@@ -330,57 +337,57 @@ export function DataTableExample({
               )}
               <span className="truncate text-body-medium text-text-primary">{c.name}</span>
             </div>
-          );
+          ));
         },
       },
       {
         id: "purchase",
         enableSorting: false,
         header: "Purchase",
-        cell: ({ row }) => (
+        cell: ({ row }) => localize((
           <PurchaseSelect value={row.original.purchase} name={row.original.name} size={size} />
-        ),
+        )),
       },
       {
         id: "status",
         enableSorting: false,
         header: "Status",
-        cell: ({ row }) => (
+        cell: ({ row }) => localize((
           <Chip variant={size === "sm" ? "caption" : "bold"} color={row.original.status.color}>
             {row.original.status.label}
           </Chip>
-        ),
+        )),
       },
       {
         accessorKey: "updatedTs",
         header: "Last updated",
-        cell: ({ row }) => (
+        cell: ({ row }) => localize((
           <span className="whitespace-nowrap text-body-medium text-text-primary">{row.original.updated}</span>
-        ),
+        )),
       },
       {
         accessorKey: "price",
         header: "Price",
-        cell: ({ row }) => (
+        cell: ({ row }) => localize((
           <Chip variant={size === "sm" ? "caption" : "subtle"} color="gray">
             {formatPrice(row.original.price)}
           </Chip>
-        ),
+        )),
       },
       {
         id: "actions",
         enableSorting: false,
         header: "Actions",
-        cell: ({ row }) => (
+        cell: ({ row }) => localize((
           <div className="flex items-center justify-end gap-2.5">
             <RowActionButton icon={RiDeleteBin6Line} label="Delete" />
             <RowActionButton icon={RiEditLine} label="Edit" />
             <RowMoreMenu name={row.original.name} />
           </div>
-        ),
+        )),
       },
     ],
-    [avatarSize, size],
+    [avatarSize, size, localize],
   );
 
   const table = useReactTable({
@@ -410,7 +417,7 @@ export function DataTableExample({
     actions: "w-[132px]",
   };
 
-  return (
+  return localize((
     <div className="flex w-full flex-col items-center gap-5">
     <section
       className={cx(
@@ -573,7 +580,7 @@ export function DataTableExample({
 
       {/* Pagination footer */}
       {totalPages > 1 && (
-        <div className="px-3 pt-3">
+        <div className="border-t border-separator-border px-3 pt-3">
           <Pagination
             page={pagination.pageIndex + 1}
             totalPages={totalPages}
@@ -597,5 +604,5 @@ export function DataTableExample({
         </SegmentedControl>
       )}
     </div>
-  );
+  ));
 }

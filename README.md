@@ -27,7 +27,7 @@ This repository is generated from BoardUI's source and takes no pull requests. S
 
 ## What's in this repository
 
-- All 66 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
+- All 69 free items as source: base components, application blocks, tokens and type scale. The catalogue is below.
 - The app: a chat at `/`, a dashboard with the two free charts, and sign-in and sign-up screens, all built from the components in this repository. Chat history stays in the visitor's browser. No database.
 - `app/api/chat/route.ts`, which reads your key server-side and streams replies. The key never reaches the browser.
 
@@ -162,6 +162,7 @@ Composed screens and panels: sidebars, chat, tables, settings, cards.
 | [App Shell](components/application/app-shell/app-shell.tsx) | Page frame for the chat starter: the sidebar, a phone drawer, and a titled content card, carrying the starter's own navigation so the sidebar only links to pages the app has. | `npx boardui@latest add app-shell` |
 | [Auth Card](https://www.boardui.com/components/auth-card) | Sign-in and sign-up cards with social providers stacked with labels or inline as icons, plus email fields and a CTA. | `npx boardui@latest add auth-card` |
 | [Composer Loader](https://www.boardui.com/components/composer-loader) | Loading state that wraps a chat composer — an iridescent light band orbiting the rim with a soft inward bloom, fading in while the agent works. | `npx boardui@latest add composer-loader` |
+| [Data Grid](https://www.boardui.com/components/data-grid) | Virtualized spreadsheet with editable cells, range selection, filters, resizable columns, undo and redo, summaries, and CSV export. | `npx boardui@latest add data-grid` |
 | [Data Table](https://www.boardui.com/components/data-table) | TanStack-powered data table with sorting, selection, and pagination. | `npx boardui@latest add data-table` |
 | [Important Alerts Card](https://www.boardui.com/components/medical-profile) | Scrollable alert feed with tinted icon circles and date pills. | `npx boardui@latest add important-alerts-card` |
 | [Notification Center](https://www.boardui.com/components/notification-center) | Tabbed activity inbox with grouped notifications, unread state, avatars, status icons, and inline actions. | `npx boardui@latest add notification-center` |
@@ -214,7 +215,9 @@ The everyday building blocks.
 | [Switch Card](https://www.boardui.com/components/switch) | Bordered settings row driven by a switch. | `npx boardui@latest add switch-card` |
 | [Table](https://www.boardui.com/components/table) | Static table primitives matching the dashboard tables. | `npx boardui@latest add table` |
 | [Tabs](https://www.boardui.com/components/tabs) | Underline and pill tab variants built on React Aria. | `npx boardui@latest add tabs` |
+| [Textarea](https://www.boardui.com/components/textarea) | Multiline text field with auto-grow, character count, and Input's label, hint and states. | `npx boardui@latest add textarea` |
 | [Tooltip](https://www.boardui.com/components/tooltip) | Light-surface tooltip built on React Aria. | `npx boardui@latest add tooltip` |
+| [Tree View](https://www.boardui.com/components/tree-view) | Nested folders and structured content with expandable branches, selection, guide lines, and keyboard navigation. | `npx boardui@latest add tree-view` |
 
 ### Foundations
 
@@ -226,7 +229,7 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 | [Agent runtime](https://www.boardui.com/components/chat-starter) | Streaming chat endpoint for agent templates: one AI_API_KEY from OpenAI, Anthropic, Google, OpenRouter, Groq, xAI or Vercel AI Gateway (or any OpenAI-compatible server by URL), a config probe for unconfigured deploys, and the message contract the BoardUI chat UI installs against. | `npx boardui@latest add agent-runtime` |
 | [Chevron icons](https://www.boardui.com/components/dropdown) | Custom chevron glyphs (select caret, sortable table headers) matching the Figma strokes. | `npx boardui@latest add chevrons` |
 | [cx utility](utils/cx.ts) | tailwind-merge wrapper aware of BoardUI's composite text styles, plus the sortCx helper. | `npx boardui@latest add cx` |
-| [Direction Provider](https://www.boardui.com/components/direction) | Locale and layout direction for RTL and LTR regions, React Aria interactions, and portals. | `npx boardui@latest add direction` |
+| [Direction Provider](https://www.boardui.com/rtl#direction-provider) | Locale and layout direction for RTL and LTR regions, React Aria interactions, and portals. | `npx boardui@latest add direction` |
 | [Directional icons](utils/directional-icon.ts) | Mirrors navigation arrows and sidebar glyphs in RTL while preserving non-directional icons. | `npx boardui@latest add directional-icon` |
 | [Directional scrolling](utils/scroll-direction.ts) | Logical horizontal scroll offsets and item alignment for RTL and LTR carousels and tab strips. | `npx boardui@latest add scroll-direction` |
 | [Global styles](styles/globals.css) | Tailwind entry css: dark-mode variant, base resets, component animations, and table styling. Imports theme.css and typography.css. | `npx boardui@latest add globals` |
@@ -239,10 +242,10 @@ Tokens, type scale, global styles, utilities, and the agent rules.
 
 ## BoardUI Pro
 
-Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 8 templates and 23 components, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
+Everything in this repository is free and complete. Pro adds the full-page templates and the richer components, 10 templates and 30 components, installed into the same project as source: `npx boardui@latest login <key>` once, then `add` as usual. One-off payment, no subscription. See [www.boardui.com/#pricing](https://www.boardui.com/#pricing).
 
 <details>
-<summary>The 8 templates</summary>
+<summary>The 10 templates</summary>
 
 | Name | What it is |
 | --- | --- |
@@ -254,15 +257,19 @@ Everything in this repository is free and complete. Pro adds the full-page templ
 | [HR Management Template](https://www.boardui.com/components/hr-management) | Headcount KPIs, recent hires, hiring pipeline, engagement radar, hires vs. attrition, team breakdowns, and an employees data table. |
 | [Marketing Dashboard Template](https://www.boardui.com/components/marketing-dashboard) | Campaign KPIs, acquisition funnel, spend by channel, traffic sources, ad spend vs. ROAS, visitors by channel, and a campaigns data table. |
 | [Medical Report Template](https://www.boardui.com/components/medical-profile) | Patient overview with steps, sleep score, activity rings, and most-active-days charts. |
+| [Multi-agent Chat Template](https://www.boardui.com/components/multi-agent-chat) | Individual and group agent conversations with ten animated paper agents, a live agent creator, and a customizable composer. |
+| [Project Board Template](https://www.boardui.com/components/project-board) | A responsive kanban workspace with sortable tickets, animated ticket creation and detail panels, editable properties, comments, and token usage charts. |
 
 </details>
 
 <details>
-<summary>The 23 components</summary>
+<summary>The 30 components</summary>
 
 | Name | What it is |
 | --- | --- |
 | [Activity Rings Card](https://www.boardui.com/components/activity-rings-card) | Apple Watch-style concentric goal rings with stat tiles. |
+| [Agent Avatar](https://www.boardui.com/components/multi-agent-chat) | Animated paper avatars with wandering eyes, expressive faces, nine silhouettes, and dimensional turn animations. |
+| [Agent Creator](https://www.boardui.com/components/agent-creator) | A controlled agent creator sidebar with animated avatars, emotion and shape pickers, custom colors, profile fields, and voice preferences. |
 | [Agent Limits Card](https://www.boardui.com/components/agent-limits-card) | Context window usage bar with an expandable token breakdown, collapsible groups, and plan usage limits with reset times. |
 | [Agent Progress](https://www.boardui.com/components/agent-progress) | Collapsible multi-step AI task progress with animated active, pending, and completed states. |
 | [Area Chart Card](https://www.boardui.com/components/area-chart-card) | Multi-series area chart with stacked, overlapping and 100% variants, gradient fills, period dropdown and stat tiles. |
@@ -270,12 +277,17 @@ Everything in this repository is free and complete. Pro adds the full-page templ
 | [Calendar](https://www.boardui.com/components/calendar) | Month-view calendar with event chips, details popover, month switcher, and inbox feed. |
 | [Combo Chart Card](https://www.boardui.com/components/combo-chart-card) | Bar-plus-line combo chart with independent left and right axes, hover dimming, and a pulsing active dot. |
 | [Composer](https://www.boardui.com/components/composer) | The AI chat composer, whole package: attachment and model menus, voice and send controls, the status bar, and the liquid-glass loading treatment for its controls. |
+| [Composer Attachments](https://www.boardui.com/components/composer-attachments) | The Composer Panel carrying attachments: image and document tiles above the prompt, landing one after another with the upload ring drawing around each. |
+| [Composer Panel](https://www.boardui.com/components/composer-panel) | The two-row AI chat composer: prompt on top, add, permission, model, mic and send controls below, and a status tab with branch, project folder and context meter hanging off the card. |
 | [Contributions Card](https://www.boardui.com/components/contributions-card) | GitHub-style contributions heat grid with swappable accent family. |
 | [Earnings Chart Card](https://www.boardui.com/components/earnings-chart-card) | Bar chart card with period switcher, count-up headline, and hover outline. |
 | [Funnel Chart Card](https://www.boardui.com/components/funnel-chart-card) | Horizontal flow funnel with curved or sharp tapers, centred conversion pills, mono option, and a value/name footer under every column. |
 | [Heatmap Chart Card](https://www.boardui.com/components/heatmap-chart-card) | Matrix heatmap card (rows × columns) with a theme-following ramp, hover-linked headline, and Less → More legend. |
 | [Line Chart Card](https://www.boardui.com/components/line-chart-card) | Line/area chart card with gradient fill, curved or sharp interpolation, and animated active dot. |
 | [Most Active Days Card](https://www.boardui.com/components/most-active-days-card) | Continuous vertical month calendar with per-day mini activity rings. |
+| [Multi-agent Chat](https://www.boardui.com/components/multi-agent-chat) | An agent workspace with individual and group conversations, a live avatar editor, and the BoardUI composer. |
+| [Project Board](https://www.boardui.com/components/project-board) | Sortable kanban board with ticket detail side panels, editable properties, comments, purple token charts, and smooth cross-column drag and drop. |
+| [Questionnaire](https://www.boardui.com/components/questionnaire) | Plan-mode questions as a chat card: one question per step with checkbox or numbered rows, a free-text Other row, step pills and Previous / Next, sliding between questions as the card animates to each one's height. |
 | [Radar Chart Card](https://www.boardui.com/components/radar-chart-card) | Radar chart card with filled, dotted, lines-only, and centre-score variants, hover-linked headline, and multi-series legend. |
 | [Radial Chart Card](https://www.boardui.com/components/radial-chart-card) | Radial bar chart card: concentric rings (plain, labelled, or over a grid), single-value gauges, and a stacked half gauge. |
 | [Sankey Chart Card](https://www.boardui.com/components/sankey-chart-card) | Sankey flow card with pill nodes, target-tinted links, source and share labels, and hover isolation. |

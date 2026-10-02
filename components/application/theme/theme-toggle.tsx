@@ -216,6 +216,8 @@ export interface ThemeToggleProps {
    */
   appearance?: "sidebar" | "segmented" | "sidebar-segmented" | "glass-segmented";
   className?: string;
+  /** Size of segmented controls; small fits inside dropdown rows. */
+  size?: "small" | "medium";
   /** Circular reveal duration in milliseconds. */
   transitionDuration?: number;
 }
@@ -225,6 +227,7 @@ export function ThemeToggle({
   collapsed = false,
   appearance = "sidebar",
   className,
+  size = "medium",
   transitionDuration = THEME_TRANSITION_DURATION,
 }: ThemeToggleProps) {
   const localize = useTemplateCopy();
@@ -245,6 +248,7 @@ export function ThemeToggle({
     appearance === "glass-segmented"
   ) {
     const glass = appearance === "glass-segmented";
+    const small = size === "small" && !glass;
     const sidebarSurface = appearance === "sidebar-segmented";
     const options = [
       { mode: "light" as const, label: "Use light mode", Icon: RiSunLine },
@@ -260,6 +264,7 @@ export function ThemeToggle({
           // Mobile: 2px padding + 28px segments = 32px tall, matching the
           // small icon buttons beside it. Desktop keeps the roomier 40px.
           glass && "p-0.5 sm:p-1",
+          small && "gap-0.5 p-0.5",
           glass
             ? // No track of its own: the host supplies the surface. A fill
               // here would paint over it. Kept registry-safe — this component
@@ -277,13 +282,14 @@ export function ThemeToggle({
             "pointer-events-none absolute top-1 start-1 size-8 rounded-full",
             "shadow-xs transition-transform duration-200 ease",
             glass && "top-0.5 start-0.5 size-7 sm:top-1 sm:start-1 sm:size-8",
+            small && "top-0.5 start-0.5 size-6",
             glass
               ? "bg-white dark:bg-[#2e2e33]"
               : sidebarSurface
                 ? "bg-theme-toggle-sidebar-selected-background"
                 : "bg-background-primary-default",
             // Segment width + the 4px gap: 28+4 on mobile, 32+4 above it.
-            dark && (glass ? "translate-x-8 rtl:-translate-x-8 sm:translate-x-9 sm:rtl:-translate-x-9" : "translate-x-9 rtl:-translate-x-9"),
+            dark && (small ? "translate-x-6.5 rtl:-translate-x-6.5" : glass ? "translate-x-8 rtl:-translate-x-8 sm:translate-x-9 sm:rtl:-translate-x-9" : "translate-x-9 rtl:-translate-x-9"),
           )}
         />
         {options.map(({ mode, label, Icon }) => {
@@ -310,6 +316,7 @@ export function ThemeToggle({
               className={cx(
                 "relative z-10 grid size-8 cursor-pointer place-items-center rounded-full outline-none",
                 glass && "size-7 sm:size-8",
+                small && "size-6",
                 "transition-colors duration-150 ease",
                 "focus-visible:ring-2 focus-visible:ring-border-focus-ring",
                 glass
@@ -323,7 +330,7 @@ export function ThemeToggle({
                     : "text-foreground-icon-secondary hover:text-foreground-icon-primary",
               )}
             >
-              <Icon className="size-4" aria-hidden />
+              <Icon className={small ? "size-3.5" : "size-4"} aria-hidden />
             </button>
           );
         })}

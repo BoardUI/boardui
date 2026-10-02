@@ -1,6 +1,6 @@
 "use client";
 
-import { useTemplateCopy } from "@/components/foundations/template-copy/template-copy";
+import { useTemplateCopy, useTemplateLanguageSelector } from "@/components/foundations/template-copy/template-copy";
 
 import { useDirection } from "@/components/foundations/direction/direction";
 import { useEffect, useState, type ComponentType, type ReactNode } from "react";
@@ -59,12 +59,12 @@ function Collapsible({ collapsed, children }: { collapsed: boolean; children: Re
 function UserMenuItem({ initials, color, name, isSelected, onSelect }: UserRow & { onSelect: () => void }) {
   const localize = useTemplateCopy();
   return localize((
-    <a
-      href="#"
+    <AriaButton
+      type="button"
       aria-current={isSelected ? "page" : undefined}
-      onClick={onSelect}
+      onPress={onSelect}
       className={cx(
-        "flex w-full items-center gap-2 rounded-2lg px-2 py-1.5 outline-none transition-colors",
+        "flex w-full cursor-pointer items-center gap-2 rounded-2lg px-2 py-1.5 text-start outline-none transition-colors",
         isSelected
           ? "bg-background-primary-hover"
           : "hover:bg-background-primary-hover focus-visible:bg-background-primary-hover",
@@ -72,7 +72,7 @@ function UserMenuItem({ initials, color, name, isSelected, onSelect }: UserRow &
     >
       <Avatar size="xs" color={color} initials={initials} />
       <span className="truncate text-body-medium text-text-primary">{name}</span>
-    </a>
+    </AriaButton>
   ));
 }
 
@@ -81,6 +81,7 @@ function UserMenuItem({ initials, color, name, isSelected, onSelect }: UserRow &
  *  inbox icon) can open the same panel without duplicating it. */
 export function AccountMenuContent({ onSelect }: { onSelect: () => void }) {
   const localize = useTemplateCopy();
+  const languageSelector = useTemplateLanguageSelector();
   return localize((
     <>
       {/* Users with access */}
@@ -112,6 +113,7 @@ export function AccountMenuContent({ onSelect }: { onSelect: () => void }) {
           Manage
         </Button>
       </div>
+      {languageSelector}
     </>
   ));
 }
